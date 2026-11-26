@@ -429,7 +429,7 @@ function parallax() {
     if (el._py !== ty) {
       el._py = ty; el.style.transform = innerWidth <= 900 ? '' : `translateY(${ty}px)`;   /* Handy: Kachel (mit Linie) bleibt stehen, nur der Inhalt schwebt */
       /* Inhalt der Kachel leicht gestaffelt: Icon zuerst, dann Label, dann Text */
-      [...el.children].filter(c => !c.classList.contains('wx')).forEach((c, j) => { const q = Math.max(0, Math.min(1, k * 1.25 - j * .1)); c.style.transform = `translateY(${((1 - q * q * (3 - 2 * q)) * (24 + j * 22)).toFixed(1)}px)`; });
+      [...el.children].filter(c => !c.classList.contains('wx')).forEach((c, j) => { const q = Math.max(0, Math.min(1, k * 1.25 - j * .1)); c.style.transform = `translateY(${((1 - q * q * (3 - 2 * q)) * (innerWidth <= 900 ? 8 + j * 5 : 24 + j * 22)).toFixed(1)}px)`; });
     }
   });
   /* Kacheln angekommen: Raster zeichnet sich um sie (und verschwindet wieder, wenn man zurückscrollt) */
@@ -1615,8 +1615,8 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
     const wide = W >= 900;
     R = wide ? Math.min(W * .27, H * .45) : Math.min(W * .42, H * .3); CX = wide ? W * .72 : W / 2; CY = wide ? H * .56 : H * .64;   /* Desktop: größer, darf unten leicht aus der Section ragen */
     if (!wide) {   /* schmal: Erde im freien Raum unter dem Text, darf nie in den Text ragen */
-      const cr = canvas.getBoundingClientRect(), extra = [...copyEl.querySelectorAll('details[open]')].reduce((s, d) => s + d.offsetHeight - d.querySelector('summary').offsetHeight, 0), tb = copyEl.getBoundingClientRect().bottom - extra - cr.top + 28, bot = H - 28;   /* gemessen wie mit zugeklappten Branchen */
-      R = Math.max(80, Math.min(W * .42, (bot - tb) / 2)); CY = Math.max(tb + R, (tb + bot) / 2);
+      const cr = canvas.getBoundingClientRect(), extra = [...copyEl.querySelectorAll('details[open]')].reduce((s, d) => s + d.offsetHeight - d.querySelector('summary').offsetHeight, 0), top0 = 20, bot = copyEl.getBoundingClientRect().top + extra - cr.top - 24;   /* Text steht unten; gemessen wie mit zugeklappten Branchen */
+      R = Math.max(70, Math.min(W * .44, (bot - top0) / 2)); CY = (top0 + bot) / 2;
     }
     window.ostGlobe = {x:CX, y:CY, r:R};   /* für das Raster: nur direkt hinter der Kugel kein Licht */
     const sc = document.getElementById('gscroll');
@@ -1661,6 +1661,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
   // Schrift als Pixel-Matrix rastern; jeder Erd-Punkt startet auf einem Schrift-Pixel
   let nodes = [], nodeSize = 4, nodeCount = 0;
   let titleCfg = null, tMinX = 0, tMaxX = 1;
+  const tY = () => W < 900 ? CY : H * TITLE_Y;   /* Handy: Titel sitzt dort, wo die Erde entsteht */
   let pR, pT, pD, pS, pSc, pPh;
   function buildIntro() {
     const narrow = W < 640;
@@ -1674,7 +1675,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
     const widest = Math.max(...lines.map(l => o.measureText(l).width));
     if (widest > W * 0.86) { fs *= W * 0.86 / widest; o.font = font(); if ('letterSpacing' in o) o.letterSpacing = (fs * -0.035) + 'px'; }
     o.fillStyle = '#fff'; o.textAlign = 'center'; o.textBaseline = 'middle';
-    lines.forEach((l, k) => o.fillText(l, W / 2, H * TITLE_Y + (k - (lines.length - 1) / 2) * fs * 1.02));
+    lines.forEach((l, k) => o.fillText(l, W / 2, tY() + (k - (lines.length - 1) / 2) * fs * 1.02));
     titleCfg = {lines, fs, font: font(), ls: fs * -0.035};
     const g = Math.max(3, Math.round(fs / 26));          // Rasterweite der Schrift-Pixel
     nodeSize = g * 0.74;
@@ -1818,7 +1819,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
     pSm = pb0 * BUILD_END;
     const pb = Math.min(1, pSm / BUILD_END);
     if (window.ostGlobe) window.ostGlobe.k = pb * pb * (3 - 2 * pb);   /* fürs Raster: Licht verschwindet erst mit der Erde */
-    { const bx = document.getElementById('gbox'); if (bx && titleCfg) { const n = titleCfg.lines.length, fsT = titleCfg.fs, cyT = H * TITLE_Y, pad = fsT * .9;
+    { const bx = document.getElementById('gbox'); if (bx && titleCfg) { const n = titleCfg.lines.length, fsT = titleCfg.fs, cyT = tY(), pad = fsT * .9;
         const t0 = cyT - n * fsT * 1.02 / 2 - fsT * .75 - pad, t1 = cyT + n * fsT * 1.02 / 2 + pad, e = pb * pb * (3 - 2 * pb), k2 = Math.min(1, e * 1.25);
         const top = t0 * (1 - k2), bot = t1 + (H - t1) * k2; bx.style.top = top.toFixed(1) + 'px'; bx.style.height = (bot - top).toFixed(1) + 'px'; bx.style.opacity = (1 - Math.max(0, k2 - .85) / .15).toFixed(3); } }   /* Box um den Titel wächst mit dem Aufbau der Erde und gibt den Platz frei */
     isBuilt = pb > 0.999;
@@ -1851,9 +1852,9 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
 /* massive Schrift; die Auflösungsfront (wie die Partikel: grob von links nach rechts) radiert sie weich weg */
   const cv0Top = () => ctx.canvas.getBoundingClientRect().top;
   function drawTitle(pb) {
-    if (!titleCfg || pb >= .4 || W < 900) return;   /* Handy: kein großer Titel über dem Text */
+    if (!titleCfg || pb >= .4) return;
     const {lines, fs, font, ls} = titleCfg, span = Math.max(1, tMaxX - tMinX);
-    const TH = window.ostTHEME, tq = TH && TH.y ? TH.y(cv0Top() + H * TITLE_Y) : 0, TC = TH ? TH.T0.map((v, i) => Math.round(v + (TH.T1[i] - v) * tq)).join(',') : OSTC.inkd;   /* Schriftfarbe folgt dem Grund: auf Hell dunkel */
+    const TH = window.ostTHEME, tq = TH && TH.y ? TH.y(cv0Top() + tY()) : 0, TC = TH ? TH.T0.map((v, i) => Math.round(v + (TH.T1[i] - v) * tq)).join(',') : OSTC.inkd;   /* Schriftfarbe folgt dem Grund: auf Hell dunkel */
     const front = tMinX + span * ((pb - .03) / .22), feather = span * .12;
     ctx.save();
     ctx.font = font; if ('letterSpacing' in ctx) ctx.letterSpacing = ls + 'px';
@@ -1862,7 +1863,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
     g.addColorStop(0, `rgba(${TC},0)`); g.addColorStop(1, `rgba(${TC},.95)`);
     ctx.fillStyle = pb <= 0 ? `rgba(${TC},.95)` : g;
     const dy = pb <= 0 ? titleDrift() : 0;
-    lines.forEach((l, k) => ctx.fillText(l, W / 2, H * TITLE_Y + dy + (k - (lines.length - 1) / 2) * fs * 1.02));
+    lines.forEach((l, k) => ctx.fillText(l, W / 2, tY() + dy + (k - (lines.length - 1) / 2) * fs * 1.02));
     /* Eyebrow darüber, blendet beim Zerfall aus */
     const ea = 1 - Math.min(1, Math.max(0, pb) / .06);
     if (ea > 0) {
@@ -1870,7 +1871,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
       ctx.font = `${lab.getPropertyValue('--fw-eb').trim() || 500} 15px ${lab.getPropertyValue('--fb').trim() || 'sans-serif'}, system-ui, sans-serif`;
       if ('letterSpacing' in ctx) ctx.letterSpacing = '1.65px';   /* wie die übrigen Eyebrows */
       ctx.fillStyle = `rgba(${TC},${.55 * ea})`;
-      ctx.fillText('WIR ARBEITEN MIT', W / 2, H * TITLE_Y + dy - (lines.length / 2) * fs * 1.02 - 38);
+      ctx.fillText('WIR ARBEITEN MIT', W / 2, tY() + dy - (lines.length / 2) * fs * 1.02 - 38);
     }
     ctx.restore();
   }
@@ -2492,6 +2493,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
       if (bp < 1 || k < 1 || hoverable || outT || (flash && e < 1100)) raf = requestAnimationFrame(draw);   /* bei Maus mitführen, solange das Bild ausweicht */
     };
     const show = (i, fl) => {
+      if (!hoverable) return;   /* Handy: kein Hover- und kein CEO-Effekt */
       if (i < 0) { if (cur >= 0 && !outT) { outT = performance.now(); eOut = Math.min(outT - t0, OPEN); } }
       else if (i !== cur || outT) { outT = 0; cur = i; flash = !!fl; fill(TEAM[i]); t0 = performance.now(); }
       if (!raf) raf = requestAnimationFrame(draw);
@@ -3295,4 +3297,13 @@ document.querySelectorAll('.sv-row').forEach(r=>r.addEventListener('click',e=>{i
   document.addEventListener('pointerdown',e=>{if(!dd.contains(e.target))close();});
   btns.forEach(b=>b.addEventListener('click',()=>setTimeout(sync)));
   bar.insertBefore(dd,tabs);sync();})();
+</script>
+
+<script>
+/* Leistungen am Handy: alle Videos laufen, solange sie im Bild sind */
+(()=>{if(innerWidth>900)return;const vs=[...document.querySelectorAll('.sv-vid video')];
+  const io=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target;if(e.isIntersecting){v.preload='auto';const p=v.play();p&&p.catch(()=>{});}else v.pause();}),{rootMargin:'100px 0px'});
+  vs.forEach(v=>io.observe(v));
+  /* die Aktiv-Logik pausiert Videos beim Wechsel – hier sofort wieder starten */
+  vs.forEach(v=>v.addEventListener('pause',()=>{const r=v.getBoundingClientRect();if(r.bottom>-100&&r.top<innerHeight+100)setTimeout(()=>{const p=v.play();p&&p.catch(()=>{});},30);}));})();
 </script>

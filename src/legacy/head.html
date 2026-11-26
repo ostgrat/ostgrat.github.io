@@ -1503,4 +1503,51 @@ video{pointer-events:none}   /* dekorative Videos: keine Browser-Bedienelemente 
 /* Desktop: mehr Luft Blog → FAQ */
 .fq{padding-top:clamp(260px,42vh,460px)}
 @media(max-width:900px){.fq{padding-top:190px}}
+
+/* ===== Runde Mobil 3 ===== */
+@media(max-width:900px){
+  /* Facts: mehr Luft unter dem Diagramm */
+  .why .why-fig{margin-bottom:56px}
+  .team{padding-top:120px!important}
+  /* NIS2: Bild unter dem Inhalt */
+  .ti-grid{display:flex!important;flex-direction:column}
+  .ti-c{order:1;border-top:0!important}.ti-img{order:2;border-top:var(--sw) solid var(--line)}
+  /* Team: ganzes Bild, kein Anschnitt */
+  .team-fig{height:calc(100vw * 1170 / 2000)!important}
+  .team-img{top:0!important;bottom:0!important}
+  .team-px{display:none!important}
+  /* Progress: mehr Luft, ruhige Schritte */
+  .s2{margin-bottom:96px}
+  .s2-list{margin-top:14px}
+  .s2-list li,.s2-list li.next,.s2-list li.on,.s2-list li.done{translate:none!important;filter:none!important;animation:none!important;top:0!important}
+  .s2-list li{padding-top:14px!important}
+  /* Für Angreifer: mehr Luft (oben mehr als unten), Linien bis zum Rand, sanfteres Einschweben */
+  .rev-in{padding:120px 0 88px!important}
+  .rev .rev-h{margin-bottom:56px}
+  .rev .why-card + .why-card::before{left:-16px!important;right:-16px!important}
+  .rev .why-card{overflow:visible!important;clip-path:none!important}
+  /* Leistungen: inneres Seitenraster bei 20 px, Videos bis dorthin, Inhalte eingerückt */
+  .sv .sv-list{position:relative;margin-left:-24px;margin-right:-24px}
+  .sv .sv-list::before,.sv .sv-list::after{content:"";display:block;position:absolute;top:0;bottom:0;width:var(--sw);background:var(--line);z-index:3;pointer-events:none}
+  .sv .sv-list::before{left:20px}.sv .sv-list::after{right:20px}
+  .sv .sv-list .sv-row{padding-left:20px!important;padding-right:20px!important}
+  .sv .sv-list .sv-c,.sv .sv-list .sv-side{padding-left:20px;padding-right:20px}
+  /* Globus: Text unten, Erde darüber */
+  #gscroll .gcopy{top:auto!important;bottom:24px}
+  /* Mehr Luft unter dem Globus */
+  .bl{padding-top:180px!important}
+  /* Blog: oberer Button weg (Link steht unten) */
+  .bl-hd .bl-cta{display:none!important}
+  /* FAQ: Kontaktbox unter den Fragen */
+  .fq{display:flex!important;flex-direction:column;gap:0}
+  .fq-l{display:contents}
+  .fq-list{order:1;margin-top:8px}
+  .fq-box{order:2;margin-top:40px}
+  /* Kontakt: Luft über der Eyebrow */
+  .ct .ct-l{padding-top:56px!important}
+}
+/* Kontakt-Kopf: Eyebrow näher an der Headline als die Headline am Text */
+.ct .ct-k{margin-bottom:12px}
+.ct .ct-hd h2{margin-bottom:0}
+.ct .ct-sub{margin-top:32px}
 </style>
