@@ -1,0 +1,19 @@
+---
+// Setzt eine Seite aus den Blöcken zusammen, die im CMS gestapelt wurden.
+import HeroBlock from './blocks/HeroBlock.astro';
+import TextBlock from './blocks/TextBlock.astro';
+import ImageTextBlock from './blocks/ImageTextBlock.astro';
+import StatsBlock from './blocks/StatsBlock.astro';
+import FaqBlock from './blocks/FaqBlock.astro';
+import CtaBlock from './blocks/CtaBlock.astro';
+import BlogTeaserBlock from './blocks/BlogTeaserBlock.astro';
+const map: Record<string, any> = {
+  hero: HeroBlock, text: TextBlock, imageText: ImageTextBlock, stats: StatsBlock,
+  faq: FaqBlock, cta: CtaBlock, blogTeaser: BlogTeaserBlock,
+};
+const { blocks = [] } = Astro.props;
+---
+{blocks.map((b: any) => {
+  const C = map[b.type];
+  return C ? <C {...b} /> : null;
+})}

@@ -11,37 +11,215 @@ media_folder: public/uploads
 public_folder: /uploads
 
 collections:
-  - name: blog
-    label: Blog
-    label_singular: Beitrag
-    folder: src/content/blog
+  # ---------- Blog: eine Sammlung pro Beitragsart ----------
+  - name: artikel
+    label: "Blog: Artikel"
+    label_singular: Artikel
+    description: Normale Beiträge mit Text und Bild.
+    icon: article
+    folder: src/content/blog/artikel
     create: true
     extension: md
     format: frontmatter
     slug: "{{slug}}"
-    summary: "{{title}}"
     sortable_fields: [date, title]
     fields:
-      - { label: Titel, name: title, widget: string }
-      - { label: Datum, name: date, widget: datetime, time_format: false, format: "YYYY-MM-DD" }
-      - { label: Autor:in, name: author, widget: string }
-      - label: Kategorie
+      - &title { label: Titel, name: title, widget: string }
+      - &date { label: Datum, name: date, widget: datetime, time_format: false, format: "YYYY-MM-DD" }
+      - &author { label: Autor:in, name: author, widget: string }
+      - &category
+        label: Thema
         name: category
         widget: select
+        hint: Bestimmt den Filter auf der Startseite.
         options:
-          - { label: Warnung, value: warnung }
           - { label: SOC, value: soc }
           - { label: Red Team, value: redteam }
           - { label: OT, value: ot }
           - { label: Compliance, value: compliance }
-      - { label: Als Sicherheitswarnung hervorheben, name: alert, widget: boolean, default: false, required: false }
-      - { label: "Entwurf (wird nicht veröffentlicht)", name: draft, widget: boolean, default: false, required: false }
-      - { label: Kurztext für die Vorschau, name: excerpt, widget: text }
-      - { label: Titelbild, name: cover, widget: image, required: false }
-      - { label: Text, name: body, widget: markdown }
+      - &excerpt { label: Kurztext für die Vorschau, name: excerpt, widget: text }
+      - &cover { label: Titelbild, name: cover, widget: image, required: false }
+      - &body { label: Text, name: body, widget: markdown, required: false }
+      - &draft { label: "Entwurf (wird nicht veröffentlicht)", name: draft, widget: boolean, default: false, required: false }
 
-  - name: pages
+  - name: warnungen
+    label: "Blog: Sicherheitswarnungen"
+    label_singular: Sicherheitswarnung
+    description: Akute Warnungen – werden orange markiert und mit Handlungsschritten angezeigt.
+    icon: warning
+    folder: src/content/blog/warnungen
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    sortable_fields: [date, title]
+    fields:
+      - *title
+      - *date
+      - *author
+      - { label: "Kennung (z. B. CVE-Nummer)", name: cve, widget: string, required: false }
+      - label: Schweregrad
+        name: severity
+        widget: select
+        options: [{ label: Kritisch, value: kritisch }, { label: Hoch, value: hoch }, { label: Mittel, value: mittel }]
+      - { label: Betroffene Systeme, name: affected, widget: list, required: false, label_singular: System }
+      - { label: Was jetzt tun (Schritte), name: actions, widget: list, required: false, label_singular: Schritt }
+      - *excerpt
+      - *cover
+      - *body
+      - *draft
+
+  - name: fallstudien
+    label: "Blog: Fallstudien"
+    label_singular: Fallstudie
+    description: Kundenprojekte mit Ausgangslage, Vorgehen und Ergebnis in Zahlen.
+    icon: work
+    folder: src/content/blog/fallstudien
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    sortable_fields: [date, title]
+    fields:
+      - *title
+      - *date
+      - *author
+      - *category
+      - { label: Branche, name: industry, widget: string, required: false }
+      - { label: Unternehmensgröße, name: companySize, widget: string, required: false }
+      - { label: Umfang / Dauer, name: duration, widget: string, required: false }
+      - label: Ergebnisse in Zahlen
+        name: results
+        widget: list
+        required: false
+        label_singular: Kennzahl
+        summary: "{{fields.value}} – {{fields.label}}"
+        fields:
+          - { label: Zahl, name: value, widget: string, hint: "z. B. 4 h oder 98 %" }
+          - { label: Beschreibung, name: label, widget: string }
+      - { label: Ausgangslage, name: challenge, widget: text, required: false }
+      - { label: Vorgehen, name: approach, widget: text, required: false }
+      - { label: Ergebnis, name: outcome, widget: text, required: false }
+      - *excerpt
+      - *cover
+      - *body
+      - *draft
+
+  # ---------- Seitenbaukasten ----------
+  - name: seiten
     label: Seiten
+    label_singular: Seite
+    description: Eigene Seiten aus Blöcken zusammenstellen. Die Adresse entsteht aus dem Titel.
+    icon: web
+    folder: src/content/pages
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    fields:
+      - { label: Titel, name: title, widget: string, hint: "Wird auch zur Adresse, z. B. „NIS2-Check“ → /nis2-check/" }
+      - { label: Beschreibung für Google, name: description, widget: text, required: false }
+      - *draft
+      - label: Blöcke
+        name: blocks
+        widget: list
+        label_singular: Block
+        types:
+          - label: Hero
+            name: hero
+            widget: object
+            summary: "{{fields.headline}}"
+            fields:
+              - { label: Dachzeile, name: kicker, widget: string, required: false }
+              - { label: Headline, name: headline, widget: string }
+              - { label: Hervorgehobene Zeile, name: highlight, widget: string, required: false }
+              - { label: Einleitung, name: lead, widget: text, required: false }
+              - { label: Button-Text, name: ctaLabel, widget: string, required: false }
+              - { label: Button-Link, name: ctaLink, widget: string, required: false }
+              - { label: Bild (optional), name: image, widget: image, required: false }
+          - label: Text
+            name: text
+            widget: object
+            summary: "{{fields.heading}}"
+            fields:
+              - { label: Dachzeile, name: kicker, widget: string, required: false }
+              - { label: Überschrift, name: heading, widget: string, required: false }
+              - { label: Text, name: body, widget: markdown }
+          - label: Bild mit Text
+            name: imageText
+            widget: object
+            summary: "{{fields.heading}}"
+            fields:
+              - { label: Bild, name: image, widget: image }
+              - { label: Bild-Position, name: imagePosition, widget: select, options: [links, rechts], default: links }
+              - { label: Dachzeile, name: kicker, widget: string, required: false }
+              - { label: Überschrift, name: heading, widget: string, required: false }
+              - { label: Text, name: body, widget: markdown, required: false }
+              - { label: Button-Text, name: ctaLabel, widget: string, required: false }
+              - { label: Button-Link, name: ctaLink, widget: string, required: false }
+          - label: Kennzahlen
+            name: stats
+            widget: object
+            summary: "{{fields.heading}}"
+            fields:
+              - { label: Dachzeile, name: kicker, widget: string, required: false }
+              - { label: Überschrift, name: heading, widget: string, required: false }
+              - label: Kennzahlen
+                name: items
+                widget: list
+                label_singular: Kennzahl
+                summary: "{{fields.value}} – {{fields.label}}"
+                fields:
+                  - { label: Zahl, name: value, widget: string }
+                  - { label: Beschreibung, name: label, widget: string }
+          - label: FAQ
+            name: faq
+            widget: object
+            summary: "{{fields.heading}}"
+            fields:
+              - { label: Dachzeile, name: kicker, widget: string, required: false }
+              - { label: Überschrift, name: heading, widget: string, required: false }
+              - label: Fragen
+                name: items
+                widget: list
+                label_singular: Frage
+                summary: "{{fields.question}}"
+                fields:
+                  - { label: Frage, name: question, widget: string }
+                  - { label: Antwort, name: answer, widget: text }
+          - label: Call-to-Action
+            name: cta
+            widget: object
+            summary: "{{fields.heading}}"
+            fields:
+              - { label: Überschrift, name: heading, widget: string }
+              - { label: Text, name: text, widget: text, required: false }
+              - { label: Button-Text, name: buttonLabel, widget: string }
+              - { label: Button-Link, name: buttonLink, widget: string }
+          - label: Blog-Teaser
+            name: blogTeaser
+            widget: object
+            summary: "{{fields.heading}}"
+            fields:
+              - { label: Dachzeile, name: kicker, widget: string, required: false }
+              - { label: Überschrift, name: heading, widget: string, required: false }
+              - label: Thema
+                name: category
+                widget: select
+                default: alle
+                options:
+                  - { label: Alle, value: alle }
+                  - { label: Warnungen, value: warnung }
+                  - { label: SOC, value: soc }
+                  - { label: Red Team, value: redteam }
+                  - { label: OT, value: ot }
+                  - { label: Compliance, value: compliance }
+              - { label: Anzahl Beiträge, name: count, widget: number, value_type: int, min: 1, max: 6, default: 3 }
+
+  # ---------- Startseite ----------
+  - name: startseite
+    label: Startseite
+    icon: home
     files:
       - name: home
         label: Startseite

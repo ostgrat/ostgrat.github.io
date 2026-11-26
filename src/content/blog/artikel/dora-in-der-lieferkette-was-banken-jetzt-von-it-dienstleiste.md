@@ -3,7 +3,6 @@ title: "DORA in der Lieferkette: Was Banken jetzt von IT-Dienstleistern verlange
 date: 2026-09-10
 author: "Elena Fuchs"
 category: compliance
-alert: false
 excerpt: "Seit DORA gilt, prüfen Banken und Versicherungen ihre Dienstleister genauer. Welche Nachweise Zulieferer jetzt vorbereiten sollten."
 cover: /uploads/blog/dora-in-der-lieferkette-was-banken-jetzt-von-it-dienstleiste.svg
 ---

@@ -1,32 +1,19 @@
 ---
-import BlogLayout from '../../layouts/BlogLayout.astro';
-import { getPosts, formatDate, categories, inlineSvg } from '../../lib/blog';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getPosts } from '../../lib/blog';
 const posts = await getPosts();
 ---
-<BlogLayout title="News & Insights" description="Was wir gerade sehen: Warnungen, Einblicke aus dem SOC und dem Red Team.">
-  <p class="lab">News &amp; Insights</p>
-  <h1>Was wir gerade sehen.</h1>
-  <div class="grid">{posts.map((p) => {
-    const svg = inlineSvg(p.data.cover);
-    return (
-      <a class="card" href={`/blog/${p.id}/`}>
-        <figure>{svg ? <Fragment set:html={svg} /> : p.data.cover && <img src={p.data.cover} alt="" loading="lazy" />}</figure>
-        <p class="lab">{categories[p.data.category]}{p.data.alert && ' · Sicherheitswarnung'}</p>
-        <h2>{p.data.title}</h2>
-        <p class="ex">{p.data.excerpt}</p>
-        <p class="meta">{p.data.author} · {formatDate(p.data.date)}</p>
-      </a>
-    );
-  })}</div>
-</BlogLayout>
+<SiteLayout title="News & Insights" description="Was wir gerade sehen: Sicherheitswarnungen, Einblicke aus dem SOC und Fallstudien aus dem Red Team.">
+  <section class="blk">
+    <p class="lab">News &amp; Insights</p>
+    <h1 class="h1">Was wir gerade sehen.</h1>
+    <div class="grid">{posts.map((p) => <BlogCard post={p} showType />)}</div>
+  </section>
+</SiteLayout>
 <style>
-  .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:64px 28px; margin-top:64px }
-  @media (max-width:1000px) { .grid { grid-template-columns:repeat(2,minmax(0,1fr)) } }
-  @media (max-width:640px) { .grid { grid-template-columns:1fr } }
-  figure { margin:0 0 20px; aspect-ratio:16/9; overflow:hidden; border:var(--sw) solid var(--line) }
-  figure :global(svg), figure img { display:block; width:100%; height:100%; object-fit:cover }
-  h2 { font-size:24px; margin:10px 0 12px }
-  .card:hover h2 { text-decoration:underline; text-decoration-thickness:var(--sw); text-underline-offset:4px }
-  .ex { color:var(--mut); margin:0 0 16px }
-  .meta { font-size:14px; color:var(--mut); margin:0 }
+  .blk { padding-top:clamp(120px,22vh,240px); padding-bottom:clamp(96px,16vh,180px) }
+  .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(52px,8vh,80px) clamp(20px,2.2vw,32px); margin-top:clamp(64px,10vh,120px) }
+  @media (max-width:1100px) { .grid { grid-template-columns:repeat(2,minmax(0,1fr)) } }
+  @media (max-width:700px) { .grid { grid-template-columns:1fr } }
 </style>

@@ -16,6 +16,7 @@
     "@fontsource/space-mono": "^5.3.0",
     "@fontsource/vt323": "^5.3.0",
     "@sveltia/cms": "^0.273.1",
-    "astro": "^7.4.13"
+    "astro": "^7.4.13",
+    "marked": "^18.3.0"
   }
 }

@@ -1,0 +1,18 @@
+---
+import Cta from '../Cta.astro';
+const { heading, text, buttonLabel, buttonLink } = Astro.props;
+---
+<section class="blk b-cta">
+  <div class="box">
+    <h2 class="h2">{heading}</h2>
+    {text && <p class="lead">{text}</p>}
+    {buttonLabel && buttonLink && <Cta href={buttonLink} label={buttonLabel} />}
+  </div>
+</section>
+<style>
+  .box { display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-areas:"h b" "t b"; column-gap:48px; align-items:center; padding:clamp(32px,4vw,56px); border:var(--sw) solid var(--line); background:linear-gradient(150deg,color-mix(in srgb,#fff 6%,transparent),transparent 60%) }
+  .h2 { grid-area:h; margin:0 }
+  .lead { grid-area:t; margin:16px 0 0 }
+  .box :global(.cta) { grid-area:b }
+  @media (max-width:800px) { .box { grid-template-columns:1fr; grid-template-areas:"h" "t" "b" } .box :global(.cta) { margin-top:32px; justify-self:start } }
+</style>

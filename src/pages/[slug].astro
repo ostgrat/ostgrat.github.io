@@ -1,0 +1,15 @@
+---
+// Seiten aus dem Seitenbaukasten (CMS → „Seiten“), Adresse = Dateiname.
+import { getCollection } from 'astro:content';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Blocks from '../components/Blocks.astro';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages', (p) => !p.data.draft);
+  return pages.map((page) => ({ params: { slug: page.id }, props: { page } }));
+}
+const { page } = Astro.props;
+---
+<SiteLayout title={page.data.title} description={page.data.description}>
+  <Blocks blocks={page.data.blocks} />
+</SiteLayout>

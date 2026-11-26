@@ -16,7 +16,8 @@ Testprojekt für das Kunden-Setup: Astro baut die Seite, Sveltia CMS macht Inhal
 | Startseite (Design 1:1 aus dem Entwurf) | `src/pages/index.astro`, `src/legacy/` |
 | Editierbare Sections | `src/components/Hero.astro`, `Faq.astro`, `BlogGrid.astro` |
 | Texte der Startseite | `src/data/home.json` |
-| Blogbeiträge | `src/content/blog/*.md` |
+| Seiten aus dem Baukasten | `src/content/pages/*.md`, Blöcke in `src/components/blocks/` |
+| Blogbeiträge je Art | `src/content/blog/artikel`, `warnungen`, `fallstudien` |
 | Bilder aus dem CMS | `public/uploads/` |
 | CMS-Konfiguration (was editierbar ist) | `public/admin/config.yml` |
 
