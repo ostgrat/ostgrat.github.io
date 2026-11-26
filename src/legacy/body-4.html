@@ -357,7 +357,7 @@ const split = (el, kind) => {
 for (const p of document.querySelectorAll('.copy p, .s2-text > p, .s2-list p, #gcopy > p:not(.gx-sub), .cta b > span, nav a span')) { p.classList.add('lq'); split(p, 'lq'); }
 /* übriger Fließtext: gleiche Wirkung, behält seine eigene Farbe */
 for (const p of document.querySelectorAll('#frame p:not(.lab):not(.lq), .ot-list li > span:not(.lab), .ct-opts li > :not(.lab), .ct-legal')) { if (p.closest('.lq, h1, h2, h3, .team-tag')) continue; p.classList.add('lq', 'lqa'); split(p, 'lq'); }
-for (const h of document.querySelectorAll('h1 .ln, h2')) { h.classList.add('sp'); split(h, 'sp'); }
+for (const h of document.querySelectorAll('h1 .ln, h2, .sv-list h3, .bl-card h3, .fq h3, .s2-list h3')) { h.classList.add('sp'); split(h, 'sp'); }   /* alle Headlines weichen dem Zeiger aus */
 function collectChars() {
   for (const c of chars) {
     const b = c.blk.getBoundingClientRect(), r = c.el.getBoundingClientRect();
@@ -1450,7 +1450,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
 
   const ACCENT = [240, 112, 79]; addEventListener('ostpal', e => ACCENT.splice(0, 3, ...e.detail.acc));
   const copyEl = document.getElementById('gcopy');
-  let gTop = 40, tN = 3, tFs = 40;   /* Handy: Titel steht oben, wo später die Headline erscheint */
+  let gTop = 40, tN = 3, tFs = 40, CY0 = 0, gShift = 0;   /* Handy: Titel steht oben, wo später die Headline erscheint */
   const sm = v => v * v * (3 - 2 * v);
   const copyParts = [[copyEl.querySelector('h2'), .5, .68], [copyEl.querySelector('.gx-sub'), .55, .73], [copyEl.querySelector('p:not(.gx-sub)'), .6, .78], [copyEl.querySelector('.gx'), .66, .84]];        // gedämpftes, aber kräftiges Orange (= --accent)
 
@@ -1617,9 +1617,10 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
     const wide = W >= 900;
     R = wide ? Math.min(W * .27, H * .45) : Math.min(W * .42, H * .3); CX = wide ? W * .72 : W / 2; CY = wide ? H * .56 : H * .64;   /* Desktop: größer, darf unten leicht aus der Section ragen */
     if (!wide) {   /* schmal: Erde im freien Raum unter dem Text, darf nie in den Text ragen */
-      const cr = canvas.getBoundingClientRect(), extra = [...copyEl.querySelectorAll('details[open]')].reduce((s, d) => s + d.offsetHeight - d.querySelector('summary').offsetHeight, 0), tb = copyEl.getBoundingClientRect().bottom - extra - cr.top + 28, bot = H - 28; gTop = copyEl.getBoundingClientRect().top - cr.top;   /* Text oben, Erde darunter; gemessen wie mit zugeklappten Branchen */
-      R = Math.max(W * .4, Math.min(W * .46, (bot - tb) / 2)); CY = Math.min(Math.max(tb + R, (tb + bot) / 2), H - R * .72);   /* Handy: Erde groß, darf unten leicht angeschnitten sein */
+      const cr = canvas.getBoundingClientRect(), extra = [...copyEl.querySelectorAll('details[open]')].reduce((s, d) => s + d.offsetHeight - d.querySelector('summary').offsetHeight, 0), tb = copyEl.getBoundingClientRect().bottom - extra - cr.top + 64, bot = H - 48; gTop = copyEl.getBoundingClientRect().top - cr.top;   /* Text oben, Erde darunter; gemessen wie mit zugeklappten Branchen */
+      R = W * .42; CY = tb + R; gShift = Math.max(0, CY + R - bot);   /* Handy: Erde groß mit Abstand zum Text; reicht sie unter die Bühne, rückt am Ende alles nach oben (gShift) */
     }
+    if (wide) gShift = 0; CY0 = CY;
     window.ostGlobe = {x:CX, y:CY, r:R};   /* für das Raster: nur direkt hinter der Kugel kein Licht */
     const sc = document.getElementById('gscroll');
     scrollTop0 = sc.getBoundingClientRect().top + scrollY; scrollSpan = sc.offsetHeight - innerHeight;
@@ -1632,7 +1633,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
   // gleichmäßig verteilte Punkte auf der Kugel (Breitengrad-Reihen)
   function build() {
     if (!W || !H) return;                                // noch kein Layout (Regler-Init vor resize)
-    cell = (2 * R) / P.density;
+    cell = (2 * R) / P.density * (W >= 900 ? .7 : 1);   /* Desktop: feinere Punkte */
     const step = Math.PI / P.density, list = [];
     for (let lat = -Math.PI / 2 + step / 2; lat < Math.PI / 2; lat += step) {
       const cnt = Math.max(1, Math.round(2 * Math.PI * Math.cos(lat) / step));
@@ -1818,6 +1819,11 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
        bis die Standorte eingezeichnet sind. Erst wenn man ein Stück zurückscrollt, folgt sie wieder dem Scrollen. */
     /* Folgt der Scrollstrecke direkt und weich (nur leichtes Glätten gegen Ruckeln); unterhalb der Section bleibt sie stehen */
     const tg = warpG(scrollProgress() / BUILD_END), below = scrollY > dockTop() + document.getElementById('gscroll').offsetHeight - innerHeight * .5;
+    if (gShift || copyEl._sh) {   /* Handy: nach dem Aufbau rücken Text und Erde gemeinsam nach oben, bis die Erde ganz sichtbar ist */
+      const pe = dockTop() + document.getElementById('gscroll').offsetHeight - innerHeight, ps = pe - innerHeight * .6, q = Math.max(0, Math.min(1, (scrollY - ps) / (innerHeight * .45))), s = gShift * q * q * (3 - 2 * q);
+      CY = CY0 - s; if (window.ostGlobe) window.ostGlobe.y = CY;
+      if (copyEl._sh !== s) { copyEl._sh = s; copyEl.style.transform = s ? `translateY(${(-s).toFixed(1)}px)` : ''; }
+    }
     gLin += ((below ? 1 : tg) - gLin) * (1 - Math.exp(-dt * 9));
     if (Math.abs(gLin - (below ? 1 : tg)) < 1e-4) gLin = below ? 1 : tg;
     const pb0 = gLin;
@@ -2454,7 +2460,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
   const fig = document.querySelector('.team-fig');
   if (fig) {
     const mv = fig.querySelector('.team-move'), img = mv.querySelector('img'), fr = fig.querySelector('.team-fr'), ln = fig.querySelector('.team-ln'), tag = fig.querySelector('.team-tag');
-    const NW = 2000, NH = 1170, LINE_T = 300, BOX_T = 180, hoverable = matchMedia('(hover:hover) and (min-width:901px)').matches;   /* Gesichter nur auf Desktop */
+    const NW = 2000, NH = 1170, LINE_T = 300, BOX_T = 180, hoverable = matchMedia('(hover:hover) and (pointer:fine) and (min-width:901px)').matches;   /* Gesichter nur auf Desktop */
     const ab = fig.querySelector('.team-about'); document.body.append(ab);   /* liegt außerhalb, damit fixed nicht vom Bild beeinflusst wird */
     let cur = -1, t0 = 0, raf = 0, auto = 0, autoI = 0, visible = false, outT = 0, eOut = 0, flash = false;
     const OPEN = 120 + LINE_T + BOX_T;
@@ -3149,7 +3155,7 @@ window.ostGlobeKF=(()=>{const sc=document.getElementById('gscroll');if(!sc)retur
 
 <script>
 /* Leistungen: ganze Karte klickbar, Ziel ist der Pfeil-Link */
-document.querySelectorAll('.sv-row').forEach(r=>r.addEventListener('click',e=>{if(innerWidth<=900||e.target.closest('a, button')||getSelection().toString())return;const a=r.querySelector('.sv-go');if(a)a.click();}));
+document.querySelectorAll('.sv-row').forEach(r=>r.addEventListener('click',e=>{if(1||e.target.closest('a, button')||getSelection().toString())return;const a=r.querySelector('.sv-go');if(a)a.click();}));
 </script>
 
 <script>

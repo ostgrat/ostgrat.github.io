@@ -1700,4 +1700,21 @@ video{pointer-events:none}   /* dekorative Videos: keine Browser-Bedienelemente 
   .rev .why-grid > a.why-card:last-of-type::after{inset:auto -16px 0 -16px;height:var(--sw);border:0;background:var(--p-dk,#0f0e12);opacity:1;z-index:2}
 }
 @media(max-width:900px){.sv .sv-row{cursor:default}}   /* Handy: nur der Pfeil ist der Link */
+
+/* Textlinks immer in Orange */
+.tlink,.ct-legal a,.tlink i,.ct-legal a i{color:var(--acc-hi)!important}
+.tlink,.ct-legal a{text-decoration:underline;text-decoration-thickness:var(--sw);text-underline-offset:.22em;text-decoration-color:color-mix(in srgb,var(--acc-hi) 45%,transparent)}
+.tlink:hover,.tlink:focus-visible,.ct-legal a:hover{text-decoration-color:var(--acc-hi)}
+/* Leistungen: nur der Pfeil ist der Link */
+.sv .sv-row{cursor:default}
+@media(max-width:900px){
+  /* Team: keine Personen-Vorschau am Handy; Bild bis zum inneren Seitenraster */
+  .team-fr,.team-ln,.team-tag,.team-about{display:none!important}
+  .team-fig{margin:0 -12px!important}
+}
+@media(max-width:900px){
+  /* Globus: Zeichenfläche reicht unter die Section, die Erde wird nie abgeschnitten */
+  #gscroll{height:calc(100svh - 67px - var(--bb) + 230vh)!important}   /* Aufbau, dann rückt alles nach oben, bis die Erde ganz zu sehen ist */
+}
+@media(min-width:901px){nav a.has-sub > svg{display:none!important}}   /* Plus nur im mobilen Menü */
 </style>

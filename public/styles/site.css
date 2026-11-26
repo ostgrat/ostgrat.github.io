@@ -98,7 +98,7 @@ main { flex:1 }
 .b-faq summary::-webkit-details-marker { display:none }
 .b-faq summary i { flex:none; display:grid; place-items:center; width:34px; height:34px; border:var(--sw) solid var(--line); transition:background .3s,color .3s,border-color .3s }
 .b-faq summary i svg { width:14px; height:14px; fill:currentColor; transition:rotate .45s cubic-bezier(.2,.7,.2,1) }
-.b-faq details[open] summary i { background:var(--ink); border-color:var(--ink); color:var(--bg) }
+.b-faq details[open] summary i { border-color:var(--ink) }   /* offen: Rahmen kräftiger, keine volle Fläche */
 .b-faq details[open] summary i svg { rotate:180deg }
 .b-faq details::details-content { block-size:0; overflow:hidden; transition:block-size .5s cubic-bezier(.2,.7,.2,1),content-visibility .5s allow-discrete }
 .b-faq details[open]::details-content { block-size:auto }
@@ -136,3 +136,12 @@ main { flex:1 }
 /* Keine Eyebrows: Kicker als Subline unter der Headline */
 .lab.sub { margin:-8px 0 28px; color:var(--mut) }
 .h1 + .lab.sub { margin:20px 0 0 }
+
+/* ASCII-Raster hinter allem, wie auf der Startseite */
+.ascii-bg { position:fixed; inset:0; width:100vw; height:100vh; z-index:0; pointer-events:none }
+.frame { position:relative; z-index:1 }
+/* Headlines: Buchstaben weichen dem Zeiger aus */
+i.sp-c { position:relative; font-style:normal }
+/* Textlinks immer in Orange */
+.prose a, main p a:not(.cta):not(.btn) { color:var(--acc); text-decoration:underline; text-decoration-thickness:var(--sw); text-underline-offset:3px; text-decoration-color:color-mix(in srgb,currentColor 45%,transparent) }
+.prose a:hover, main p a:not(.cta):not(.btn):hover { text-decoration-color:currentColor }
