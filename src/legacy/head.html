@@ -1613,4 +1613,11 @@ video{pointer-events:none}   /* dekorative Videos: keine Browser-Bedienelemente 
   .rev-h{opacity:0;transition:opacity .5s ease}
   .rev.in .rev-h{opacity:1}
 }
+
+/* Handy: Teamfoto im inneren Seitenraster, ganzes Bild ohne Anschnitt */
+@media(max-width:900px){
+  .team-fig{margin:0 -8px!important;height:auto!important;aspect-ratio:2000/1170}
+  .team-img{inset:0!important;top:0!important;bottom:0!important;height:100%!important;overflow:hidden!important}
+  .team-img img{position:absolute;inset:0;width:100%!important;height:100%!important;object-fit:contain!important;object-position:50% 50%!important;transform:none!important;translate:none!important;scale:none!important}
+}
 </style>
