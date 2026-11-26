@@ -831,7 +831,7 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:calc(-1 * var(-
 .fq summary:focus-visible{outline:var(--sw) solid var(--acc-hi);outline-offset:4px}
 .fq summary i{flex:none;display:grid;place-items:center;width:34px;height:34px;border:var(--sw) solid var(--line);transition:border-color .3s,background .3s,color .3s}
 .fq summary i svg{width:14px;height:14px;fill:currentColor;transition:rotate .45s cubic-bezier(.2,.7,.2,1)}
-.fq details[open] summary i{background:var(--ink);border-color:var(--ink);color:var(--bg)}   /* Zustandswechsel: volle Fläche, Icon kippt */
+.fq details[open] summary i{border-color:var(--ink)}   /* offen: Rahmen kräftiger, Icon kippt – keine volle Fläche */
 .fq details[open] summary i svg{rotate:180deg}
 .fq details::details-content{block-size:0;overflow:hidden;transition:block-size .5s cubic-bezier(.2,.7,.2,1),content-visibility .5s allow-discrete}
 .fq details[open]::details-content{block-size:auto}
@@ -1694,9 +1694,10 @@ video{pointer-events:none}   /* dekorative Videos: keine Browser-Bedienelemente 
   .ti .ti-steps{margin-bottom:0!important}
   .ti .ti-cta{margin-top:18px!important}
   .ti .ti-c{padding-bottom:74px!important}
-  .ti{padding-bottom:124px!important}
+  .ti{padding-bottom:56px!important}
   /* Für Angreifer: Linie auch über der ersten und unter der letzten Karte */
   .rev .why-grid > .why-card:first-child::before{content:"";display:block!important;position:absolute;left:-16px;right:-16px;top:0;height:var(--sw);background:var(--p-dk,#0f0e12);z-index:2;transform:none}
-  .rev .why-grid > .why-card:last-child::after{inset:auto -16px 0 -16px;height:var(--sw);border:0;background:var(--p-dk,#0f0e12);opacity:1;z-index:2}
+  .rev .why-grid > a.why-card:last-of-type::after{inset:auto -16px 0 -16px;height:var(--sw);border:0;background:var(--p-dk,#0f0e12);opacity:1;z-index:2}
 }
+@media(max-width:900px){.sv .sv-row{cursor:default}}   /* Handy: nur der Pfeil ist der Link */
 </style>

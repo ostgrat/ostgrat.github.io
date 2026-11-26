@@ -1069,7 +1069,7 @@ function cubeSwap(cv) {
     const yawFree = (45 + 180 * sr + (RM ? 0 : 6 * Math.sin(t * .35))) * Math.PI / 180, yawEnd = 283 * Math.PI / 180;   /* nicht symmetrisch: nur leicht verdreht */
     const yaw = yawFree + (yawEnd - yawFree) * c, pitch = (35.26 + (90 - 35.26) * c) * Math.PI / 180;   /* Endbild: komplett von oben, nur leicht verdreht */   /* landet schräg und bleibt leicht isometrisch */
     const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
-    const S = Math.min(W / 1.6, H) * (W < 700 ? .38 : .2) * (1 - .62 * c), ox = W / 2, oy = H * (W < 700 ? .54 : .5);   /* Handy: Würfel größer */
+    const S = Math.min(W / 1.6, H) * (W < 700 ? .38 : .2) * (1 - .62 * c), ox = W / 2, oy = H * (W < 700 ? .68 : .5);   /* Handy: Würfel größer */
     const Pj = (x, y, z) => { const X = x * cy + z * sy, Z0 = -x * sy + z * cy; return [ox + X * S, oy - (y * cp - Z0 * sp) * S, Z0 * cp + y * sp]; };
     const facing = f => { const n = f[0], Z0 = -n[0] * sy + n[2] * cy; return Z0 * cp + n[1] * sp; };
     if (atk0 && now >= nextHit) { const fr = [0, 1, 2, 3, 4].filter(fi => facing(FACES[fi]) > .3), H0 = spawned < NH ? HITS[spawned] : {u: (Math.random() * 2 - 1) * .7, v: (Math.random() * 2 - 1) * .7}; live.push({fi: fr.length ? fr[Math.floor(Math.random() * fr.length)] : 0, u: H0.u, v: H0.v, t0: now}); spawned++; nextHit = now + 330 + Math.random() * 260; }   /* neue Treffer nur im Schritt Angreifen */
@@ -3149,7 +3149,7 @@ window.ostGlobeKF=(()=>{const sc=document.getElementById('gscroll');if(!sc)retur
 
 <script>
 /* Leistungen: ganze Karte klickbar, Ziel ist der Pfeil-Link */
-document.querySelectorAll('.sv-row').forEach(r=>r.addEventListener('click',e=>{if(e.target.closest('a, button')||getSelection().toString())return;const a=r.querySelector('.sv-go');if(a)a.click();}));
+document.querySelectorAll('.sv-row').forEach(r=>r.addEventListener('click',e=>{if(innerWidth<=900||e.target.closest('a, button')||getSelection().toString())return;const a=r.querySelector('.sv-go');if(a)a.click();}));
 </script>
 
 <script>
