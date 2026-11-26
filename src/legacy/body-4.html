@@ -547,7 +547,7 @@ function frame(now) {
   const list = [...touches.values()];
   /* beim Scrollen bleibt das Licht unter dem Zeiger: Bildschirm- in Seitenkoordinaten umrechnen */
   if (mouse) { mouse.x = mouse.cx - ox; mouse.y = mouse.cy - oy; const cr = CUBE_CV && CUBE_CV.getBoundingClientRect(); mouse.cube = !!cr && mouse.cx > cr.left && mouse.cx < cr.right && mouse.cy > cr.top && mouse.cy < cr.bottom;
-    const co = NOLIGHT && NOLIGHT.getBoundingClientRect(), PADL = R0 * .3; if (co && co.width && mouse.cx > co.left - PADL && mouse.cx < co.right + PADL && mouse.cy > co.top - PADL && mouse.cy < co.bottom + PADL) mouse.cube = true;   /* Kontaktwege: Schrift nie vom Glühen überdeckt */
+    const PADL = R0 * .3; for (const nl of (frame.nol || (frame.nol = [NOLIGHT, ...document.querySelectorAll('.sv-list')].filter(Boolean)))) { const co = nl.getBoundingClientRect(); if (co.width && mouse.cx > co.left - PADL && mouse.cx < co.right + PADL && mouse.cy > co.top - PADL && mouse.cy < co.bottom + PADL) { mouse.cube = true; break; } }   /* Kontaktwege und Leistungskarten: kein Glühen dahinter */
     mouse.k += ((mouse.cube ? 0 : mouse.over ? S.textDim : 1) - mouse.k) * .08; list.push(mouse); }   /* über dem Würfel kein Licht im Raster */
   for (const h of holds.values()) if (h.cx != null) { h.x = h.cx - ox; h.y = h.cy - oy; }
   if (!list.length && now - idleAt > 1200) {
@@ -1450,6 +1450,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
 
   const ACCENT = [240, 112, 79]; addEventListener('ostpal', e => ACCENT.splice(0, 3, ...e.detail.acc));
   const copyEl = document.getElementById('gcopy');
+  let gTop = 40, tN = 3, tFs = 40;   /* Handy: Titel steht oben, wo später die Headline erscheint */
   const sm = v => v * v * (3 - 2 * v);
   const copyParts = [[copyEl.querySelector('h2'), .5, .68], [copyEl.querySelector('.gx-sub'), .55, .73], [copyEl.querySelector('p:not(.gx-sub)'), .6, .78], [copyEl.querySelector('.gx'), .66, .84]];        // gedämpftes, aber kräftiges Orange (= --accent)
 
@@ -1616,7 +1617,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
     const wide = W >= 900;
     R = wide ? Math.min(W * .27, H * .45) : Math.min(W * .42, H * .3); CX = wide ? W * .72 : W / 2; CY = wide ? H * .56 : H * .64;   /* Desktop: größer, darf unten leicht aus der Section ragen */
     if (!wide) {   /* schmal: Erde im freien Raum unter dem Text, darf nie in den Text ragen */
-      const cr = canvas.getBoundingClientRect(), extra = [...copyEl.querySelectorAll('details[open]')].reduce((s, d) => s + d.offsetHeight - d.querySelector('summary').offsetHeight, 0), tb = copyEl.getBoundingClientRect().bottom - extra - cr.top + 28, bot = H - 28;   /* Text oben, Erde darunter; gemessen wie mit zugeklappten Branchen */
+      const cr = canvas.getBoundingClientRect(), extra = [...copyEl.querySelectorAll('details[open]')].reduce((s, d) => s + d.offsetHeight - d.querySelector('summary').offsetHeight, 0), tb = copyEl.getBoundingClientRect().bottom - extra - cr.top + 28, bot = H - 28; gTop = copyEl.getBoundingClientRect().top - cr.top;   /* Text oben, Erde darunter; gemessen wie mit zugeklappten Branchen */
       R = Math.max(W * .4, Math.min(W * .46, (bot - tb) / 2)); CY = Math.min(Math.max(tb + R, (tb + bot) / 2), H - R * .72);   /* Handy: Erde groß, darf unten leicht angeschnitten sein */
     }
     window.ostGlobe = {x:CX, y:CY, r:R};   /* für das Raster: nur direkt hinter der Kugel kein Licht */
@@ -1662,7 +1663,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
   // Schrift als Pixel-Matrix rastern; jeder Erd-Punkt startet auf einem Schrift-Pixel
   let nodes = [], nodeSize = 4, nodeCount = 0;
   let titleCfg = null, tMinX = 0, tMaxX = 1;
-  const tY = () => W < 900 ? CY : H * TITLE_Y;   /* Handy: Titel sitzt dort, wo die Erde entsteht */
+  const tY = () => W < 900 ? gTop + tN * tFs * 1.02 / 2 : H * TITLE_Y;   /* Handy: Titel sitzt oben und zerfällt nach unten zur Erde */
   let pR, pT, pD, pS, pSc, pPh;
   function buildIntro() {
     const narrow = W < 640;
@@ -1678,7 +1679,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
     const wNow = Math.max(...lines.map(l => o.measureText(l).width));
     if (wNow * (fs / (parseFloat(o.font) || fs)) > W * 0.8 || widest > W * 0.86) { fs *= W * 0.8 / Math.max(widest, 1); o.font = font(); if ('letterSpacing' in o) o.letterSpacing = (fs * -0.035) + 'px'; }
     if (widest > W * 0.86) { fs *= W * 0.86 / widest; o.font = font(); if ('letterSpacing' in o) o.letterSpacing = (fs * -0.035) + 'px'; }
-    o.fillStyle = '#fff'; o.textAlign = 'center'; o.textBaseline = 'middle';
+    o.fillStyle = '#fff'; o.textAlign = 'center'; o.textBaseline = 'middle'; tN = lines.length; tFs = fs;
     lines.forEach((l, k) => o.fillText(l, W / 2, tY() + (k - (lines.length - 1) / 2) * fs * 1.02));
     titleCfg = {lines, fs, font: font(), ls: fs * -0.035};
     const g = Math.max(3, Math.round(fs / 26));          // Rasterweite der Schrift-Pixel
@@ -3178,7 +3179,7 @@ document.querySelectorAll('.sv-row').forEach(r=>r.addEventListener('click',e=>{i
   const rows=()=>[...L.children];
   const vid=r=>r&&r.querySelector('.sv-vid video');
   const set=r=>{if(r===cur)return;chg=performance.now();if(cur){cur.classList.remove('act');const v=vid(cur);v&&v.pause();}cur=r;if(cur){cur.classList.add('act');const v=vid(cur);if(v){v.preload='auto';const pr=v.play();pr&&pr.catch(()=>{});}}};
-  const measure=()=>{if(performance.now()-chg<1100)return;rows().forEach((r,i)=>{if(r!==cur)hc[i]=r.offsetHeight;});};
+  const measure=()=>{if(performance.now()-chg<700)return;rows().forEach((r,i)=>{if(r!==cur)hc[i]=r.offsetHeight;});};
   const pick=()=>{raf=0;if(L.dataset.v!=='4'){set(null);ci=-1;return;}measure();const R=rows(),n=R.length;if(hc.length<n||hc.some(x=>!x)){R.forEach((r,i)=>{if(!hc[i])hc[i]=r.offsetHeight;});}
     const lb=L.getBoundingClientRect();if(lb.bottom<0||lb.top>innerHeight){set(null);ci=-1;return;}
     const p=innerHeight*.5-lb.top,HY=28;if(p<0){set(null);ci=-1;return;}
