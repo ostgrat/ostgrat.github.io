@@ -1069,7 +1069,7 @@ function cubeSwap(cv) {
     const yawFree = (45 + 180 * sr + (RM ? 0 : 6 * Math.sin(t * .35))) * Math.PI / 180, yawEnd = 283 * Math.PI / 180;   /* nicht symmetrisch: nur leicht verdreht */
     const yaw = yawFree + (yawEnd - yawFree) * c, pitch = (35.26 + (90 - 35.26) * c) * Math.PI / 180;   /* Endbild: komplett von oben, nur leicht verdreht */   /* landet schräg und bleibt leicht isometrisch */
     const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
-    const S = Math.min(W / 1.6, H) * (W < 700 ? .27 : .2) * (1 - .62 * c), ox = W / 2, oy = H * .5;   /* Handy: Würfel größer */
+    const S = Math.min(W / 1.6, H) * (W < 700 ? .4 : .2) * (1 - .62 * c), ox = W / 2, oy = H * (W < 700 ? .46 : .5);   /* Handy: Würfel größer */
     const Pj = (x, y, z) => { const X = x * cy + z * sy, Z0 = -x * sy + z * cy; return [ox + X * S, oy - (y * cp - Z0 * sp) * S, Z0 * cp + y * sp]; };
     const facing = f => { const n = f[0], Z0 = -n[0] * sy + n[2] * cy; return Z0 * cp + n[1] * sp; };
     if (atk0 && now >= nextHit) { const fr = [0, 1, 2, 3, 4].filter(fi => facing(FACES[fi]) > .3), H0 = spawned < NH ? HITS[spawned] : {u: (Math.random() * 2 - 1) * .7, v: (Math.random() * 2 - 1) * .7}; live.push({fi: fr.length ? fr[Math.floor(Math.random() * fr.length)] : 0, u: H0.u, v: H0.v, t0: now}); spawned++; nextHit = now + 330 + Math.random() * 260; }   /* neue Treffer nur im Schritt Angreifen */
@@ -1077,7 +1077,7 @@ function cubeSwap(cv) {
     mk += ((mOn ? 1 : 0) - mk) * (1 - Math.exp(-dt * 6));
     const MR = 45, flee = p => { if (mk < .01) return p; const dx = p[0] - mx, dy = p[1] - my, d2 = dx * dx + dy * dy; if (d2 > MR * MR * 4) return p; const d = Math.sqrt(d2) || 1, f = 2 * mk * Math.exp(-d2 / (MR * MR)); return [p[0] + dx / d * f, p[1] + dy / d * f, p[2]]; };
     g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);   /* kein eigener Hintergrund */
-    const px = Math.max(1.5, 3.2 * (1 - .52 * c));   /* im Endbild etwas kleiner */   /* Pixel ähnlich groß wie beim Globus */
+    const px = Math.max(1.3, (W < 700 ? 2.2 : 3.2) * (1 - .52 * c));   /* Handy: feinere Pixel */   /* im Endbild etwas kleiner */   /* Pixel ähnlich groß wie beim Globus */
     /* --- Überwachen: großes Raster weiterer Würfel, nach außen ausgeblendet (je Seite ein Pfad, schnell) --- */
     const na = seg(sg, .05, .45), sp2 = 2.14, SPREAD = .9;
     /* Scanlinien: nur im fertigen Endbild; laufen entlang einer Pixelreihe, zufällige Länge und Richtung */

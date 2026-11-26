@@ -1425,7 +1425,7 @@ video{pointer-events:none}   /* dekorative Videos: keine Browser-Bedienelemente 
   .fab{transition:translate .45s cubic-bezier(.2,.7,.2,1),opacity .3s}
   html.fab-away .fab{translate:0 calc(100% + 24px);opacity:0;pointer-events:none}
   /* Globus: Text immer lesbar, nicht vom Aufbau abhängig */
-  #gscroll .gcopy > *{opacity:1!important;filter:none!important;translate:none!important}
+  #gscroll .gcopy h2{opacity:1!important;filter:none!important;translate:none!important}   /* Headline steht, der Rest blurrt nach dem Aufbau ein */
   /* Blog-Filter: Tabs nicht stauchen, seitlich wischbar */
   .bl-bar{gap:12px}.bl-tabs{gap:22px;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(90deg,#000 85%,transparent)}
   .bl-tabs button{flex:none}
@@ -1619,5 +1619,38 @@ video{pointer-events:none}   /* dekorative Videos: keine Browser-Bedienelemente 
   .team-fig{margin:0 -8px!important;height:auto!important;aspect-ratio:2000/1170}
   .team-img{inset:0!important;top:0!important;bottom:0!important;height:100%!important;overflow:hidden!important}
   .team-img img{position:absolute;inset:0;width:100%!important;height:100%!important;object-fit:contain!important;object-position:50% 50%!important;transform:none!important;translate:none!important;scale:none!important}
+}
+
+/* ===== Handy: einheitliches Raster – Linien bis zum Rand, Bilder im inneren Raster (16 px), Inhalt bei 28 px ===== */
+@media(max-width:900px){
+  .why,.team,.ti,.fq,.bl,.ct,.sv{padding-left:28px!important;padding-right:28px!important}
+  /* Leistungen */
+  .sv .sv-list{margin-left:-28px!important;margin-right:-28px!important}
+  .sv .sv-list .sv-c,.sv .sv-list .sv-side{padding-left:12px!important;padding-right:12px!important}
+  /* NIS2: Trennlinien bis zum Rand, etwas mehr Innenabstand, weniger Spalten-Gap, Bild im inneren Raster */
+  .ti-grid{margin:0 -28px!important}
+  .ti-c{padding:44px 28px 40px!important}
+  .ti-steps{margin-left:-28px;margin-right:-28px}
+  .ti-steps li{padding:18px 28px;grid-template-columns:30px minmax(0,1fr);gap:8px}
+  .ti-img{margin:0 16px!important;border-top:0!important}
+  /* Progress: mehr Innenabstand, weniger Lücke zur Animation, Inhalt steht ruhig */
+  .s2-pin{--mx:28px;padding-top:48px!important}
+  .s2-media{margin-top:0!important}
+  .s2 .s2-text > h2,.s2 .s2-text > p,.s2 .s2-list,.s2.in .s2-text > h2,.s2.in .s2-text > p,.s2.in .s2-list{opacity:1!important;filter:none!important;translate:none!important;transition:none!important}
+  .s2-list li h3 .hl{transition:none!important}
+  /* Für Angreifer: Trennlinien immer da */
+  .rev .why-card + .why-card::before{transform:none!important;transition:none!important}
+  /* Blog: Filterlinie bis zum Rand, Bilder im inneren Raster, Text bei 28 px */
+  .bl-bar{margin-left:-28px;margin-right:-28px;padding-left:28px;padding-right:28px}
+  .bl-bar::after{left:0;right:0}
+  .bl-img{margin-left:-12px!important;margin-right:-12px!important}
+  /* FAQ: Trennlinien bis zum Rand */
+  .fq-list{margin-left:-28px!important;margin-right:-28px!important}
+  .fq details summary,.fq details p{padding-left:28px!important;padding-right:28px!important}
+  .fq summary i{margin-right:0}
+  /* Kontakt: Trennlinien bis zum Rand, Formular im inneren Raster */
+  .ct .ct-opts{margin-left:-28px!important;margin-right:-28px!important;width:auto!important;max-width:none!important}
+  .ct .ct-opts li{padding-left:28px;padding-right:28px}
+  .ct .ct-r{margin-left:-12px!important;margin-right:-12px!important;padding:40px 12px!important}
 }
 </style>
