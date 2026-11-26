@@ -54,6 +54,7 @@ export const toCard = (p: Post) => ({
   excerpt: p.data.excerpt,
   author: p.data.author,
   dateText: formatDate(p.data.date),
+  iso: isoDate(p.data.date),
   cover: p.data.cover,
   coverSvg: inlineSvg(p.data.cover),
   alert: p.alert,

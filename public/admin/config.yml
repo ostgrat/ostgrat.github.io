@@ -232,40 +232,655 @@ collections:
                   - { label: Compliance, value: compliance }
               - { label: Anzahl Beiträge, name: count, widget: number, value_type: int, min: 1, max: 6, default: 3 }
 
-  # ---------- Startseite ----------
+  # ---------- Startseite: Blöcke (Markup in src/lib/home-blocks.mjs) ----------
   - name: startseite
     label: Startseite
     icon: home
     files:
-      - name: home
-        label: Startseite
-        file: src/data/home.json
-        format: json
-        fields:
-          - label: Hero
-            name: hero
-            widget: object
+    - name: home
+      label: Startseite
+      file: src/data/home.json
+      format: json
+      fields:
+      - label: Blöcke
+        name: blocks
+        widget: list
+        label_singular: Block
+        thumbnail: ansicht
+        hint: Blöcke wählen, sortieren und befüllen. Hell/Dunkel pro Block bestimmt den Farbwechsel beim Scrollen.
+        types:
+        - label: Hero mit Monitor & Laufband
+          name: hero
+          widget: object
+          description: 'Seitenanfang: Headline in drei Zeilen (dritte wird getippt), Einleitung, Button, Laufband.'
+          summary: '{{fields.line1}} {{fields.line2}}'
+          fields:
+          - label: So sieht der Block aus
+            name: ansicht
+            widget: image
+            default: /uploads/bloecke/start-hero.jpg
+            readonly: true
+            required: false
+            choose_url: false
+          - label: Hintergrund
+            name: theme
+            widget: select
+            default: dunkel
+            options:
+            - label: Dunkel
+              value: dunkel
+            - label: Hell
+              value: hell
+            hint: Beim Scrollen blendet die Seite in diese Farbe über.
+          - label: Subline (unter der Headline)
+            name: kicker
+            widget: string
+          - label: Headline – Zeile 1
+            name: line1
+            widget: string
+          - label: Headline – Zeile 2
+            name: line2
+            widget: string
+          - label: Headline – Zeile 3 (getippt, hervorgehoben)
+            name: highlight
+            widget: string
+          - label: Einleitung
+            name: lead
+            widget: text
+          - label: Button-Text
+            name: ctaLabel
+            widget: string
+            required: false
+          - label: Button-Link
+            name: ctaLink
+            widget: string
+            required: false
+            hint: 'z. B. #kontakt oder /nis2-check/'
+          - label: Laufband
+            name: ticker
+            widget: list
+            label_singular: Eintrag
+            hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
+        - label: Fakten & Zertifikate
+          name: fakten
+          widget: object
+          description: Headline, Text, Kennzahlen rechts, Zertifikats-Logos und -Kacheln, animiertes Diagramm.
+          summary: '{{fields.heading}}'
+          fields:
+          - label: So sieht der Block aus
+            name: ansicht
+            widget: image
+            default: /uploads/bloecke/start-fakten.jpg
+            readonly: true
+            required: false
+            choose_url: false
+          - label: Hintergrund
+            name: theme
+            widget: select
+            default: hell
+            options:
+            - label: Dunkel
+              value: dunkel
+            - label: Hell
+              value: hell
+            hint: Beim Scrollen blendet die Seite in diese Farbe über.
+          - label: Überschrift (Zeilenumbruch = neue Zeile)
+            name: heading
+            widget: text
+          - label: Unterzeile
+            name: sub
+            widget: string
+          - label: Text
+            name: text
+            widget: text
+            hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
+          - label: Button-Text
+            name: ctaLabel
+            widget: string
+            required: false
+          - label: Button-Link
+            name: ctaLink
+            widget: string
+            required: false
+            hint: 'z. B. #kontakt oder /nis2-check/'
+          - label: Textlink
+            name: linkLabel
+            widget: string
+            required: false
+          - label: Textlink-Ziel
+            name: linkHref
+            widget: string
+            required: false
+          - label: Logos
+            name: logos
+            widget: list
+            label_singular: Logo
+            summary: '{{fields.alt}}'
             fields:
-              - { label: Dachzeile, name: kicker, widget: string }
-              - { label: "Headline – Zeile 1", name: line1, widget: string }
-              - { label: "Headline – Zeile 2", name: line2, widget: string }
-              - { label: "Headline – Zeile 3 (getippt, hervorgehoben)", name: highlight, widget: string }
-              - { label: Einleitung, name: lead, widget: text }
-              - { label: Button-Text, name: ctaLabel, widget: string }
-              - { label: Button-Link, name: ctaLink, widget: string, hint: "z. B. #kontakt für den Kontaktbereich" }
-          - label: FAQ
-            name: faq
-            widget: object
+            - label: Logo
+              name: image
+              widget: image
+            - label: Beschreibung (Alt-Text)
+              name: alt
+              widget: string
+            - label: Höhe in Pixel
+              name: height
+              widget: number
+              value_type: int
+              default: 32
+              min: 12
+              max: 80
+          - label: Kennzahlen
+            name: stats
+            widget: list
+            label_singular: Kennzahl
+            summary: '{{fields.value}} – {{fields.label}}'
             fields:
-              - { label: Dachzeile, name: kicker, widget: string }
-              - { label: Überschrift, name: heading, widget: string }
-              - { label: Text im Kasten, name: boxText, widget: text }
-              - { label: Kontakt-E-Mail, name: email, widget: string }
-              - label: Fragen
-                name: items
-                widget: list
-                label_singular: Frage
-                summary: "{{fields.question}}"
-                fields:
-                  - { label: Frage, name: question, widget: string }
-                  - { label: Antwort, name: answer, widget: text }
+            - label: Zahl
+              name: value
+              widget: string
+            - label: Beschreibung
+              name: label
+              widget: string
+          - label: Zertifikats-Kacheln
+            name: certs
+            widget: list
+            label_singular: Kachel
+            summary: '{{fields.title}}'
+            fields:
+            - label: Titel
+              name: title
+              widget: string
+            - label: Untertitel
+              name: subtitle
+              widget: string
+        - label: Team mit Gruppenfoto
+          name: team
+          widget: object
+          description: Headline und Text, darunter großes Teamfoto mit Effekten.
+          summary: '{{fields.heading}}'
+          fields:
+          - label: So sieht der Block aus
+            name: ansicht
+            widget: image
+            default: /uploads/bloecke/start-team.jpg
+            readonly: true
+            required: false
+            choose_url: false
+          - label: Hintergrund
+            name: theme
+            widget: select
+            default: hell
+            options:
+            - label: Dunkel
+              value: dunkel
+            - label: Hell
+              value: hell
+            hint: Beim Scrollen blendet die Seite in diese Farbe über.
+          - label: Überschrift
+            name: heading
+            widget: string
+          - label: Text
+            name: lead
+            widget: text
+          - label: Zusatz (hervorgehoben)
+            name: hint
+            widget: string
+            required: false
+          - label: Button-Text
+            name: ctaLabel
+            widget: string
+            required: false
+          - label: Button-Link
+            name: ctaLink
+            widget: string
+            required: false
+            hint: 'z. B. #kontakt oder /nis2-check/'
+          - label: Gruppenfoto
+            name: image
+            widget: image
+          - label: Bildbeschreibung (Alt-Text)
+            name: imageAlt
+            widget: string
+        - label: Bild, Text & Schritte
+          name: nis2
+          widget: object
+          description: Bild links, rechts Headline, Text, nummerierte Schritte und Button.
+          summary: '{{fields.heading}}'
+          fields:
+          - label: So sieht der Block aus
+            name: ansicht
+            widget: image
+            default: /uploads/bloecke/start-nis2.jpg
+            readonly: true
+            required: false
+            choose_url: false
+          - label: Hintergrund
+            name: theme
+            widget: select
+            default: hell
+            options:
+            - label: Dunkel
+              value: dunkel
+            - label: Hell
+              value: hell
+            hint: Beim Scrollen blendet die Seite in diese Farbe über.
+          - label: Überschrift
+            name: heading
+            widget: string
+          - label: Text
+            name: text
+            widget: text
+            hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
+          - label: Schritte
+            name: steps
+            widget: list
+            label_singular: Schritt
+            summary: '{{fields.title}}'
+            fields:
+            - label: Titel
+              name: title
+              widget: string
+            - label: Text
+              name: text
+              widget: string
+          - label: Bild
+            name: image
+            widget: image
+          - label: Bildbeschreibung (Alt-Text)
+            name: imageAlt
+            widget: string
+          - label: Button-Text
+            name: ctaLabel
+            widget: string
+            required: false
+          - label: Button-Link
+            name: ctaLink
+            widget: string
+            required: false
+            hint: 'z. B. #kontakt oder /nis2-check/'
+        - label: Progress Section
+          name: redteam
+          widget: object
+          description: Box bleibt beim Scrollen stehen, der Fortschritt läuft durch die Schritte, das Bild wechselt.
+          summary: '{{fields.heading}}'
+          fields:
+          - label: So sieht der Block aus
+            name: ansicht
+            widget: image
+            default: /uploads/bloecke/start-redteam.jpg
+            readonly: true
+            required: false
+            choose_url: false
+          - label: Hintergrund
+            name: theme
+            widget: select
+            default: hell
+            options:
+            - label: Dunkel
+              value: dunkel
+            - label: Hell
+              value: hell
+            hint: Beim Scrollen blendet die Seite in diese Farbe über. Dieser Block ist immer hell gestaltet – „Hell“ lassen.
+          - label: Überschrift
+            name: heading
+            widget: string
+          - label: Überschrift – farbiger Teil
+            name: headingAccent
+            widget: string
+            required: false
+          - label: Text
+            name: text
+            widget: text
+            hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
+          - label: Button-Text
+            name: ctaLabel
+            widget: string
+            required: false
+          - label: Button-Link
+            name: ctaLink
+            widget: string
+            required: false
+            hint: 'z. B. #kontakt oder /nis2-check/'
+          - label: Schritte
+            name: steps
+            widget: list
+            label_singular: Schritt
+            summary: '{{fields.title}}'
+            fields:
+            - label: Titel
+              name: title
+              widget: string
+            - label: Text
+              name: text
+              widget: text
+              hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
+            - label: Bild
+              name: image
+              widget: image
+            - label: Bildbeschreibung (Alt-Text)
+              name: imageAlt
+              widget: string
+        - label: Video mit drei Karten
+          name: warum
+          widget: object
+          description: Headline über Video-Hintergrund, darunter Karten mit Icon. Ideal für genau drei Karten.
+          summary: '{{fields.heading}}'
+          fields:
+          - label: So sieht der Block aus
+            name: ansicht
+            widget: image
+            default: /uploads/bloecke/start-warum.jpg
+            readonly: true
+            required: false
+            choose_url: false
+          - label: Hintergrund
+            name: theme
+            widget: select
+            default: dunkel
+            options:
+            - label: Dunkel
+              value: dunkel
+            - label: Hell
+              value: hell
+            hint: Beim Scrollen blendet die Seite in diese Farbe über.
+          - label: Überschrift
+            name: heading
+            widget: string
+          - label: Karten
+            name: cards
+            widget: list
+            label_singular: Karte
+            summary: '{{fields.label}}'
+            fields:
+            - label: Titel
+              name: label
+              widget: string
+            - label: Text
+              name: text
+              widget: text
+              hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
+            - label: Link
+              name: link
+              widget: string
+              required: false
+              default: '#kontakt'
+        - label: Leistungen
+          name: services
+          widget: object
+          description: Liste der Leistungen mit Video, Kennzahlen und Pfeil-Link.
+          summary: '{{fields.line1}} {{fields.line2}}'
+          fields:
+          - label: So sieht der Block aus
+            name: ansicht
+            widget: image
+            default: /uploads/bloecke/start-services.jpg
+            readonly: true
+            required: false
+            choose_url: false
+          - label: Hintergrund
+            name: theme
+            widget: select
+            default: dunkel
+            options:
+            - label: Dunkel
+              value: dunkel
+            - label: Hell
+              value: hell
+            hint: Beim Scrollen blendet die Seite in diese Farbe über.
+          - label: Überschrift – Zeile 1
+            name: line1
+            widget: string
+          - label: Überschrift – Zeile 2
+            name: line2
+            widget: string
+          - label: Einleitung
+            name: intro
+            widget: text
+            hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
+          - label: Leistungen
+            name: items
+            widget: list
+            label_singular: Leistung
+            summary: '{{fields.title}}'
+            fields:
+            - label: Titel
+              name: title
+              widget: string
+            - label: Text
+              name: text
+              widget: text
+              hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
+            - label: Angabe 1 – Bezeichnung
+              name: label1
+              widget: string
+              default: Einstieg
+            - label: Angabe 1 – Wert
+              name: value1
+              widget: string
+            - label: Angabe 2 – Bezeichnung
+              name: label2
+              widget: string
+              default: Dauer
+            - label: Angabe 2 – Wert
+              name: value2
+              widget: string
+            - label: Video
+              name: video
+              widget: file
+              required: false
+            - label: Standbild zum Video
+              name: poster
+              widget: image
+              required: false
+            - label: Link
+              name: link
+              widget: string
+              required: false
+              default: '#kontakt'
+            - label: Sprungmarke (optional)
+              name: anchor
+              widget: string
+              required: false
+              hint: 'z. B. nis2 – dann führt #nis2 zu dieser Leistung'
+        - label: Globus
+          name: globus
+          widget: object
+          description: Rotierender Pixel-Globus mit Text und Branchen-Liste. Nur einmal pro Seite verwenden.
+          summary: '{{fields.line1}} {{fields.line2}}'
+          fields:
+          - label: So sieht der Block aus
+            name: ansicht
+            widget: image
+            default: /uploads/bloecke/start-globus.jpg
+            readonly: true
+            required: false
+            choose_url: false
+          - label: Hintergrund
+            name: theme
+            widget: select
+            default: dunkel
+            options:
+            - label: Dunkel
+              value: dunkel
+            - label: Hell
+              value: hell
+            hint: Beim Scrollen blendet die Seite in diese Farbe über.
+          - label: Unsichtbare Überschrift (für Screenreader)
+            name: srHeading
+            widget: string
+          - label: Überschrift – Zeile 1
+            name: line1
+            widget: string
+          - label: Überschrift – Zeile 2
+            name: line2
+            widget: string
+          - label: Unterzeile
+            name: sub
+            widget: string
+          - label: Text
+            name: text
+            widget: text
+            hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
+          - label: Branchen
+            name: branches
+            widget: list
+            label_singular: Branche
+            summary: '{{fields.title}}'
+            fields:
+            - label: Titel
+              name: title
+              widget: string
+            - label: Untertitel
+              name: subtitle
+              widget: string
+            - label: Text
+              name: text
+              widget: text
+              hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
+        - label: News & Insights
+          name: insights
+          widget: object
+          description: Die neuesten Blogbeiträge mit Filter und Suche.
+          summary: '{{fields.heading}}'
+          fields:
+          - label: So sieht der Block aus
+            name: ansicht
+            widget: image
+            default: /uploads/bloecke/start-insights.jpg
+            readonly: true
+            required: false
+            choose_url: false
+          - label: Hintergrund
+            name: theme
+            widget: select
+            default: dunkel
+            options:
+            - label: Dunkel
+              value: dunkel
+            - label: Hell
+              value: hell
+            hint: Beim Scrollen blendet die Seite in diese Farbe über.
+          - label: Subline (unter der Headline)
+            name: kicker
+            widget: string
+          - label: Überschrift
+            name: heading
+            widget: string
+          - label: Button-Text
+            name: ctaLabel
+            widget: string
+          - label: Anzahl Beiträge
+            name: count
+            widget: number
+            value_type: int
+            default: 6
+            min: 1
+            max: 12
+        - label: FAQ mit Kontaktkasten
+          name: faq
+          widget: object
+          description: Links Headline und Kontaktkasten, rechts aufklappbare Fragen.
+          summary: '{{fields.heading}}'
+          fields:
+          - label: So sieht der Block aus
+            name: ansicht
+            widget: image
+            default: /uploads/bloecke/start-faq.jpg
+            readonly: true
+            required: false
+            choose_url: false
+          - label: Hintergrund
+            name: theme
+            widget: select
+            default: dunkel
+            options:
+            - label: Dunkel
+              value: dunkel
+            - label: Hell
+              value: hell
+            hint: Beim Scrollen blendet die Seite in diese Farbe über.
+          - label: Überschrift
+            name: heading
+            widget: string
+          - label: Text im Kasten
+            name: boxText
+            widget: text
+            hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
+          - label: Kontakt-E-Mail
+            name: email
+            widget: string
+          - label: Fragen
+            name: items
+            widget: list
+            label_singular: Frage
+            summary: '{{fields.question}}'
+            fields:
+            - label: Frage
+              name: question
+              widget: string
+            - label: Antwort
+              name: answer
+              widget: text
+              hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
+        - label: Kontakt mit Formular
+          name: kontakt
+          widget: object
+          description: Kontaktwege links, Formular rechts.
+          summary: '{{fields.heading}}'
+          fields:
+          - label: So sieht der Block aus
+            name: ansicht
+            widget: image
+            default: /uploads/bloecke/start-kontakt.jpg
+            readonly: true
+            required: false
+            choose_url: false
+          - label: Hintergrund
+            name: theme
+            widget: select
+            default: dunkel
+            options:
+            - label: Dunkel
+              value: dunkel
+            - label: Hell
+              value: hell
+            hint: Beim Scrollen blendet die Seite in diese Farbe über.
+          - label: Überschrift
+            name: heading
+            widget: string
+          - label: Unterzeile
+            name: sub
+            widget: string
+          - label: Kontaktwege
+            name: options
+            widget: list
+            label_singular: Kontaktweg
+            summary: '{{fields.label}}: {{fields.value}}'
+            fields:
+            - label: Bezeichnung
+              name: label
+              widget: string
+            - label: Wert
+              name: value
+              widget: string
+            - label: Link (tel:, mailto:, …)
+              name: link
+              widget: string
+              required: false
+            - label: Hervorheben (Notfall)
+              name: hot
+              widget: boolean
+              required: false
+              default: false
+          - label: Themen im Formular
+            name: topics
+            widget: list
+            label_singular: Thema
+          - label: Button-Text
+            name: sendLabel
+            widget: string
+          - label: Datenschutz-Hinweis
+            name: legal
+            widget: text
+            hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'

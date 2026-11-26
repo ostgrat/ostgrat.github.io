@@ -18,5 +18,8 @@
     "@sveltia/cms": "^0.273.1",
     "astro": "^7.4.13",
     "marked": "^18.3.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
   }
 }

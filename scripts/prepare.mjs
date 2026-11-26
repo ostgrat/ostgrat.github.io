@@ -2,6 +2,7 @@
 // und public/styles/fonts.css erzeugen. So sind die Schriften selbst gehostet (DSGVO)
 // und Website wie CMS-Vorschau nutzen dieselbe Datei.
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from 'node:fs';
+import { buildSync } from 'esbuild';
 
 const fonts = [
   ['ibm-plex-serif', [400, 500]],
@@ -31,3 +32,11 @@ for (const [pkg, weights] of fonts) {
 }
 writeFileSync('public/styles/fonts.css', out);
 console.log('Schriften vorbereitet');
+
+// Renderer der Startseiten-Blöcke als klassisches Skript für die CMS-Vorschau (/vorschau/)
+buildSync({
+  entryPoints: ['src/lib/home-preview-entry.mjs'],
+  bundle: true, format: 'iife', minify: true, target: 'es2020',
+  outfile: 'public/admin/home-preview.js', logLevel: 'warning',
+});
+console.log('Vorschau-Renderer gebaut');

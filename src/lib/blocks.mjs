@@ -79,5 +79,6 @@ const renderers = {
  */
 export function renderBlocks(blocks = [], ctx = {}) {
   const c = { md: (s) => (s ? esc(s) : ''), asset: (s) => s, posts: null, ...ctx };
-  return blocks.map((b) => (renderers[b?.type] ? renderers[b.type](b, c) : '')).join('\n');
+  // data-bi = Position des Blocks, damit die CMS-Vorschau zum gewählten Block scrollen kann
+  return blocks.map((b, i) => (renderers[b?.type] ? renderers[b.type](b, c).replace(/^<section\b/, `<section data-bi="${i}"`) : '')).join('\n');
 }

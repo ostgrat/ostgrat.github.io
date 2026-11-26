@@ -5,3 +5,4 @@ dist/
 # werden beim Build aus node_modules erzeugt (scripts/prepare.mjs)
 public/fonts/
 public/styles/fonts.css
+public/admin/home-preview.js

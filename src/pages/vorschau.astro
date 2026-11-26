@@ -1,0 +1,34 @@
+---
+// Vorschau der Startseite für das CMS (nicht verlinkt, nicht bei Google).
+// Gleicher Rahmen wie die Startseite; die Blöcke kommen aus dem Entwurf im CMS (window.top.__ostHomeDraft),
+// ohne Entwurf aus den veröffentlichten Daten. Gerendert wird VOR den Seitenskripten, damit alle Effekte normal starten.
+import home from '../data/home.json';
+import head from '../legacy/head.html?raw';
+import top from '../legacy/top.html?raw';
+import bottom from '../legacy/bottom.html?raw';
+import { getPosts, toCard } from '../lib/blog';
+const posts = (await getPosts()).map(toCard);
+const json = (v: unknown) => JSON.stringify(v).replace(/</g, '\\u003c');
+const boot = `window.__ostPublished=${json(home.blocks)};window.__ostPosts=${json(posts)};`;
+const render = `(function(){var d=null;try{d=window.top!==window&&window.top.__ostHomeDraft&&window.top.__ostHomeDraft();}catch(e){}
+var blocks=(d&&d.blocks)||window.__ostPublished;var q=new URLSearchParams(location.search).get('ohne');if(q){var o=q.split(',');blocks=blocks.filter(function(b){return o.indexOf(b.type)<0});}var asset=(d&&d.asset)||function(s){return s};
+document.write(window.OstHome.render(blocks,{posts:window.__ostPosts,asset:asset}));})();`;
+---
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<base href="/">
+<title>Vorschau – Ostgrat</title>
+<link rel="stylesheet" href="/styles/fonts.css">
+<Fragment set:html={head} />
+</head>
+<body>
+<Fragment set:html={top} />
+<script is:inline src="/admin/home-preview.js"></script>
+<script is:inline set:html={boot}></script>
+<script is:inline set:html={render}></script>
+<Fragment set:html={bottom} />
+</body>
+</html>

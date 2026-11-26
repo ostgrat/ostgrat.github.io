@@ -17,17 +17,44 @@
   content:""; display:block; width:100%; margin:4px 0 8px; background:#0f0e12 center/cover no-repeat;
   border:1px solid rgba(0,0,0,.12); border-radius:4px;
 }
-[data-typed-key-path$="<hero>.vorschau"] .field-wrapper::before { background-image:url(/uploads/bloecke/hero.jpg); aspect-ratio:960/373 }
-.variable-type-described button[aria-label="Hero"] .content::before { background-image:url(/uploads/bloecke/hero.jpg); aspect-ratio:960/373 }
+[data-typed-key-path$="<hero>.vorschau"] .field-wrapper::before { background-image:url(/uploads/bloecke/hero.jpg); aspect-ratio:960/371 }
+.variable-type-described button[aria-label="Hero"] .content::before { background-image:url(/uploads/bloecke/hero.jpg); aspect-ratio:960/371 }
 [data-typed-key-path$="<text>.vorschau"] .field-wrapper::before { background-image:url(/uploads/bloecke/text.jpg); aspect-ratio:960/201 }
 .variable-type-described button[aria-label="Text"] .content::before { background-image:url(/uploads/bloecke/text.jpg); aspect-ratio:960/201 }
 [data-typed-key-path$="<imageText>.vorschau"] .field-wrapper::before { background-image:url(/uploads/bloecke/imageText.jpg); aspect-ratio:960/379 }
 .variable-type-described button[aria-label="Bild mit Text"] .content::before { background-image:url(/uploads/bloecke/imageText.jpg); aspect-ratio:960/379 }
-[data-typed-key-path$="<stats>.vorschau"] .field-wrapper::before { background-image:url(/uploads/bloecke/stats.jpg); aspect-ratio:960/310 }
-.variable-type-described button[aria-label="Kennzahlen"] .content::before { background-image:url(/uploads/bloecke/stats.jpg); aspect-ratio:960/310 }
+[data-typed-key-path$="<stats>.vorschau"] .field-wrapper::before { background-image:url(/uploads/bloecke/stats.jpg); aspect-ratio:960/304 }
+.variable-type-described button[aria-label="Kennzahlen"] .content::before { background-image:url(/uploads/bloecke/stats.jpg); aspect-ratio:960/304 }
 [data-typed-key-path$="<faq>.vorschau"] .field-wrapper::before { background-image:url(/uploads/bloecke/faq.jpg); aspect-ratio:960/314 }
 .variable-type-described button[aria-label="FAQ"] .content::before { background-image:url(/uploads/bloecke/faq.jpg); aspect-ratio:960/314 }
 [data-typed-key-path$="<cta>.vorschau"] .field-wrapper::before { background-image:url(/uploads/bloecke/cta.jpg); aspect-ratio:960/268 }
 .variable-type-described button[aria-label="Call-to-Action"] .content::before { background-image:url(/uploads/bloecke/cta.jpg); aspect-ratio:960/268 }
-[data-typed-key-path$="<blogTeaser>.vorschau"] .field-wrapper::before { background-image:url(/uploads/bloecke/blogTeaser.jpg); aspect-ratio:960/495 }
-.variable-type-described button[aria-label="Blog-Teaser"] .content::before { background-image:url(/uploads/bloecke/blogTeaser.jpg); aspect-ratio:960/495 }
+[data-typed-key-path$="<blogTeaser>.vorschau"] .field-wrapper::before { background-image:url(/uploads/bloecke/blogTeaser.jpg); aspect-ratio:960/492 }
+.variable-type-described button[aria-label="Blog-Teaser"] .content::before { background-image:url(/uploads/bloecke/blogTeaser.jpg); aspect-ratio:960/492 }
+
+/* Startseiten-Blöcke (Feld „ansicht“, eigene Labels im Add-Menü) */
+[data-typed-key-path$=".ansicht"] .field-wrapper > *, [data-typed-key-path$=".ansicht"] header button { display:none !important }
+[data-typed-key-path$=".ansicht"] .field-wrapper::before { content:""; display:block; width:100%; background:#0f0e12 center/contain no-repeat; border:1px solid rgba(0,0,0,.12); border-radius:4px }
+[data-typed-key-path$=".ansicht"] header h4 { font-weight:400; opacity:.7 }
+[data-typed-key-path$="<hero>.ansicht"] .field-wrapper::before { background-image:url(/uploads/bloecke/start-hero.jpg); aspect-ratio:960/563 }
+.variable-type-described button[aria-label="Hero mit Monitor & Laufband"] .content::before { background-image:url(/uploads/bloecke/start-hero.jpg); aspect-ratio:960/563 }
+[data-typed-key-path$="<fakten>.ansicht"] .field-wrapper::before { background-image:url(/uploads/bloecke/start-fakten.jpg); aspect-ratio:960/563 }
+.variable-type-described button[aria-label="Fakten & Zertifikate"] .content::before { background-image:url(/uploads/bloecke/start-fakten.jpg); aspect-ratio:960/563 }
+[data-typed-key-path$="<team>.ansicht"] .field-wrapper::before { background-image:url(/uploads/bloecke/start-team.jpg); aspect-ratio:960/563 }
+.variable-type-described button[aria-label="Team mit Gruppenfoto"] .content::before { background-image:url(/uploads/bloecke/start-team.jpg); aspect-ratio:960/563 }
+[data-typed-key-path$="<nis2>.ansicht"] .field-wrapper::before { background-image:url(/uploads/bloecke/start-nis2.jpg); aspect-ratio:960/563 }
+.variable-type-described button[aria-label="Bild, Text & Schritte"] .content::before { background-image:url(/uploads/bloecke/start-nis2.jpg); aspect-ratio:960/563 }
+[data-typed-key-path$="<redteam>.ansicht"] .field-wrapper::before { background-image:url(/uploads/bloecke/start-redteam.jpg); aspect-ratio:960/563 }
+.variable-type-described button[aria-label="Progress Section"] .content::before { background-image:url(/uploads/bloecke/start-redteam.jpg); aspect-ratio:960/563 }
+[data-typed-key-path$="<warum>.ansicht"] .field-wrapper::before { background-image:url(/uploads/bloecke/start-warum.jpg); aspect-ratio:960/563 }
+.variable-type-described button[aria-label="Video mit drei Karten"] .content::before { background-image:url(/uploads/bloecke/start-warum.jpg); aspect-ratio:960/563 }
+[data-typed-key-path$="<services>.ansicht"] .field-wrapper::before { background-image:url(/uploads/bloecke/start-services.jpg); aspect-ratio:960/563 }
+.variable-type-described button[aria-label="Leistungen"] .content::before { background-image:url(/uploads/bloecke/start-services.jpg); aspect-ratio:960/563 }
+[data-typed-key-path$="<globus>.ansicht"] .field-wrapper::before { background-image:url(/uploads/bloecke/start-globus.jpg); aspect-ratio:960/563 }
+.variable-type-described button[aria-label="Globus"] .content::before { background-image:url(/uploads/bloecke/start-globus.jpg); aspect-ratio:960/563 }
+[data-typed-key-path$="<insights>.ansicht"] .field-wrapper::before { background-image:url(/uploads/bloecke/start-insights.jpg); aspect-ratio:960/563 }
+.variable-type-described button[aria-label="News & Insights"] .content::before { background-image:url(/uploads/bloecke/start-insights.jpg); aspect-ratio:960/563 }
+[data-typed-key-path$="<faq>.ansicht"] .field-wrapper::before { background-image:url(/uploads/bloecke/start-faq.jpg); aspect-ratio:960/563 }
+.variable-type-described button[aria-label="FAQ mit Kontaktkasten"] .content::before { background-image:url(/uploads/bloecke/start-faq.jpg); aspect-ratio:960/563 }
+[data-typed-key-path$="<kontakt>.ansicht"] .field-wrapper::before { background-image:url(/uploads/bloecke/start-kontakt.jpg); aspect-ratio:960/563 }
+.variable-type-described button[aria-label="Kontakt mit Formular"] .content::before { background-image:url(/uploads/bloecke/start-kontakt.jpg); aspect-ratio:960/563 }
