@@ -1,0 +1,45 @@
+# CLAUDE.md – Ostgrat Website
+
+Astro-Seite mit Sveltia CMS, Deploy über GitHub Actions auf GitHub Pages. Mehrere Claude-Sitzungen arbeiten parallel auf `main`: vor jeder Arbeit `git pull`, vor jedem Push nochmal.
+
+## Startseite: wo was liegt
+
+Die Startseite besteht aus Blöcken, die im CMS sortiert, entfernt und hinzugefügt werden können. Es gibt **keine** `src/legacy/body-*.html` mehr.
+
+| Was | Datei |
+| --- | --- |
+| HTML der Sections (11 Blöcke) | `src/lib/home-blocks.mjs` |
+| SVGs der Sections | `src/lib/home-svgs.mjs` |
+| Navbar, Seitenrahmen vor den Blöcken | `src/legacy/top.html` |
+| Footer, Popups, alle Seitenskripte | `src/legacy/bottom.html` |
+| `<head>` | `src/legacy/head.html` |
+| Styles | `public/styles/site.css` |
+| Inhalte, Reihenfolge, Hell/Dunkel | `src/data/home.json` (wird vom CMS überschrieben) |
+| Felder im CMS | `public/admin/config.yml`, Collection „Startseite“ |
+| Bilder und Videos der Startseite | `public/uploads/start/` |
+
+`home-blocks.mjs` rendert sowohl die Website (`src/pages/index.astro`) als auch die CMS-Vorschau (`src/pages/vorschau.astro`). Eine Änderung dort gilt für beide.
+
+## Regeln für Änderungen an der Startseite
+
+- **Texte nicht ins HTML schreiben.** Jeder Text, den der Kunde ändern soll, kommt aus `home.json` und braucht ein Feld in `config.yml`. Neues Feld = beide Dateien anpassen.
+- **Jeder Block muss entfernbar sein.** Skripte in `bottom.html` dürfen nicht davon ausgehen, dass ein bestimmtes Element existiert. Vor dem Zugriff prüfen (`if (!el) return;`, `el && …`).
+- **Hell/Dunkel** kommt aus dem Feld `theme` jedes Blocks (`data-theme="hell|dunkel"` am Block-Element). Die Scroll-Logik in `bottom.html` (`frame()`) liest nur dieses Attribut. Keine festen Section-IDs für den Farbwechsel einbauen.
+- **Block-Attribute:** jeder Block trägt `data-bi` (Position), `data-block` (Typ), `data-theme`. `data-i` ist von den Seitenskripten belegt, nicht für Blöcke verwenden.
+- **Globus** darf nur einmal pro Seite vorkommen, die Progress Section (`.s2`) mehrfach.
+- **Neuer Block:** Renderer in `home-blocks.mjs`, Typ in `config.yml` (mit `theme`-Feld und Screenshot-Feld `ansicht`), Eintrag in `home.json`, Screenshot unter `public/uploads/bloecke/start-<typ>.jpg`.
+- **Design geändert?** Dann sind die Block-Screenshots in `public/uploads/bloecke/` veraltet. Neu aufnehmen oder im Commit erwähnen.
+
+## Seitenbaukasten (Unterseiten)
+
+Blöcke in `src/lib/blocks.mjs`, Seiten in `src/content/pages/*.md`, Übersicht aller Blöcke unter `/bloecke/`. Gleiche Regeln: Texte über CMS-Felder, Screenshots aktuell halten.
+
+## Prüfen vor dem Push
+
+- `npm run build` muss durchlaufen.
+- Startseite auf 1440 und 390 px ohne Fehler in der Konsole.
+- Bei Änderungen an `bottom.html`: Seite mit `/vorschau/?ohne=globus,hero` o. ä. testen (entfernt Blöcke), es darf keinen Fehler geben.
+
+## Commit-Messages
+
+Erste Zeile: plakative Zusammenfassung aller Änderungen. Dann Leerzeile, dann die Änderungen, nach jedem Semikolon ein Zeilenumbruch. Sachlich und präzise.
