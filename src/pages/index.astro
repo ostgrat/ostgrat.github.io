@@ -1,0 +1,30 @@
+---
+// Startseite: das bestehende Ostgrat-Design 1:1, editierbare Teile als Komponenten.
+import Fonts from '../components/Fonts.astro';
+import Hero from '../components/Hero.astro';
+import BlogGrid from '../components/BlogGrid.astro';
+import Faq from '../components/Faq.astro';
+import head from '../legacy/head.html?raw';
+import body1 from '../legacy/body-1.html?raw';
+import body2 from '../legacy/body-2.html?raw';
+import body3 from '../legacy/body-3.html?raw';
+import body4 from '../legacy/body-4.html?raw';
+---
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ostgrat – Sicherheit für den Mittelstand</title>
+<Fonts />
+<Fragment set:html={head} />
+</head>
+<body>
+<Fragment set:html={body1} />
+<Hero />
+<Fragment set:html={body2} />
+<BlogGrid />
+<Fragment set:html={body3} />
+<Faq />
+<Fragment set:html={body4} />
+</body>
+</html>

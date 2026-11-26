@@ -1,0 +1,21 @@
+---
+// Startseiten-Teaser: die 6 neuesten Beiträge aus dem Blog (CMS → „Blog“).
+import icons from '../legacy/icons.json';
+import { getPosts, formatDate, isoDate, inlineSvg } from '../lib/blog';
+const posts = (await getPosts()).slice(0, 6);
+---
+<div class="bl-grid">{posts.map((p) => {
+  const svg = inlineSvg(p.data.cover);
+  return (
+    <article class:list={['bl-card', { 'is-alert': p.data.alert }]} data-cat={p.data.category} data-date={isoDate(p.data.date)}>
+      <a class="bl-hit" href={`/blog/${p.id}/`} aria-label={p.data.title}></a>
+      <figure class="bl-img">
+        {svg ? <Fragment set:html={svg} /> : p.data.cover ? <img src={p.data.cover} alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover" /> : null}
+        {p.data.alert && <Fragment set:html={icons.alert} />}
+      </figure>
+      <h3>{p.data.title}</h3>
+      <p class="bl-ex">{p.data.excerpt}</p>
+      <div class="bl-meta"><span>{p.data.author}</span><span>{formatDate(p.data.date)}</span></div>
+    </article>
+  );
+})}</div>

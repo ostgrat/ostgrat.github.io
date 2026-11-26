@@ -1,0 +1,77 @@
+# Sveltia CMS – legt fest, was der Kunde bearbeiten darf.
+backend:
+  name: github
+  repo: ostgrat/ostgrat.github.io
+  branch: main
+
+site_url: https://ostgrat.github.io
+display_url: https://ostgrat.github.io
+
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: blog
+    label: Blog
+    label_singular: Beitrag
+    folder: src/content/blog
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    sortable_fields: [date, title]
+    fields:
+      - { label: Titel, name: title, widget: string }
+      - { label: Datum, name: date, widget: datetime, time_format: false, format: "YYYY-MM-DD" }
+      - { label: Autor:in, name: author, widget: string }
+      - label: Kategorie
+        name: category
+        widget: select
+        options:
+          - { label: Warnung, value: warnung }
+          - { label: SOC, value: soc }
+          - { label: Red Team, value: redteam }
+          - { label: OT, value: ot }
+          - { label: Compliance, value: compliance }
+      - { label: Als Sicherheitswarnung hervorheben, name: alert, widget: boolean, default: false, required: false }
+      - { label: "Entwurf (wird nicht veröffentlicht)", name: draft, widget: boolean, default: false, required: false }
+      - { label: Kurztext für die Vorschau, name: excerpt, widget: text }
+      - { label: Titelbild, name: cover, widget: image, required: false }
+      - { label: Text, name: body, widget: markdown }
+
+  - name: pages
+    label: Seiten
+    files:
+      - name: home
+        label: Startseite
+        file: src/data/home.json
+        format: json
+        fields:
+          - label: Hero
+            name: hero
+            widget: object
+            fields:
+              - { label: Dachzeile, name: kicker, widget: string }
+              - { label: "Headline – Zeile 1", name: line1, widget: string }
+              - { label: "Headline – Zeile 2", name: line2, widget: string }
+              - { label: "Headline – Zeile 3 (getippt, hervorgehoben)", name: highlight, widget: string }
+              - { label: Einleitung, name: lead, widget: text }
+              - { label: Button-Text, name: ctaLabel, widget: string }
+              - { label: Button-Link, name: ctaLink, widget: string, hint: "z. B. #kontakt für den Kontaktbereich" }
+          - label: FAQ
+            name: faq
+            widget: object
+            fields:
+              - { label: Dachzeile, name: kicker, widget: string }
+              - { label: Überschrift, name: heading, widget: string }
+              - { label: Text im Kasten, name: boxText, widget: text }
+              - { label: Kontakt-E-Mail, name: email, widget: string }
+              - label: Fragen
+                name: items
+                widget: list
+                label_singular: Frage
+                summary: "{{fields.question}}"
+                fields:
+                  - { label: Frage, name: question, widget: string }
+                  - { label: Antwort, name: answer, widget: text }

@@ -1,0 +1,32 @@
+---
+import { render } from 'astro:content';
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import { getPosts, formatDate, categories, inlineSvg } from '../../lib/blog';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+const { post } = Astro.props;
+const { Content } = await render(post);
+const svg = inlineSvg(post.data.cover);
+---
+<BlogLayout title={post.data.title} description={post.data.excerpt}>
+  <article>
+    <p class="lab">{categories[post.data.category]}{post.data.alert && ' · Sicherheitswarnung'}</p>
+    <h1>{post.data.title}</h1>
+    <p class="meta">{post.data.author} · {formatDate(post.data.date)}</p>
+    {(svg || post.data.cover) && <figure>{svg ? <Fragment set:html={svg} /> : <img src={post.data.cover} alt="" />}</figure>}
+    <div class="body"><Content /></div>
+  </article>
+</BlogLayout>
+<style>
+  article { max-width:760px }
+  .meta { color:var(--mut); font-size:15px; margin:0 0 40px }
+  figure { margin:0 0 48px; aspect-ratio:16/9; overflow:hidden; border:var(--sw) solid var(--line) }
+  figure :global(svg), figure img { display:block; width:100%; height:100%; object-fit:cover }
+  .body { font-size:19px; line-height:1.6 }
+  .body :global(h2) { font-size:32px; margin:1.6em 0 .5em }
+  .body :global(a) { text-decoration:underline; text-decoration-thickness:var(--sw); text-underline-offset:3px }
+  .body :global(img) { max-width:100% }
+</style>

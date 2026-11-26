@@ -1,0 +1,43 @@
+{
+  "hero": {
+    "kicker": "Cybersecurity von IT bis OT",
+    "line1": "Sicherheit für",
+    "line2": "den Mittelstand.",
+    "highlight": "Auf Konzern-Niveau.",
+    "lead": "Wir schützen IT und Produktion von Unternehmen, die zu groß für Standardlösungen und zu klein für ein eigenes Security-Team sind. Unser Red Team greift jedes System an, das wir aufbauen. Unser SOC wacht rund um die Uhr.",
+    "ctaLabel": "Beratung vereinbaren",
+    "ctaLink": "#kontakt"
+  },
+  "faq": {
+    "kicker": "Häufige Fragen",
+    "heading": "Was Kunden uns vorher fragen.",
+    "boxText": "Ihre Frage ist nicht dabei? Schreiben Sie uns direkt – wir antworten innerhalb eines Werktags.",
+    "email": "kontakt@ostgrat.at",
+    "items": [
+      {
+        "question": "Für wen ist Ostgrat der richtige Partner?",
+        "answer": "Für mittelständische Unternehmen mit etwa 50 bis 2.000 Mitarbeitenden, die IT und oft auch Produktion schützen müssen – zu groß für Standardlösungen, zu klein für ein eigenes Security-Team. Unsere Kunden sitzen vor allem in Österreich und im DACH-Raum."
+      },
+      {
+        "question": "Wie schnell reagieren Sie im Ernstfall?",
+        "answer": "SOC-Kunden erreichen uns rund um die Uhr; wir reagieren in unter 15 Minuten. Mit einem Incident-Response-Retainer ist die Reaktionszeit vertraglich garantiert. Die Notfall-Hotline ist auch für Unternehmen erreichbar, die noch nicht Kunde sind."
+      },
+      {
+        "question": "Betrifft uns NIS2?",
+        "answer": "Das hängt vor allem von Sektor, Unternehmensgröße und Ihrer Rolle in der Lieferkette ab. In einem Betroffenheitscheck klären wir das in einem Tag und zeigen, welche Pflichten konkret auf Sie zukommen."
+      },
+      {
+        "question": "Stört ein Pentest unseren laufenden Betrieb?",
+        "answer": "Nein, wenn er gut geplant ist. Wir stimmen Testfenster und Grenzen vorab mit Ihnen ab, testen Produktionssysteme nur passiv oder im Wartungsfenster und haben während des Tests immer einen direkten Notfallkontakt."
+      },
+      {
+        "question": "Wo bleiben unsere Daten?",
+        "answer": "In Österreich. Unser SOC steht in Linz, Logdaten und Berichte verarbeiten wir DSGVO-konform in eigenen Systemen und geben sie nicht weiter."
+      },
+      {
+        "question": "Was kostet der Einstieg?",
+        "answer": "Ein Pentest beginnt bei € 6.900, das Managed SOC bei € 2.400 im Monat. Das Erstgespräch ist kostenlos – danach bekommen Sie ein Angebot mit festem Umfang."
+      }
+    ]
+  }
+}

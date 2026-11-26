@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+# wird beim Build aus node_modules kopiert
+public/admin/sveltia-cms.js
+public/admin/chunks/
