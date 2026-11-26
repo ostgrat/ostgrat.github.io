@@ -32,11 +32,21 @@
       "theme": "hell",
       "heading": "IT- und OT-Sicherheit.\nUnabhängig geprüft.",
       "sub": "In unter 15 Minuten im Einsatz – rund um die Uhr.",
-      "text": "Ein eigenes Red Team, ein 24/7-SOC, das nie schläft, und Spezialistinnen und Spezialisten, die Ihre Systeme kennen.",
-      "ctaLabel": "Über uns",
-      "ctaLink": "#team",
-      "linkLabel": "NIS2-Beratung",
-      "linkHref": "#nis2-umsetzen",
+      "text": "Drei Leistungen, ein Team: Spezialistinnen und Spezialisten, die Ihre Systeme kennen.",
+      "services": [
+        {
+          "title": "Managed SOC",
+          "text": "Wir überwachen Ihre IT und OT rund um die Uhr aus Linz und greifen im Ernstfall in unter 15 Minuten ein."
+        },
+        {
+          "title": "NIS2-Beratung",
+          "text": "Von der Betroffenheitsprüfung bis zum Audit setzen wir die Pflichten mit Ihnen um – pragmatisch und prüffest."
+        },
+        {
+          "title": "Red Team",
+          "text": "Unser eigenes Team greift Sie an wie echte Angreifer und zeigt Lücken, bevor andere sie finden."
+        }
+      ],
       "logos": [
         {
           "image": "/uploads/start/cert-iso.png",

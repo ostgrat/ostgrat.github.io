@@ -351,6 +351,20 @@ collections:
             name: linkHref
             widget: string
             required: false
+          - label: Wichtigste Leistungen
+            name: services
+            widget: list
+            label_singular: Leistung
+            required: false
+            hint: Erscheint als nummerierte Liste unter dem Text. Drei bis vier Einträge.
+            summary: '{{fields.title}}'
+            fields:
+            - label: Titel
+              name: title
+              widget: string
+            - label: Erklärung (ein Satz)
+              name: text
+              widget: text
           - label: Logos
             name: logos
             widget: list
