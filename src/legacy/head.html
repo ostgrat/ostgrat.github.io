@@ -1556,8 +1556,9 @@ video{pointer-events:none}   /* dekorative Videos: keine Browser-Bedienelemente 
 @media(max-width:900px){
   html.fab-away .fab{translate:none;opacity:1;pointer-events:auto}   /* Buttons bleiben stehen wie am Desktop */
   /* Seitenraster überall bei 16 px */
-  .frame::before,.frame::after{content:"";position:absolute;top:0;bottom:0;width:var(--sw);background:var(--line);pointer-events:none;z-index:0}
-  .frame::before{left:16px}.frame::after{right:16px}
+  .side-grid{display:block!important;position:fixed;inset:0;z-index:1;pointer-events:none}
+  .side-grid::before,.side-grid::after{content:"";position:absolute;top:0;bottom:0;width:var(--sw);background:var(--line)}
+  .side-grid::before{left:16px}.side-grid::after{right:16px}
   .sv .sv-list::before,.sv .sv-list::after{display:none!important}
   .sv .sv-list .sv-row{padding-left:16px!important;padding-right:16px!important}
   .sv .sv-list .sv-c,.sv .sv-list .sv-side{padding-left:8px;padding-right:8px}
@@ -1590,5 +1591,26 @@ video{pointer-events:none}   /* dekorative Videos: keine Browser-Bedienelemente 
 @media(min-width:901px){
   .ti-card{width:min(80%,560px)}
   .ti-img::after{left:calc(50% - min(40%,280px));right:calc(50% - min(40%,280px))}
+}
+
+.side-grid{display:none}
+@media(max-width:900px){
+  /* Mega-Menü am Handy scrollbar */
+  nav#nav{max-height:calc(100svh - 56px);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+  /* Progress: Würfel-Fläche genau so breit wie der Bildschirm */
+  .s2-media{width:auto!important;max-width:none;left:auto;right:auto;align-self:stretch}
+  /* Facts-Diagramm: ganzer Ausschnitt, nicht zu breit */
+  .why .why-chart{left:0!important;right:0!important;width:100%!important}
+  .why .why-fig{overflow:visible;margin-top:-90px!important;min-height:380px!important;margin-bottom:96px}
+  .s2-media .pxs{position:absolute!important;inset:0!important;left:0!important;width:100%!important;height:100%!important}
+}
+
+/* Handy: Headlines blenden als Ganzes ein, nicht Buchstabe für Buchstabe */
+@media(max-width:900px){
+  .rv-h i,.rev-h i{opacity:1!important;translate:none!important;filter:none!important;transition:none!important}
+  .rv-h{opacity:0;transition:opacity .5s ease}
+  .rv-h.rv-on{opacity:1}
+  .rev-h{opacity:0;transition:opacity .5s ease}
+  .rev.in .rev-h{opacity:1}
 }
 </style>

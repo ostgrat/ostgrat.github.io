@@ -1069,7 +1069,7 @@ function cubeSwap(cv) {
     const yawFree = (45 + 180 * sr + (RM ? 0 : 6 * Math.sin(t * .35))) * Math.PI / 180, yawEnd = 283 * Math.PI / 180;   /* nicht symmetrisch: nur leicht verdreht */
     const yaw = yawFree + (yawEnd - yawFree) * c, pitch = (35.26 + (90 - 35.26) * c) * Math.PI / 180;   /* Endbild: komplett von oben, nur leicht verdreht */   /* landet schräg und bleibt leicht isometrisch */
     const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
-    const S = Math.min(W / 1.6, H) * .2 * (1 - .62 * c), ox = W / 2, oy = H * .5;
+    const S = Math.min(W / 1.6, H) * (W < 700 ? .27 : .2) * (1 - .62 * c), ox = W / 2, oy = H * .5;   /* Handy: Würfel größer */
     const Pj = (x, y, z) => { const X = x * cy + z * sy, Z0 = -x * sy + z * cy; return [ox + X * S, oy - (y * cp - Z0 * sp) * S, Z0 * cp + y * sp]; };
     const facing = f => { const n = f[0], Z0 = -n[0] * sy + n[2] * cy; return Z0 * cp + n[1] * sp; };
     if (atk0 && now >= nextHit) { const fr = [0, 1, 2, 3, 4].filter(fi => facing(FACES[fi]) > .3), H0 = spawned < NH ? HITS[spawned] : {u: (Math.random() * 2 - 1) * .7, v: (Math.random() * 2 - 1) * .7}; live.push({fi: fr.length ? fr[Math.floor(Math.random() * fr.length)] : 0, u: H0.u, v: H0.v, t0: now}); spawned++; nextHit = now + 330 + Math.random() * 260; }   /* neue Treffer nur im Schritt Angreifen */
@@ -1674,6 +1674,9 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
     const font = () => `400 ${fs}px ${fam}, Georgia, serif`;   /* Headline-Schrift aus dem Font-Tester */
     o.font = font(); if ('letterSpacing' in o) o.letterSpacing = (fs * -0.035) + 'px';
     const widest = Math.max(...lines.map(l => o.measureText(l).width));
+    if (narrow) fs = Math.min(fs, R * 2 / (lines.length * 1.15));   /* Handy: Titel passt in die Fläche der Erde */
+    const wNow = Math.max(...lines.map(l => o.measureText(l).width));
+    if (wNow * (fs / (parseFloat(o.font) || fs)) > W * 0.8 || widest > W * 0.86) { fs *= W * 0.8 / Math.max(widest, 1); o.font = font(); if ('letterSpacing' in o) o.letterSpacing = (fs * -0.035) + 'px'; }
     if (widest > W * 0.86) { fs *= W * 0.86 / widest; o.font = font(); if ('letterSpacing' in o) o.letterSpacing = (fs * -0.035) + 'px'; }
     o.fillStyle = '#fff'; o.textAlign = 'center'; o.textBaseline = 'middle';
     lines.forEach((l, k) => o.fillText(l, W / 2, tY() + (k - (lines.length - 1) / 2) * fs * 1.02));
@@ -3313,4 +3316,9 @@ document.querySelectorAll('.sv-row').forEach(r=>r.addEventListener('click',e=>{i
   a.after(sub);a.classList.add('has-sub');a.insertAdjacentHTML('beforeend',PLUS);a.setAttribute('aria-controls','nav-sub');a.setAttribute('aria-expanded','false');
   a.addEventListener('click',e=>{if(innerWidth>900)return;e.preventDefault();e.stopImmediatePropagation();const o=!sub.classList.contains('open');sub.classList.toggle('open',o);a.setAttribute('aria-expanded',String(o));},true);
   sub.addEventListener('click',e=>{if(e.target.closest('a')){const m=document.getElementById('menu');if(m&&m.getAttribute('aria-expanded')==='true')m.click();}});})();
+</script>
+
+<script>
+/* Handy: Seitenraster als eigene feste Ebene (links und rechts, flackerfrei) */
+(()=>{const f=document.getElementById('frame'),fx=document.getElementById('fx');if(!f)return;const d=document.createElement('div');d.className='side-grid';d.setAttribute('aria-hidden','true');(fx?fx.after(d):f.prepend(d));})();
 </script>
