@@ -266,7 +266,7 @@ if (GL.ok) {
   } catch (err) { console.error(err); GL.ok = false; cv.style.display = 'none'; }
 }
 function layout() {
-  dpr = Math.min(2, window.devicePixelRatio || 1, Math.max(1.25, 3000 / innerWidth));   /* scharf, aber bei sehr breiten Retina-Bildschirmen nicht über ~3000 px Breite */
+  dpr = innerWidth <= 900 ? Math.min(1.5, window.devicePixelRatio || 1) : Math.min(2, window.devicePixelRatio || 1, Math.max(1.25, 3000 / innerWidth));   /* Handy: Raster mit 1,5× – spart Rechenzeit */   /* scharf, aber bei sehr breiten Retina-Bildschirmen nicht über ~3000 px Breite */
   W = host.clientWidth; H = host.clientHeight; VH = innerHeight;
   /* 12 Spalten: Zellbreite so gewählt, dass jede Spaltenlinie (und der Rahmen) genau auf einer Zellmitte liegt */
   const m = Math.max(2, Math.round(W / (12 * S.cell))); nc = 12 * m; cw = W / nc; window.ostCW = cw;
@@ -424,7 +424,7 @@ function parallax() {
   const rvv = window.ostRevVis ?? 1;
   let minK = 1;
   whyCards.forEach((el, i) => {
-    const k = Math.max(0, Math.min(1, (rvv - .12 - i * .08) / .55));   /* alle drei erreichen ihre Endlage */   /* alle stehen bei t ≈ .72, bevor die Headline mittig ist (≈ .77) */ minK = Math.min(minK, k);
+    const k = innerWidth <= 900 ? (r => Math.max(0, Math.min(1, (innerHeight - r.top) / (innerHeight * .55))))(el.getBoundingClientRect()) : Math.max(0, Math.min(1, (rvv - .12 - i * .08) / .55));   /* Handy: Karten stehen untereinander – jede schwebt nach ihrer eigenen Lage ein */   /* alle drei erreichen ihre Endlage */   /* alle stehen bei t ≈ .72, bevor die Headline mittig ist (≈ .77) */ minK = Math.min(minK, k);
     const ty = Math.round((1 - k * k * (3 - 2 * k)) * (150 + i * 130) * 10) / 10;
     if (el._py !== ty) {
       el._py = ty; el.style.transform = innerWidth <= 900 ? '' : `translateY(${ty}px)`;   /* Handy: Kachel (mit Linie) bleibt stehen, nur der Inhalt schwebt */
@@ -1847,7 +1847,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
 /* massive Schrift; die Auflösungsfront (wie die Partikel: grob von links nach rechts) radiert sie weich weg */
   const cv0Top = () => ctx.canvas.getBoundingClientRect().top;
   function drawTitle(pb) {
-    if (!titleCfg || pb >= .4) return;
+    if (!titleCfg || pb >= .4 || W < 900) return;   /* Handy: kein großer Titel über dem Text */
     const {lines, fs, font, ls} = titleCfg, span = Math.max(1, tMaxX - tMinX);
     const TH = window.ostTHEME, tq = TH && TH.y ? TH.y(cv0Top() + H * TITLE_Y) : 0, TC = TH ? TH.T0.map((v, i) => Math.round(v + (TH.T1[i] - v) * tq)).join(',') : OSTC.inkd;   /* Schriftfarbe folgt dem Grund: auf Hell dunkel */
     const front = tMinX + span * ((pb - .03) / .22), feather = span * .12;
@@ -2432,7 +2432,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
   const H = [...document.querySelectorAll('.why .why-h, .team h2, .sv-top h2, .ct .ct-hd h2, .bl-hd h2, .ti h2, .fq h2')].filter(out), Pp = [...document.querySelectorAll('.why-p, .team-lead, .sv-top > p, .sv-txt, .ct .ct-sub, .ti-p')].filter(out);
   H.forEach(h => { h.classList.add('rv-h'); let w = 0, prev = ' '; for (const i of h.querySelectorAll('i')) { const ch = i.textContent; if (/\s/.test(prev) && !/\s/.test(ch)) w++; prev = ch; i.style.setProperty('--d', ((w - 1) * .07).toFixed(2) + 's'); } });
   Pp.forEach(p => p.classList.add('rv-p'));
-  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('rv-on'); else if (e.boundingClientRect.top > 0) e.target.classList.remove('rv-on'); }), {rootMargin: '0px 0px -12% 0px'});
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('rv-on'); else if (e.boundingClientRect.top > 0) e.target.classList.remove('rv-on'); }), {rootMargin: innerWidth <= 900 ? '0px 0px -2% 0px' : '0px 0px -12% 0px'});
   [...H, ...Pp].forEach(el => io.observe(el));
 }
 
@@ -3116,7 +3116,7 @@ document.addEventListener('keydown',e=>{const t=e.target.closest&&e.target.close
 /* Kontakt: Optionen und Formularfelder gestaffelt; setzt sich beim Zurückscrollen unter den Bildschirm zurück */
 (()=>{const groups=[document.querySelector('.ct .ct-opts'),document.querySelector('.ct .ct-form')].filter(Boolean);
   groups.forEach(g=>{[...g.children].forEach((c,k)=>{c.classList.add('rv-i');c.style.setProperty('--d',(k*.08).toFixed(2)+'s')})});
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('rv-on');else if(e.boundingClientRect.top>0)e.target.classList.remove('rv-on')}),{rootMargin:'0px 0px -10% 0px'});
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('rv-on');else if(e.boundingClientRect.top>0)e.target.classList.remove('rv-on')}),{rootMargin:innerWidth<=900?'0px 0px -2% 0px':'0px 0px -10% 0px'});
   groups.forEach(g=>io.observe(g));})();
 /* Globus: Keyframe 1 = angedockt, Überschrift komplett · Keyframe 2 = Erde fertig.
    Bleibt man in den ersten 15 % nach K1 stehen, geht es weich hoch zu K1; in den letzten 15 % vor K2 weich runter zu K2. */
@@ -3153,7 +3153,7 @@ document.querySelectorAll('.sv-row').forEach(r=>r.addEventListener('click',e=>{i
   cards.forEach((c,i)=>c.style.setProperty('--d',((i%3)*.06).toFixed(2)+'s'));
   const replay=()=>{let k=0;cards.forEach(c=>{if(c.hidden)return;c.classList.remove('rv-on');c.style.setProperty('--d',((k++%3)*.06).toFixed(2)+'s');});void grid.offsetWidth;requestAnimationFrame(()=>cards.forEach(c=>{if(!c.hidden)c.classList.add('rv-on');}));};
   const bar=s.querySelector('.bl-bar');[...bar.querySelectorAll('.bl-tabs button, .bl-tools > button')].forEach((b,i)=>{b.classList.add('rv-i');b.style.setProperty('--d',(i*.05).toFixed(2)+'s');});
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('rv-on');else if(e.boundingClientRect.top>0)e.target.classList.remove('rv-on');}),{rootMargin:'0px 0px -8% 0px'});
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('rv-on');else if(e.boundingClientRect.top>0)e.target.classList.remove('rv-on');}),{rootMargin:innerWidth<=900?'0px':'0px 0px -8% 0px'});
   cards.forEach(c=>io.observe(c));io.observe(bar);
   /* auf der Karte selbst: rv-on direkt am Element */
 })();
@@ -3183,7 +3183,7 @@ document.querySelectorAll('.sv-row').forEach(r=>r.addEventListener('click',e=>{i
 (()=>{const ti=document.querySelector('.ti'),fq=document.querySelector('.fq-list');
   if(ti)[...ti.querySelectorAll('.ti-steps li, .ti-cta')].forEach((el,i)=>{el.classList.add('rv-i');el.style.setProperty('--d',(i*.1).toFixed(2)+'s');});
   if(fq)[...fq.children,document.querySelector('.fq-cta')].filter(Boolean).forEach((el,i)=>{el.classList.add('rv-i');el.style.setProperty('--d',(i*.07).toFixed(2)+'s');});
-  const io=new IntersectionObserver(es=>es.forEach(e=>{const t=e.target===fq?[fq,document.querySelector('.fq-l')]:[e.target];if(e.isIntersecting)t.forEach(x=>x&&x.classList.add('rv-on'));else if(e.boundingClientRect.top>0)t.forEach(x=>x&&x.classList.remove('rv-on'));}),{rootMargin:'0px 0px -12% 0px'});
+  const io=new IntersectionObserver(es=>es.forEach(e=>{const t=e.target===fq?[fq,document.querySelector('.fq-l')]:[e.target];if(e.isIntersecting)t.forEach(x=>x&&x.classList.add('rv-on'));else if(e.boundingClientRect.top>0)t.forEach(x=>x&&x.classList.remove('rv-on'));}),{rootMargin:innerWidth<=900?'0px 0px -2% 0px':'0px 0px -12% 0px'});
   [ti,fq].filter(Boolean).forEach(x=>io.observe(x));})();
 </script>
 
@@ -3232,7 +3232,7 @@ document.querySelectorAll('.sv-row').forEach(r=>r.addEventListener('click',e=>{i
 (()=>{const els=[...document.querySelectorAll('.sv-list, .sv-list > .sv-row, .ti-grid, .ti-img, .ti-steps, .fq-list, .ct .ct-opts, .fo-bot, .fo-nf')];
   els.forEach(el=>el.classList.add('gb'));
   [...document.querySelectorAll('.sv-list > .sv-row')].forEach((r,i)=>r.style.setProperty('--gd',(.15+(i%3)*.08).toFixed(2)+'s'));
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('gb-on');else if(e.boundingClientRect.top>0)e.target.classList.remove('gb-on');}),{rootMargin:'0px 0px -8% 0px'});
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('gb-on');else if(e.boundingClientRect.top>0)e.target.classList.remove('gb-on');}),{rootMargin:innerWidth<=900?'0px':'0px 0px -8% 0px'});
   els.forEach(el=>io.observe(el));})();
 </script>
 
@@ -3263,4 +3263,12 @@ document.querySelectorAll('.sv-row').forEach(r=>r.addEventListener('click',e=>{i
 (()=>{const cl=document.querySelector('.fo-cl'),r=document.querySelector('.fo-r'),top=document.querySelector('.fo-top');if(!cl||!r)return;
   const set=()=>{if(innerWidth<=1100){r.style.paddingTop='';return;}const off=cl.getBoundingClientRect().top-top.getBoundingClientRect().top-parseFloat(getComputedStyle(top).paddingTop);r.style.paddingTop=Math.max(0,Math.round(off))+'px';};
   addEventListener('resize',set);(document.fonts?document.fonts.ready:Promise.resolve()).then(set);set();})();
+</script>
+
+<script>
+/* Handy: schwebende Buttons starten zu und weichen beim Runterscrollen aus */
+(()=>{if(innerWidth>900)return;const R=document.documentElement;document.querySelectorAll('.fab.open').forEach(f=>f.classList.remove('open'));
+  let last=scrollY,acc=0;addEventListener('scroll',()=>{const y=scrollY,d=y-last;last=y;acc=(Math.sign(d)===Math.sign(acc)?acc:0)+d;
+    const atEnd=y+innerHeight>=document.documentElement.scrollHeight-40;
+    if(y<80||atEnd||acc<-30)R.classList.remove('fab-away');else if(acc>30)R.classList.add('fab-away');},{passive:true});})();
 </script>

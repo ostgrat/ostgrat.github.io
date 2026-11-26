@@ -1416,4 +1416,22 @@ video{pointer-events:none}   /* dekorative Videos: keine Browser-Bedienelemente 
 .why-logos li{opacity:1}
 .why-logos img{display:block;width:auto;filter:grayscale(1) contrast(1.05);opacity:.7;transition:filter .4s,opacity .4s}
 .why-logos li:hover img,.why-logos[data-v=B] img{filter:none;opacity:1}
+
+/* ===== Mobil-Durchgang ===== */
+@media(max-width:900px){
+  .rev-in{height:auto!important;overflow:visible}   /* alle drei Karten ganz sichtbar */
+  #gscroll .gbox{display:none}
+  /* schwebende Buttons: zu, verschwinden beim Runterscrollen, kommen beim Hochscrollen wieder */
+  .fab{transition:translate .45s cubic-bezier(.2,.7,.2,1),opacity .3s}
+  html.fab-away .fab{translate:0 calc(100% + 24px);opacity:0;pointer-events:none}
+  /* Globus: Text immer lesbar, nicht vom Aufbau abhängig */
+  #gscroll .gcopy > *{opacity:1!important;filter:none!important;translate:none!important}
+  /* Blog-Filter: Tabs nicht stauchen, seitlich wischbar */
+  .bl-bar{gap:12px}.bl-tabs{gap:22px;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(90deg,#000 85%,transparent)}
+  .bl-tabs button{flex:none}
+  /* Reveals schneller, damit Text nicht hinterherhinkt */
+  .rv-h i{transition-duration:.45s,.55s,.45s,.2s}
+  .rv-p{transition-duration:.6s,.5s,.5s}
+  .rv-i{transition-duration:.45s,.55s,.45s}
+}
 </style>
