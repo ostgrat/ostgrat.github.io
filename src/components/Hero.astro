@@ -7,8 +7,8 @@ const h = home.hero;
 ---
 <section class="hero">
     <div class="copy">
-      <p class="hero-k">{h.kicker}</p>
       <h1><span class="ln">{h.line1}</span> <span class="ln">{h.line2}</span> <span class="ln hl typing">{h.highlight}</span></h1>
+      <p class="hero-k sub">{h.kicker}</p>
       <p class="lead">{h.lead}</p>
       <a class="cta" href={h.ctaLink}><b><span>{h.ctaLabel}</span></b><i set:html={icons.arrow}></i></a>
     </div>

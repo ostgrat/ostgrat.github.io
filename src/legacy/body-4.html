@@ -3,7 +3,7 @@
   <section class="ct" id="kontakt" aria-labelledby="h-kontakt">
     <div class="ct-grid">
       <div class="ct-l">
-        <div class="ct-hd"><p class="lab ct-k">Kontakt</p><h2 id="h-kontakt">Beratung vereinbaren.</h2><p class="ct-sub">30 Minuten mit jemandem aus unserem Team in Linz. Unverbindlich und vertraulich.</p></div>
+        <div class="ct-hd"><h2 id="h-kontakt">Beratung vereinbaren.</h2><p class="ct-sub">30 Minuten mit jemandem aus unserem Team in Linz. Unverbindlich und vertraulich.</p></div>
         <ul class="ct-opts">
           <li class="hot"><span class="lab">Notfall-Hotline 24/7</span><a href="tel:+43732908700">+43 732 908 700</a></li>
           <li><span class="lab">Telefon</span><a href="tel:+43732908100">+43 732 908 100</a></li>
@@ -402,7 +402,7 @@ const PAR = {
   up:parseFloat(getComputedStyle(document.querySelector('.s2')).getPropertyValue('--up')) || 0,   /* so weit kommt die zweite Section samt Linie zusätzlich entgegen (px, aus dem CSS) */
   range:1.1,                                /* Länge des Übergangs in Bildschirmhöhen */
   s2:document.querySelector('.s2'),
-  hero:[document.querySelector('.hero-k'), ...document.querySelectorAll('h1 .ln'), document.querySelector('.copy .lead'), document.querySelector('.cta'), document.querySelector('.h2m')]
+  hero:[...document.querySelectorAll('h1 .ln'), document.querySelector('.hero-k'), document.querySelector('.copy .lead'), document.querySelector('.cta'), document.querySelector('.h2m')]
 };
 const CSSPAR = !reduce && window.CSS && CSS.supports('animation-timeline: scroll()');
 if (CSSPAR) {
@@ -1471,7 +1471,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
   const BOX_W = 212, GAP = 10, LINE_T = 0.3, BOX_T = 0.18; // Sekunden: Linie zeichnen, Box aufklappen
 
   // Intro: Schrift -> Staub -> Wirbel -> Erde (scroll-gesteuert)
-  const INTRO_TEXT = ['Unternehmen, die', 'nicht ausfallen dürfen.'];   /* zerfällt zur Erde; Handy: kürzere Zeilen */
+  const INTRO_TEXT = ['Für Unternehmen, die', 'nicht ausfallen dürfen.'];   /* zerfällt zur Erde; Handy: kürzere Zeilen */
   const TITLE_Y = 0.4;                   // Endlage der Schrift in der Box (beim Zerfall); davor sitzt sie etwas tiefer und gleitet hoch
   const BUILD_END = 0.85;               // bei 85 % der Scroll-Strecke ist die Erde fertig, danach kurz Ruhe
   const SWIRL = -0.35;                  // nur ein Hauch Drehung – die Schrift zerfällt vor allem nach unten
@@ -1666,7 +1666,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
   let pR, pT, pD, pS, pSc, pPh;
   function buildIntro() {
     const narrow = W < 640;
-    const lines = narrow ? ['Unternehmen,', 'die nicht', 'ausfallen dürfen.'] : INTRO_TEXT;
+    const lines = narrow ? ['Für Unternehmen,', 'die nicht', 'ausfallen dürfen.'] : INTRO_TEXT;
     const off = document.createElement('canvas'); off.width = W; off.height = H;
     const o = off.getContext('2d');
     let fs = Math.min(H * (narrow ? 0.06 : 0.068), 60);   /* Titel kleiner und leichter */
@@ -1875,7 +1875,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
       ctx.font = `${lab.getPropertyValue('--fw-eb').trim() || 500} 15px ${lab.getPropertyValue('--fb').trim() || 'sans-serif'}, system-ui, sans-serif`;
       if ('letterSpacing' in ctx) ctx.letterSpacing = '1.65px';   /* wie die übrigen Eyebrows */
       ctx.fillStyle = `rgba(${TC},${.55 * ea})`;
-      ctx.fillText('WIR ARBEITEN MIT', W / 2, tY() + dy - (lines.length / 2) * fs * 1.02 - 38);
+      if (0) ctx.fillText('WIR ARBEITEN MIT', W / 2, tY() + dy - (lines.length / 2) * fs * 1.02 - 38);
     }
     ctx.restore();
   }
@@ -2623,7 +2623,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
     const f = e.target.closest('.ct-form'); if (!f || f.dataset.busy) return; e.preventDefault();
     const n = (f.elements.name.value || '').trim().split(/\s+/)[0], btn = f.querySelector('.ct-send');
     f.dataset.busy = 1; [...f.elements].forEach(el => el.disabled = true); btn.querySelector('b span').textContent = 'Wird gesendet …';
-    setTimeout(() => f.innerHTML = `<div class="ct-hd"><p class="lab ct-k">Anfrage erhalten</p><h2>Danke${n ? ', ' + esc(n) : ''}.</h2><p class="ct-sub">Wir melden uns innerhalb eines Werktags. Bei einem akuten Vorfall rufen Sie bitte direkt die Notfall-Hotline an.</p></div>`, 700);
+    setTimeout(() => f.innerHTML = `<div class="ct-hd"><h2>Danke${n ? ', ' + esc(n) : ''}.</h2><p class="ct-sub">Wir melden uns innerhalb eines Werktags. Bei einem akuten Vorfall rufen Sie bitte direkt die Notfall-Hotline an.</p></div>`, 700);
   });
 
   /* Pop-up */

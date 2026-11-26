@@ -132,3 +132,7 @@ main { flex:1 }
 .card .ex { margin:12px 0 18px; color:var(--mut) }
 .card .meta { display:flex; gap:16px; margin:0; color:var(--mut); font-size:14px }
 .card.is-placeholder figure { border-style:dashed }
+
+/* Keine Eyebrows: Kicker als Subline unter der Headline */
+.lab.sub { margin:-8px 0 28px; color:var(--mut) }
+.h1 + .lab.sub { margin:20px 0 0 }

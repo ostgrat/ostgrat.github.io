@@ -16,7 +16,7 @@ export const cta = (href, label) =>
   href && label ? `<a class="cta" href="${attr(href)}"><b><span>${esc(label)}</span></b><i>${icons.arrow}</i></a>` : '';
 
 const head = (b) =>
-  (b.kicker ? `<p class="lab">${esc(b.kicker)}</p>` : '') + (b.heading ? `<h2 class="h2">${esc(b.heading)}</h2>` : '');
+  (b.heading ? `<h2 class="h2">${esc(b.heading)}</h2>` : '') + (b.kicker ? `<p class="lab sub">${esc(b.kicker)}</p>` : '');   /* keine Eyebrows: Kicker steht als Subline unter der Headline */
 
 /** Beitragskarte (Startseiten-Teaser, Blog-Übersicht, Blog-Teaser-Block). */
 export function card(p, { showType = false } = {}) {
@@ -32,8 +32,8 @@ export function card(p, { showType = false } = {}) {
 const renderers = {
   hero: (b, ctx) =>
     `<section class="blk b-hero${b.image ? ' has-img' : ''}"><div class="copy">` +
-    (b.kicker ? `<p class="lab">${esc(b.kicker)}</p>` : '') +
     `<h1 class="h1">${esc(b.headline)}${b.highlight ? `<span class="hl">${esc(b.highlight)}</span>` : ''}</h1>` +
+    (b.kicker ? `<p class="lab sub">${esc(b.kicker)}</p>` : '') +
     (b.lead ? `<p class="lead">${esc(b.lead)}</p>` : '') +
     cta(b.ctaLink, b.ctaLabel) +
     `</div>${b.image ? `<figure><img src="${attr(ctx.asset(b.image))}" alt=""></figure>` : ''}</section>`,
