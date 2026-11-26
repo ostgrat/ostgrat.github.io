@@ -2,6 +2,6 @@ node_modules/
 dist/
 .astro/
 .DS_Store
-# wird beim Build aus node_modules kopiert
-public/admin/sveltia-cms.js
-public/admin/chunks/
+# werden beim Build aus node_modules erzeugt (scripts/prepare.mjs)
+public/fonts/
+public/styles/fonts.css

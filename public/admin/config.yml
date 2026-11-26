@@ -131,7 +131,6 @@ collections:
             name: hero
             widget: object
             description: "Seitenanfang: große Überschrift, hervorgehobene Zeile, Einleitung, Button, optional Bild rechts."
-            hint: "So sieht dieser Block aus: [Vorschau öffnen](/bloecke/#hero)"
             summary: "{{fields.headline}}"
             fields:
               - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/hero.jpg, readonly: true, required: false, choose_url: false }
@@ -146,7 +145,6 @@ collections:
             name: text
             widget: object
             description: "Überschrift links, längerer Text rechts. Für Erklärungen, Listen, Absätze."
-            hint: "So sieht dieser Block aus: [Vorschau öffnen](/bloecke/#text)"
             summary: "{{fields.heading}}"
             fields:
               - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/text.jpg, readonly: true, required: false, choose_url: false }
@@ -157,7 +155,6 @@ collections:
             name: imageText
             widget: object
             description: "Großes Bild neben Überschrift, Text und optionalem Button. Bild links oder rechts."
-            hint: "So sieht dieser Block aus: [Vorschau öffnen](/bloecke/#imageText)"
             summary: "{{fields.heading}}"
             fields:
               - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/imageText.jpg, readonly: true, required: false, choose_url: false }
@@ -172,7 +169,6 @@ collections:
             name: stats
             widget: object
             description: "Große Zahlen in einer Reihe, jeweils mit kurzer Beschreibung darunter."
-            hint: "So sieht dieser Block aus: [Vorschau öffnen](/bloecke/#stats)"
             summary: "{{fields.heading}}"
             fields:
               - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/stats.jpg, readonly: true, required: false, choose_url: false }
@@ -190,7 +186,6 @@ collections:
             name: faq
             widget: object
             description: "Überschrift links, aufklappbare Fragen und Antworten rechts."
-            hint: "So sieht dieser Block aus: [Vorschau öffnen](/bloecke/#faq)"
             summary: "{{fields.heading}}"
             fields:
               - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/faq.jpg, readonly: true, required: false, choose_url: false }
@@ -208,7 +203,6 @@ collections:
             name: cta
             widget: object
             description: "Umrandeter Kasten mit Überschrift, kurzem Text und Button – meist am Seitenende."
-            hint: "So sieht dieser Block aus: [Vorschau öffnen](/bloecke/#cta)"
             summary: "{{fields.heading}}"
             fields:
               - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/cta.jpg, readonly: true, required: false, choose_url: false }
@@ -220,7 +214,6 @@ collections:
             name: blogTeaser
             widget: object
             description: "Die neuesten Blogbeiträge als Karten, optional nach Thema gefiltert."
-            hint: "So sieht dieser Block aus: [Vorschau öffnen](/bloecke/#blogTeaser)"
             summary: "{{fields.heading}}"
             fields:
               - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/blogTeaser.jpg, readonly: true, required: false, choose_url: false }

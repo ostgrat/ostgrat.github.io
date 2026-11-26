@@ -1,19 +1,17 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
-import BlogCard from '../../components/BlogCard.astro';
-import { getPosts } from '../../lib/blog';
-const posts = await getPosts();
+import { card } from '../../lib/blocks.mjs';
+import { getPosts, toCard } from '../../lib/blog';
+const cards = (await getPosts()).map((p) => card(toCard(p), { showType: true })).join('');
 ---
 <SiteLayout title="News & Insights" description="Was wir gerade sehen: Sicherheitswarnungen, Einblicke aus dem SOC und Fallstudien aus dem Red Team.">
   <section class="blk">
     <p class="lab">News &amp; Insights</p>
     <h1 class="h1">Was wir gerade sehen.</h1>
-    <div class="grid">{posts.map((p) => <BlogCard post={p} showType />)}</div>
+    <div class="cards" set:html={cards} />
   </section>
 </SiteLayout>
 <style>
   .blk { padding-top:clamp(120px,22vh,240px); padding-bottom:clamp(96px,16vh,180px) }
-  .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(52px,8vh,80px) clamp(20px,2.2vw,32px); margin-top:clamp(64px,10vh,120px) }
-  @media (max-width:1100px) { .grid { grid-template-columns:repeat(2,minmax(0,1fr)) } }
-  @media (max-width:700px) { .grid { grid-template-columns:1fr } }
+  .cards { margin-top:clamp(64px,10vh,120px) }
 </style>

@@ -1,19 +1,10 @@
 ---
 // Setzt eine Seite aus den Blöcken zusammen, die im CMS gestapelt wurden.
-import HeroBlock from './blocks/HeroBlock.astro';
-import TextBlock from './blocks/TextBlock.astro';
-import ImageTextBlock from './blocks/ImageTextBlock.astro';
-import StatsBlock from './blocks/StatsBlock.astro';
-import FaqBlock from './blocks/FaqBlock.astro';
-import CtaBlock from './blocks/CtaBlock.astro';
-import BlogTeaserBlock from './blocks/BlogTeaserBlock.astro';
-const map: Record<string, any> = {
-  hero: HeroBlock, text: TextBlock, imageText: ImageTextBlock, stats: StatsBlock,
-  faq: FaqBlock, cta: CtaBlock, blogTeaser: BlogTeaserBlock,
-};
+// Das HTML kommt aus src/lib/blocks.mjs – derselbe Code rendert die Live-Vorschau im CMS.
+import { renderBlocks } from '../lib/blocks.mjs';
+import { md } from '../lib/md';
+import { getPosts, toCard } from '../lib/blog';
 const { blocks = [] } = Astro.props;
+const posts = blocks.some((b: any) => b?.type === 'blogTeaser') ? (await getPosts()).map(toCard) : [];
 ---
-{blocks.map((b: any) => {
-  const C = map[b.type];
-  return C ? <C {...b} /> : null;
-})}
+<Fragment set:html={renderBlocks(blocks, { md, posts })} />

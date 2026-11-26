@@ -1,0 +1,55 @@
+---
+// CMS-Startseite (/admin/). Sveltia wird hier mitgebaut statt von einem CDN geladen –
+// so lädt das CMS keine Dateien von fremden Servern. Konfiguration: public/admin/config.yml
+---
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Ostgrat – Inhalte bearbeiten</title>
+  <link rel="stylesheet" href="/admin/admin.css" />
+</head>
+<body>
+  <script>
+    import CMS, { React } from '@sveltia/cms';
+    import { marked } from 'marked';
+    import { renderBlocks } from '../../lib/blocks.mjs';
+
+    const md = (s) => (s ? marked.parse(String(s), { async: false }) : '');
+
+    // Daten aus der Vorschau-Entry holen (Immutable.js oder einfaches Objekt)
+    const toData = (entry) => {
+      const e = entry?.toJS ? entry.toJS() : entry;
+      return e?.data ?? {};
+    };
+
+    // Bild-URL für die Vorschau: frisch hochgeladene Bilder kommen über getAsset,
+    // bereits veröffentlichte über ihren normalen Pfad.
+    const makeAsset = (getAsset) => (path) => {
+      try {
+        const a = getAsset?.(path);
+        if (a && typeof a.then !== 'function') {
+          const url = String(a.url ?? a);
+          if (url && url !== '[object Object]') return url;
+        }
+      } catch {}
+      return path;
+    };
+
+    // Live-Vorschau für Seiten aus dem Baukasten: dasselbe HTML wie auf der Website
+    function PagePreview({ entry, getAsset }) {
+      const data = toData(entry);
+      const html = renderBlocks(data.blocks || [], { md, asset: makeAsset(getAsset) });
+      return React.createElement('main', { className: 'preview', dangerouslySetInnerHTML: { __html: html } });
+    }
+
+    CMS.registerPreviewStyle('/styles/fonts.css');
+    CMS.registerPreviewStyle('/styles/site.css');
+    CMS.registerPreviewStyle('main.preview{min-height:100vh}.preview .blk:last-child{padding-bottom:96px}', { raw: true });
+    CMS.registerPreviewTemplate('seiten', PagePreview);
+    CMS.init();
+  </script>
+</body>
+</html>

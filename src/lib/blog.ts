@@ -46,3 +46,17 @@ export function inlineSvg(cover?: string) {
   const file = path.join(process.cwd(), 'public', cover);
   return fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : null;
 }
+
+/** Beitrag als einfache Daten für den gemeinsamen Renderer (src/lib/blocks.mjs). */
+export const toCard = (p: Post) => ({
+  url: postUrl(p),
+  title: p.data.title,
+  excerpt: p.data.excerpt,
+  author: p.data.author,
+  dateText: formatDate(p.data.date),
+  cover: p.data.cover,
+  coverSvg: inlineSvg(p.data.cover),
+  alert: p.alert,
+  cat: p.cat,
+  typeLabel: types[p.type],
+});

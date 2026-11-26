@@ -16,7 +16,10 @@ Testprojekt für das Kunden-Setup: Astro baut die Seite, Sveltia CMS macht Inhal
 | Startseite (Design 1:1 aus dem Entwurf) | `src/pages/index.astro`, `src/legacy/` |
 | Editierbare Sections | `src/components/Hero.astro`, `Faq.astro`, `BlogGrid.astro` |
 | Texte der Startseite | `src/data/home.json` |
-| Seiten aus dem Baukasten | `src/content/pages/*.md`, Blöcke in `src/components/blocks/` |
+| Seiten aus dem Baukasten | `src/content/pages/*.md` |
+| Block-HTML (Website und CMS-Vorschau) | `src/lib/blocks.mjs`, Styles in `public/styles/site.css` |
+| CMS-Seite mit Live-Vorschau | `src/pages/admin/index.astro`, Oberfläche `public/admin/admin.css` |
+| Block-Screenshots fürs CMS | `public/uploads/bloecke/` |
 | Blogbeiträge je Art | `src/content/blog/artikel`, `warnungen`, `fallstudien` |
 | Bilder aus dem CMS | `public/uploads/` |
 | CMS-Konfiguration (was editierbar ist) | `public/admin/config.yml` |
@@ -28,4 +31,4 @@ npm install
 npm run dev
 ```
 
-Schriften und das CMS sind selbst gehostet, es gibt keine Google-Fonts- oder CDN-Aufrufe.
+Schriften und das CMS sind selbst gehostet, es gibt keine Google-Fonts- oder CDN-Aufrufe – auch nicht im CMS.

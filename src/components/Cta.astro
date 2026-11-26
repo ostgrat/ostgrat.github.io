@@ -1,7 +1,0 @@
----
-// Button wie auf der Startseite: Textfeld + orange Pfeil-Kachel.
-import icons from '../legacy/icons.json';
-interface Props { href: string; label: string; class?: string }
-const { href, label, class: cls } = Astro.props;
----
-<a class:list={['cta', cls]} href={href}><b><span>{label}</span></b><i set:html={icons.arrow}></i></a>
