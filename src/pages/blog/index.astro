@@ -4,10 +4,10 @@ import { card } from '../../lib/blocks.mjs';
 import { getPosts, toCard } from '../../lib/blog';
 const cards = (await getPosts()).map((p) => card(toCard(p), { showType: true })).join('');
 ---
-<SiteLayout title="News & Insights" description="Was wir gerade sehen: Sicherheitswarnungen, Einblicke aus dem SOC und Fallstudien aus dem Red Team.">
+<SiteLayout title="News & Insights" description="Was unsere Welt gerade bewegt: Sicherheitswarnungen, Einblicke aus dem SOC und Fallstudien aus dem Red Team.">
   <section class="blk">
     <p class="lab">News &amp; Insights</p>
-    <h1 class="h1">Was wir gerade sehen.</h1>
+    <h1 class="h1">Was unsere Welt gerade bewegt.</h1>
     <div class="cards" set:html={cards} />
   </section>
 </SiteLayout>

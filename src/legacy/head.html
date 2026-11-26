@@ -1434,4 +1434,73 @@ video{pointer-events:none}   /* dekorative Videos: keine Browser-Bedienelemente 
   .rv-p{transition-duration:.6s,.5s,.5s}
   .rv-i{transition-duration:.45s,.55s,.45s}
 }
+
+/* ===== Runde Mobil 2 ===== */
+@media(max-width:900px){
+  /* Schwebende Buttons rechts untereinander: Notfall über Beratung */
+  .fab-sos{left:auto;right:max(var(--frame),12px);bottom:calc(max(var(--frame),12px) + 48px)}
+  /* NIS2: Bild quer, ohne inneren Rahmen und Linien */
+  .ti{padding-bottom:72px}
+  .ti-img{min-height:0;aspect-ratio:16/10;overflow:hidden}
+  .ti-img::before,.ti-img::after{display:none}
+  .ti-card{position:absolute;inset:0;width:auto;translate:none;box-shadow:none;background:none}
+  .ti-card img{inset:0;width:100%;height:100%}
+  /* Team: Bild größer, weniger Luft darunter */
+  .team{padding-bottom:56px!important}
+  .team-fig{height:calc(100vw * 5 / 6)}
+  /* Facts: Kennzahlen größer, Diagramm höher, mehr Luft zum Team */
+  .why .why-side .why-stats dt{font-size:38px}
+  .why .why-fig{margin-top:-230px!important;min-height:440px;position:relative;z-index:0}
+  .why .why-side{position:relative;z-index:1}
+  .why .why-side .why-logos{position:static;margin:44px 0 0!important;padding:0 24px!important;justify-content:flex-start}
+  .team{padding-top:150px!important}
+  /* Progress: oberer Block klebt, darunter läuft der Würfel */
+  .s2{height:calc(100svh * 3.4)!important}
+  .s2-pin{position:sticky;top:56px;height:calc(100svh - 56px);display:flex;flex-direction:column;padding:28px var(--mx,20px) 12px}
+  .s2-text{flex:none}
+  .s2-text h2{font-size:28px}
+  .s2-text > p{font-size:14px;margin-bottom:18px!important;line-height:1.5}
+  .s2-cta{display:none!important}
+  .s2-list{display:grid}
+  .s2-list li,.s2-list li.next{grid-area:1/1;padding:0!important;opacity:0;transition:opacity .45s}
+  .s2-list li.on{opacity:1}
+  .s2-list li p{font-size:14px;line-height:1.5}
+  .li-pic{display:none!important}
+  .s2-media{display:block!important;position:relative;flex:1;min-height:0;margin:8px calc(-1 * var(--mx,20px)) 0}
+  .s2-media .ring,.s2-media .rcard,.s2-media .rimg{position:absolute;inset:0;width:100%;height:100%;margin:0;transform:none!important}
+  .s2-media .rglass{display:none}
+  .s2-media .pxs{opacity:1!important;filter:none!important;width:100%;height:100%}
+  /* Für Angreifer: Karten mit Innenabstand, Trennlinien, Rahmen bis zum Seitenraster */
+  .rev{--rg:16px}
+  .rev-in{padding:72px 0 64px!important;min-height:0!important}
+  .rev-c{width:calc(100% - 32px)!important}
+  .rev .rev-h{padding:0 8px;margin-bottom:40px}
+  .rev .why-grid{margin-top:0!important}
+  .rev .why-card{padding:30px 24px 32px!important}
+  .rev .why-card + .why-card::before{left:0!important;right:0!important}
+  .rev .why-grid > b.h{left:0!important;right:0!important}
+  /* Leistungen: größere Bilder, kein Aufklappen */
+  .sv-list[data-v="4"] .sv-vid,.sv-list[data-v="4"] .sv-row.act .sv-vid{height:auto;aspect-ratio:4/3;transition:none}
+  .sv-list[data-v="4"] .sv-vid video,.sv-list[data-v="4"] .sv-row.act .sv-vid video{filter:none;scale:1;transition:none}
+  .sv-list[data-v="4"] .sv-m,.sv-list[data-v="4"] .sv-row.act .sv-m{opacity:1;translate:none;filter:none;transition:none}
+  .sv .sv-list .sv-row{padding-left:24px!important;padding-right:24px!important}
+  /* Kontakt: weniger Luft zwischen Text und Kontaktwegen, mehr bis zum Formular */
+  .ct .ct-l{padding-top:0!important}
+  .ct .ct-opts{margin-top:40px!important}
+  .ct .ct-r{margin-top:56px!important}
+  /* Blog → FAQ */
+  .fq{padding-top:190px}
+  /* Blog-Filter: Dropdown links */
+  .bl-tabs{display:none}
+  .bl-dd{display:block!important}
+}
+.bl-dd{display:none;position:relative}
+.bl-dd > button{display:inline-flex;align-items:center;gap:10px;padding:0 0 14px;border:0;background:none;color:var(--ink);font:var(--fw-btn) var(--fs-btn)/1 var(--fb),system-ui,sans-serif;cursor:pointer}
+.bl-dd > button svg{width:14px;height:14px;fill:currentColor;transition:rotate .35s cubic-bezier(.2,.7,.2,1)}
+.bl-dd.open > button svg{rotate:180deg}
+.bl-dd .dd-list{left:0;right:auto;min-width:200px;top:calc(100% + 2px)}
+.bl-dd.open .dd-list{opacity:1;translate:0 0;pointer-events:auto}
+/* Desktop: mehr Luft Blog → FAQ */
+.fq{padding-top:clamp(260px,42vh,460px)}
+@media(max-width:900px){.fq{padding-top:190px}}
 </style>

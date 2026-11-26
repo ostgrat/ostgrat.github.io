@@ -1268,7 +1268,11 @@ function pixSwap(cv, srcs) {
   const upd = () => {
     raf = 0;
     for (const o of secs) {
-      if (!desk()) { o.bar.style.transform = ''; continue; }
+      if (!desk()) { o.bar.style.transform = '';
+        if (o.cv && o.cv.setP) { const r = o.sec.getBoundingClientRect(), span = Math.max(1, o.sec.offsetHeight - o.pin.offsetHeight), p = Math.max(0, Math.min(1, (56 - r.top) / span)), n = o.items.length, k = Math.min(n - 1, Math.floor(p * n * .999));
+          o.cv.setP(p, p); o.cv.style.opacity = 1; if (o.cv._f !== 'none') { o.cv._f = 'none'; o.cv.style.filter = 'none'; }
+          if (k !== o.vis) { o.vis = k; o.mark(k); } o.cv.atk = k === 1 && r.bottom > innerHeight * .3; }
+        continue; }   /* Handy: oberer Block klebt, Würfel läuft darunter */
       const p = Math.max(0, Math.min(1, (scrollY - o.start) / o.len)), n = o.items.length;
       o.bar.style.transform = `scaleY(${p.toFixed(4)})`; if (o.cv && o.cv.setP) o.cv.setP(p, (scrollY - o.start) / o.len);
       const tx = o.txt || (o.txt = o.sec.querySelector('.s2-text')); if (tx) { const pin = o.pinEl || (o.pinEl = o.sec.querySelector('.s2-pin')), over = Math.max(0, tx.scrollHeight - pin.clientHeight), sm = p * p * (3 - 2 * p); tx.style.translate = innerWidth > 900 ? `0 ${(110 - (over + 420) * sm).toFixed(1)}px` : '';
@@ -1609,9 +1613,9 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
     if (gl) gl.viewport(0, 0, canvas.width, canvas.height);
     /* Erde rechts, links Platz für Headline und Text; schmal: Erde unten mittig */
     const wide = W >= 900;
-    R = wide ? Math.min(W * .245, H * .37) : Math.min(W * .42, H * .3); CX = wide ? W * .715 : W / 2; CY = wide ? H / 2 : H * .64;
+    R = wide ? Math.min(W * .27, H * .45) : Math.min(W * .42, H * .3); CX = wide ? W * .72 : W / 2; CY = wide ? H * .56 : H * .64;   /* Desktop: größer, darf unten leicht aus der Section ragen */
     if (!wide) {   /* schmal: Erde im freien Raum unter dem Text, darf nie in den Text ragen */
-      const cr = canvas.getBoundingClientRect(), tb = copyEl.getBoundingClientRect().bottom - cr.top + 28, bot = H - 28;
+      const cr = canvas.getBoundingClientRect(), extra = [...copyEl.querySelectorAll('details[open]')].reduce((s, d) => s + d.offsetHeight - d.querySelector('summary').offsetHeight, 0), tb = copyEl.getBoundingClientRect().bottom - extra - cr.top + 28, bot = H - 28;   /* gemessen wie mit zugeklappten Branchen */
       R = Math.max(80, Math.min(W * .42, (bot - tb) / 2)); CY = Math.max(tb + R, (tb + bot) / 2);
     }
     window.ostGlobe = {x:CX, y:CY, r:R};   /* für das Raster: nur direkt hinter der Kugel kein Licht */
@@ -2389,6 +2393,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
       const r = ri.getBoundingClientRect(), seen = vis > .01 && r.bottom > 0 && r.top < innerHeight, on = rev.classList.contains('in');
       if (!on && vis > .4) { rev.classList.add('in'); grid && grid.classList.add('built'); }
       else if (on && vis < .03) { rev.classList.remove('in'); grid && grid.classList.remove('built'); }   /* zurück im Hero: setzt sich zurück */
+      const near = r.top < innerHeight * 2 && r.bottom > -innerHeight * .5; if (v && near && v.preload !== 'auto') { v.preload = 'auto'; v.load(); }
       if (v && seen !== playing && !RM) { playing = seen; if (seen) { v.preload = 'auto'; v.play().catch(() => {}); } else v.pause(); }
     };
     size(); upd(); addEventListener("resize", () => { size(); upd(); }); (window.onScrollFrame || (f => addEventListener("scroll", f, {passive: true})))(upd);
@@ -3107,7 +3112,7 @@ document.addEventListener('keydown',e=>{const t=e.target.closest&&e.target.close
   const fix=()=>{gc.style.top='';gc.style.translate='';if(innerWidth<=900)return;const gx=gc.querySelector('.gx'),open=[...gc.querySelectorAll('details[open]')];open.forEach(d=>d.open=false);
     const hgt=gc.offsetHeight;gc.style.top=`calc(50% - ${Math.round(hgt/2)}px)`;gc.style.translate='0 0';open.forEach(d=>d.open=true);};
   addEventListener('resize',fix);(document.fonts?document.fonts.ready:Promise.resolve()).then(fix);
-  gc.querySelectorAll('details').forEach(d=>d.addEventListener('toggle',()=>{if(innerWidth<=900)dispatchEvent(new Event('resize'))}));
+  /* Aufklappen ändert die Erde nicht */
   document.querySelectorAll('a[href="#branchen"]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();const top=sc.getBoundingClientRect().top+scrollY,span=sc.offsetHeight-innerHeight;if(window.ostGlobeKF)window.ostGlobeKF.go(window.ostGlobeKF.kf()[1]);else scrollTo({top:top+span*.92,behavior:'smooth'});}));
 })();
 </script>
@@ -3194,7 +3199,7 @@ document.querySelectorAll('.sv-row').forEach(r=>r.addEventListener('click',e=>{i
   const SS=4;let key='',ver=0;
   const build=()=>{const Cg=window.ostCW||14,host=document.getElementById('frame');const W=box.clientWidth;if(!W||!host)return;
     const hr=host.getBoundingClientRect(),br=box.getBoundingClientRect(),fx=br.left-hr.left-host.clientLeft,fy=br.top+parseFloat(getComputedStyle(box).paddingTop)-hr.top-host.clientTop;
-    const lines=W<700?['OST','GRAT']:['OSTGRAT'],font=s=>`700 ${s}px "Space Grotesk", system-ui, sans-serif`;
+    const lines=['OSTGRAT'],font=s=>`700 ${s}px "Space Grotesk", system-ui, sans-serif`;
     const m=document.createElement('canvas').getContext('2d');m.font=font(100);if('letterSpacing' in m)m.letterSpacing='-2px';
     const wid=Math.max(...lines.map(l=>{const t=m.measureText(l);return t.actualBoundingBoxLeft+t.actualBoundingBoxRight;})),asc=m.measureText('OSTGRAT').actualBoundingBoxAscent;
     const fs=100*(W-Cg)/wid,capH=asc*fs/100,lh=capH*1.22,Hh=Math.ceil((capH+(lines.length-1)*lh)/Cg+1)*Cg;
@@ -3271,4 +3276,23 @@ document.querySelectorAll('.sv-row').forEach(r=>r.addEventListener('click',e=>{i
   let last=scrollY,acc=0;addEventListener('scroll',()=>{const y=scrollY,d=y-last;last=y;acc=(Math.sign(d)===Math.sign(acc)?acc:0)+d;
     const atEnd=y+innerHeight>=document.documentElement.scrollHeight-40;
     if(y<80||atEnd||acc<-30)R.classList.remove('fab-away');else if(acc>30)R.classList.add('fab-away');},{passive:true});})();
+</script>
+
+<script>
+/* Facts am Handy: Siegel unter die Kennzahlen, am Desktop zurück */
+(()=>{const lg=document.querySelector('.why-logos'),c=document.querySelector('.why-c'),s=document.querySelector('.why .why-side');if(!lg||!c||!s)return;
+  const mq=matchMedia('(max-width:900px)'),put=()=>{if(mq.matches){if(lg.parentElement!==s)s.append(lg);}else if(lg.parentElement!==c)c.append(lg);};mq.addEventListener('change',put);put();})();
+/* Blog am Handy: Filter als Dropdown links */
+(()=>{const bar=document.querySelector('.bl-bar'),tabs=bar&&bar.querySelector('.bl-tabs');if(!tabs)return;
+  const CARET='<svg viewBox="0 0 256 256" aria-hidden="true"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/></svg>';
+  const dd=document.createElement('div');dd.className='bl-dd';const btns=[...tabs.querySelectorAll('button')];
+  dd.innerHTML='<button type="button" aria-haspopup="listbox" aria-expanded="false"><span></span>'+CARET+'</button><ul class="dd-list" role="listbox"></ul>';
+  const lab=dd.querySelector('span'),ul=dd.querySelector('ul'),tb=dd.querySelector('button');
+  btns.forEach(b=>{const li=document.createElement('li');li.setAttribute('role','option');li.textContent=b.textContent.trim();li.addEventListener('click',()=>{b.click();close();});ul.append(li);});
+  const sync=()=>{const i=btns.findIndex(b=>b.getAttribute('aria-selected')==='true');lab.textContent=btns[Math.max(0,i)].textContent.trim();[...ul.children].forEach((li,k)=>li.setAttribute('aria-selected',String(k===i)));};
+  const close=()=>{dd.classList.remove('open');tb.setAttribute('aria-expanded','false');};
+  tb.addEventListener('click',()=>{const o=!dd.classList.contains('open');dd.classList.toggle('open',o);tb.setAttribute('aria-expanded',String(o));});
+  document.addEventListener('pointerdown',e=>{if(!dd.contains(e.target))close();});
+  btns.forEach(b=>b.addEventListener('click',()=>setTimeout(sync)));
+  bar.insertBefore(dd,tabs);sync();})();
 </script>
