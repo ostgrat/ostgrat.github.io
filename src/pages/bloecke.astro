@@ -1,0 +1,47 @@
+---
+// Blockübersicht für Redakteure: zeigt jeden Baukasten-Block mit Beispielinhalt, genau wie live.
+// Wird aus dem CMS bei jedem Block verlinkt (/bloecke/#hero usw.). Nicht in der Navigation, nicht bei Google.
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Blocks from '../components/Blocks.astro';
+import samples from '../data/block-samples.json';
+import { blockInfo } from '../lib/block-info';
+---
+<SiteLayout title="Blockübersicht" noindex>
+  <section class="intro">
+    <p class="lab">Für Redakteure</p>
+    <h1 class="h1">Blockübersicht</h1>
+    <p class="lead">Alle Blöcke des Seitenbaukastens mit Beispielinhalt – so sehen sie auf der Website aus. Im CMS unter „Seiten“ → „Blöcke“ → „Add Block“ auswählen.</p>
+    <ol class="toc">{samples.map((b, i) => (
+      <li><a href={`#${b.type}`}><span>{String(i + 1).padStart(2, '0')}</span>{blockInfo[b.type].label}</a></li>
+    ))}</ol>
+  </section>
+  {samples.map((b, i) => (
+    <div class="item" id={b.type}>
+      <div class="bar">
+        <span class="no">{String(i + 1).padStart(2, '0')}</span>
+        <strong>{blockInfo[b.type].label}</strong>
+        <span class="desc">{blockInfo[b.type].description}</span>
+        <a href="#" class="up">Nach oben</a>
+      </div>
+      <Blocks blocks={[b]} />
+    </div>
+  ))}
+</SiteLayout>
+<style>
+  :global(html) { scroll-padding-top:56px }
+  .intro { padding:clamp(120px,20vh,200px) var(--pad) clamp(64px,10vh,120px) }
+  .intro .lead { margin:32px 0 0 }
+  .toc { display:flex; flex-wrap:wrap; gap:0; margin:48px 0 0; padding:0; list-style:none; border-left:var(--sw) solid var(--line) }
+  .toc a { display:flex; gap:10px; align-items:baseline; padding:12px 18px; border:var(--sw) solid var(--line); border-left:0; font-size:15px; transition:background .3s,color .3s }
+  .toc li { margin-bottom:-1px }
+  .toc a span { color:var(--mut); font:500 12px var(--fm) }
+  .toc a:hover { background:var(--ink); color:var(--bg) } .toc a:hover span { color:var(--bg) }
+  .item { border-top:var(--sw) solid var(--ln); padding-bottom:clamp(64px,10vh,120px) }
+  .bar { position:sticky; top:56px; z-index:2; display:flex; align-items:baseline; gap:16px; padding:14px var(--pad); background:var(--bg); border-bottom:var(--sw) solid var(--line); font-size:15px }
+  .no { color:var(--acc); font:500 13px var(--fm) }
+  .desc { color:var(--mut) }
+  .up { margin-left:auto; color:var(--mut); white-space:nowrap } .up:hover { color:var(--ink) }
+  @media (max-width:760px) { .bar { flex-wrap:wrap } .desc { flex-basis:100% } .up { display:none } }
+  .item :global(.blk) { padding-top:clamp(56px,8vh,96px) }
+  .item :global(.blk:last-child) { padding-bottom:0 }
+</style>

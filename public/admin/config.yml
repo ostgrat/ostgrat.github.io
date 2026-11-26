@@ -109,7 +109,7 @@ collections:
   - name: seiten
     label: Seiten
     label_singular: Seite
-    description: Eigene Seiten aus Blöcken zusammenstellen. Die Adresse entsteht aus dem Titel.
+    description: Eigene Seiten aus Blöcken zusammenstellen. Die Adresse entsteht aus dem Titel. Alle Blöcke mit Beispiel unter /bloecke/
     icon: web
     folder: src/content/pages
     create: true
@@ -124,10 +124,13 @@ collections:
         name: blocks
         widget: list
         label_singular: Block
+        hint: "Mit „Add Block“ einen Block wählen, mit den Pfeilen sortieren. Alle Blöcke mit Beispiel: [Blockübersicht öffnen](/bloecke/)"
         types:
           - label: Hero
             name: hero
             widget: object
+            description: "Seitenanfang: große Überschrift, hervorgehobene Zeile, Einleitung, Button, optional Bild rechts."
+            hint: "So sieht dieser Block aus: [Vorschau öffnen](/bloecke/#hero)"
             summary: "{{fields.headline}}"
             fields:
               - { label: Dachzeile, name: kicker, widget: string, required: false }
@@ -140,6 +143,8 @@ collections:
           - label: Text
             name: text
             widget: object
+            description: "Überschrift links, längerer Text rechts. Für Erklärungen, Listen, Absätze."
+            hint: "So sieht dieser Block aus: [Vorschau öffnen](/bloecke/#text)"
             summary: "{{fields.heading}}"
             fields:
               - { label: Dachzeile, name: kicker, widget: string, required: false }
@@ -148,6 +153,8 @@ collections:
           - label: Bild mit Text
             name: imageText
             widget: object
+            description: "Großes Bild neben Überschrift, Text und optionalem Button. Bild links oder rechts."
+            hint: "So sieht dieser Block aus: [Vorschau öffnen](/bloecke/#imageText)"
             summary: "{{fields.heading}}"
             fields:
               - { label: Bild, name: image, widget: image }
@@ -160,6 +167,8 @@ collections:
           - label: Kennzahlen
             name: stats
             widget: object
+            description: "Große Zahlen in einer Reihe, jeweils mit kurzer Beschreibung darunter."
+            hint: "So sieht dieser Block aus: [Vorschau öffnen](/bloecke/#stats)"
             summary: "{{fields.heading}}"
             fields:
               - { label: Dachzeile, name: kicker, widget: string, required: false }
@@ -175,6 +184,8 @@ collections:
           - label: FAQ
             name: faq
             widget: object
+            description: "Überschrift links, aufklappbare Fragen und Antworten rechts."
+            hint: "So sieht dieser Block aus: [Vorschau öffnen](/bloecke/#faq)"
             summary: "{{fields.heading}}"
             fields:
               - { label: Dachzeile, name: kicker, widget: string, required: false }
@@ -190,6 +201,8 @@ collections:
           - label: Call-to-Action
             name: cta
             widget: object
+            description: "Umrandeter Kasten mit Überschrift, kurzem Text und Button – meist am Seitenende."
+            hint: "So sieht dieser Block aus: [Vorschau öffnen](/bloecke/#cta)"
             summary: "{{fields.heading}}"
             fields:
               - { label: Überschrift, name: heading, widget: string }
@@ -199,6 +212,8 @@ collections:
           - label: Blog-Teaser
             name: blogTeaser
             widget: object
+            description: "Die neuesten Blogbeiträge als Karten, optional nach Thema gefiltert."
+            hint: "So sieht dieser Block aus: [Vorschau öffnen](/bloecke/#blogTeaser)"
             summary: "{{fields.heading}}"
             fields:
               - { label: Dachzeile, name: kicker, widget: string, required: false }
