@@ -1069,7 +1069,7 @@ function cubeSwap(cv) {
     const yawFree = (45 + 180 * sr + (RM ? 0 : 6 * Math.sin(t * .35))) * Math.PI / 180, yawEnd = 283 * Math.PI / 180;   /* nicht symmetrisch: nur leicht verdreht */
     const yaw = yawFree + (yawEnd - yawFree) * c, pitch = (35.26 + (90 - 35.26) * c) * Math.PI / 180;   /* Endbild: komplett von oben, nur leicht verdreht */   /* landet schräg und bleibt leicht isometrisch */
     const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
-    const S = Math.min(W / 1.6, H) * (W < 700 ? .4 : .2) * (1 - .62 * c), ox = W / 2, oy = H * (W < 700 ? .46 : .5);   /* Handy: Würfel größer */
+    const S = Math.min(W / 1.6, H) * (W < 700 ? .38 : .2) * (1 - .62 * c), ox = W / 2, oy = H * (W < 700 ? .54 : .5);   /* Handy: Würfel größer */
     const Pj = (x, y, z) => { const X = x * cy + z * sy, Z0 = -x * sy + z * cy; return [ox + X * S, oy - (y * cp - Z0 * sp) * S, Z0 * cp + y * sp]; };
     const facing = f => { const n = f[0], Z0 = -n[0] * sy + n[2] * cy; return Z0 * cp + n[1] * sp; };
     if (atk0 && now >= nextHit) { const fr = [0, 1, 2, 3, 4].filter(fi => facing(FACES[fi]) > .3), H0 = spawned < NH ? HITS[spawned] : {u: (Math.random() * 2 - 1) * .7, v: (Math.random() * 2 - 1) * .7}; live.push({fi: fr.length ? fr[Math.floor(Math.random() * fr.length)] : 0, u: H0.u, v: H0.v, t0: now}); spawned++; nextHit = now + 330 + Math.random() * 260; }   /* neue Treffer nur im Schritt Angreifen */
@@ -1077,7 +1077,7 @@ function cubeSwap(cv) {
     mk += ((mOn ? 1 : 0) - mk) * (1 - Math.exp(-dt * 6));
     const MR = 45, flee = p => { if (mk < .01) return p; const dx = p[0] - mx, dy = p[1] - my, d2 = dx * dx + dy * dy; if (d2 > MR * MR * 4) return p; const d = Math.sqrt(d2) || 1, f = 2 * mk * Math.exp(-d2 / (MR * MR)); return [p[0] + dx / d * f, p[1] + dy / d * f, p[2]]; };
     g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, W, H);   /* kein eigener Hintergrund */
-    const px = Math.max(1.3, (W < 700 ? 2.2 : 3.2) * (1 - .52 * c));   /* Handy: feinere Pixel */   /* im Endbild etwas kleiner */   /* Pixel ähnlich groß wie beim Globus */
+    const px = Math.max(1.3, (W < 700 ? 1.7 : 3.2) * (1 - .52 * c));   /* Handy: feinere Pixel */   /* im Endbild etwas kleiner */   /* Pixel ähnlich groß wie beim Globus */
     /* --- Überwachen: großes Raster weiterer Würfel, nach außen ausgeblendet (je Seite ein Pfad, schnell) --- */
     const na = seg(sg, .05, .45), sp2 = 2.14, SPREAD = .9;
     /* Scanlinien: nur im fertigen Endbild; laufen entlang einer Pixelreihe, zufällige Länge und Richtung */
@@ -1617,7 +1617,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
     R = wide ? Math.min(W * .27, H * .45) : Math.min(W * .42, H * .3); CX = wide ? W * .72 : W / 2; CY = wide ? H * .56 : H * .64;   /* Desktop: größer, darf unten leicht aus der Section ragen */
     if (!wide) {   /* schmal: Erde im freien Raum unter dem Text, darf nie in den Text ragen */
       const cr = canvas.getBoundingClientRect(), extra = [...copyEl.querySelectorAll('details[open]')].reduce((s, d) => s + d.offsetHeight - d.querySelector('summary').offsetHeight, 0), tb = copyEl.getBoundingClientRect().bottom - extra - cr.top + 28, bot = H - 28;   /* Text oben, Erde darunter; gemessen wie mit zugeklappten Branchen */
-      R = Math.max(80, Math.min(W * .42, (bot - tb) / 2)); CY = Math.max(tb + R, (tb + bot) / 2);
+      R = Math.max(W * .4, Math.min(W * .46, (bot - tb) / 2)); CY = Math.min(Math.max(tb + R, (tb + bot) / 2), H - R * .72);   /* Handy: Erde groß, darf unten leicht angeschnitten sein */
     }
     window.ostGlobe = {x:CX, y:CY, r:R};   /* für das Raster: nur direkt hinter der Kugel kein Licht */
     const sc = document.getElementById('gscroll');
@@ -1796,7 +1796,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
   /* Fortschritt beginnt schon, während die Box noch hereinscrollt: die Schrift zerfällt im Hochfahren */
   /* Ablauf in Scrollstrecke (Anteile der Bildschirmhöhe, ab Andocken der Box):
      erst lesen (Schrift ganz), dann kurzer Zerfall + Aufbau, dann kurzer Halt */
-  const HOLD = 0, BUILD = 1.3, DRIFT = 0;   /* Aufbau verteilt sich über eine ganze Bildschirmhöhe */   /* Überschrift ohne Einfahr-Animation: steht sofort an ihrer Endposition */   /* Zerfall beginnt schon kurz vor dem Andocken, längere, ruhigere Strecke */
+  const HOLD = 0, BUILD = innerWidth <= 900 ? 1.75 : 1.3, DRIFT = 0;   /* Handy: längere Section */   /* Aufbau verteilt sich über eine ganze Bildschirmhöhe */   /* Überschrift ohne Einfahr-Animation: steht sofort an ihrer Endposition */   /* Zerfall beginnt schon kurz vor dem Andocken, längere, ruhigere Strecke */
   const dockTop = () => { const sc = document.getElementById('gscroll'); return sc.getBoundingClientRect().top + scrollY - 55; };
   /* Schrift kommt dem Scrollen leicht entgegen: gleitet beim Hereinkommen bis zum Zerfall um DRIFT px nach oben */
   const titleDrift = () => { const d0 = dockTop() - innerHeight * .45, d1 = dockTop() + innerHeight * HOLD; return DRIFT * (1 - Math.max(0, Math.min(1, (scrollY - d0) / (d1 - d0)))); };
@@ -3133,7 +3133,7 @@ document.addEventListener('keydown',e=>{const t=e.target.closest&&e.target.close
    Bleibt man in den ersten 15 % nach K1 stehen, geht es weich hoch zu K1; in den letzten 15 % vor K2 weich runter zu K2. */
 window.ostGlobeKF=(()=>{const sc=document.getElementById('gscroll');if(!sc)return null;
   const root=document.documentElement;let t=0,raf=0,busy=false;
-  const kf=()=>{const k1=sc.getBoundingClientRect().top+scrollY-55;return [k1,k1+innerHeight*1.3];};   /* entspricht HOLD = 0, BUILD = 1 */
+  const kf=()=>{const k1=sc.getBoundingClientRect().top+scrollY-55;return [k1,k1+innerHeight*(innerWidth <= 900 ? 1.75 : 1.3)];};   /* entspricht HOLD = 0, BUILD = 1 */
   const ease=u=>u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2;
   const stop=()=>{if(!busy)return;cancelAnimationFrame(raf);busy=false;root.style.scrollBehavior='';};
   const go=to=>{stop();const from=scrollY,d=to-from;if(Math.abs(d)<3)return;const dur=Math.min(1100,450+Math.abs(d)*.9),t0=performance.now();busy=true;root.style.scrollBehavior='auto';

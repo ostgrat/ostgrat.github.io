@@ -769,7 +769,7 @@ nav a.lang span.off{opacity:.45}
 @media(prefers-reduced-motion:reduce){.bl-card *{opacity:1!important;filter:none!important;translate:none!important}.bl-bar::after{transform:none}}
 
 /* Kein Gummiband-Überscrollen: oben/unten keine Bounce-Verschiebung von Navbar und Rahmen */
-html,body{overscroll-behavior-y:none}
+@media(min-width:901px){html,body{overscroll-behavior-y:none}}   /* Handy: Ziehen zum Neuladen bleibt möglich */
 header::after{content:"";position:absolute;left:0;right:0;bottom:calc(-1 * var(--sw));height:var(--sw);background:var(--line);pointer-events:none;z-index:5}
 
 /* ===== Leistungen · Variante 4: Video links, aktive Kachel öffnet sich beim Durchscrollen ===== */
@@ -1661,4 +1661,27 @@ video{pointer-events:none}   /* dekorative Videos: keine Browser-Bedienelemente 
 .hero h1 + .hero-k + .lead{margin-top:28px}
 .bl-hd .bl-k{margin:18px 0 0;color:var(--mut)}
 .team-k,.ti-k,.sv-k,.fq-k,.ct .ct-hd > .ct-k{display:none}
+
+@media(max-width:900px){
+  #gscroll{height:calc(100svh - 67px - var(--bb) + 175vh)!important}
+  /* Würfel: Zeichenfläche reicht nach oben in den Text, nichts wird abgeschnitten */
+  .s2-media,.s2-media .ring,.s2-media .rcard,.s2-media .rimg{overflow:visible!important;clip-path:none!important}
+  .s2-media .pxs{inset:-180px 0 0 0!important;height:calc(100% + 180px)!important;pointer-events:none}
+  .s2-text{position:relative;z-index:2}
+  /* Für Angreifer: schwarze Trennlinien zwischen den Karten */
+  .rev .why-card + .why-card::before{display:block!important}
+}
+
+@media(max-width:900px){
+  .rev .why-grid > .why-card + .why-card::before{display:block!important;transform:none!important}
+  /* Facts-Diagramm liegt unter dem Seitenraster */
+  .side-grid{z-index:6!important}
+  /* Team: kein Parallax im Foto */
+  .team-move{inset:0!important;top:0!important;bottom:0!important;transform:none!important;translate:none!important;transition:none!important}
+  /* Progress: reiner Crossfade zwischen den Schritten, sonst ändert sich nichts */
+  .s2-list li,.s2-list li.next,.s2-list li.on,.s2-list li.done{transition:opacity .5s ease!important;will-change:opacity}
+  .s2-list li *{transition:none!important;animation:none!important}
+  .s2-list li h3 .hl{padding:0 .3em;background:var(--ink)!important;color:var(--bg)!important}
+  .s2-list li h3 svg{opacity:1!important;color:var(--ink)!important}
+}
 </style>
