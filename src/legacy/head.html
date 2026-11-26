@@ -1550,4 +1550,45 @@ video{pointer-events:none}   /* dekorative Videos: keine Browser-Bedienelemente 
 .ct .ct-k{margin-bottom:12px}
 .ct .ct-hd h2{margin-bottom:0}
 .ct .ct-sub{margin-top:32px}
+
+/* ===== Runde Mobil 4 ===== */
+.mon .inc.ok{color:#5fd07a;border-color:#5fd07a}   /* „Solved“: deutlich grün */
+@media(max-width:900px){
+  html.fab-away .fab{translate:none;opacity:1;pointer-events:auto}   /* Buttons bleiben stehen wie am Desktop */
+  /* Seitenraster überall bei 16 px */
+  .frame::before,.frame::after{content:"";position:absolute;top:0;bottom:0;width:var(--sw);background:var(--line);pointer-events:none;z-index:0}
+  .frame::before{left:16px}.frame::after{right:16px}
+  .sv .sv-list::before,.sv .sv-list::after{display:none!important}
+  .sv .sv-list .sv-row{padding-left:16px!important;padding-right:16px!important}
+  .sv .sv-list .sv-c,.sv .sv-list .sv-side{padding-left:8px;padding-right:8px}
+  /* Globus: Text wieder oben, Erde darunter */
+  #gscroll .gcopy{top:40px!important;bottom:auto!important}
+  /* Facts: Diagramm sicher sichtbar, Team weiter weg */
+  .team{padding-top:170px!important}
+  /* Für Angreifer: Glaskarten bündig im Raster, ohne weiße Kontur, Gap 0, schwarze Trennlinien */
+  .rev .why-grid{gap:0!important;margin:0!important}
+  .rev .why-grid > b{display:none!important}
+  .rev .why-card{margin:0!important;transform:none!important;box-shadow:none!important;border:0!important}
+  .rev .why-card + .why-card::before{background:var(--p-dk,#0f0e12)!important;left:-16px!important;right:-16px!important;z-index:2}
+  /* Progress: kein Nachmessen und kein Zeilenhöhen-Wechsel, der den Würfel verschiebt */
+  .s2 .s2-text > p,.s2.in .s2-text > p{line-height:1.5!important;transition:opacity .6s,filter .6s!important}
+  /* Mobiles Menü: Leistungen aufklappbar */
+  nav .nav-sub{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s cubic-bezier(.2,.7,.2,1);border-top:0}
+  nav .nav-sub > div{overflow:hidden}
+  nav .nav-sub.open{grid-template-rows:1fr}
+  nav .nav-sub .ns-g{padding:6px 18px 14px}
+  nav .nav-sub .ns-g p{margin:10px 0 6px;color:var(--mut)}
+  nav .nav-sub a{display:block;height:auto!important;padding:9px 0!important;border:0!important;color:var(--ink);font-size:15px}
+  nav a.has-sub{justify-content:space-between}
+  nav a.has-sub svg{width:14px;height:14px;fill:currentColor;transition:rotate .45s cubic-bezier(.2,.7,.2,1)}
+  nav a.has-sub[aria-expanded=true] svg{rotate:45deg}
+}
+.nav-sub{display:none}
+@media(max-width:900px){nav .nav-sub{display:grid}}
+
+/* NIS2-Bild (Desktop): Karte breiter, waagrechte Linien enden an den Ecken der Karte */
+@media(min-width:901px){
+  .ti-card{width:min(80%,560px)}
+  .ti-img::after{left:calc(50% - min(40%,280px));right:calc(50% - min(40%,280px))}
+}
 </style>

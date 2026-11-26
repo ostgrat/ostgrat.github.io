@@ -1212,6 +1212,7 @@ function pixSwap(cv, srcs) {
     const first = sec.id === 'redteam';
     const o = {sec, pin, list, bar, tip, items, imgs, cards, first, cur: 0, start: 0, len: 1, card: sec.querySelector('.rcard'), cv: pxs, glass: sec.querySelector('.rglass'), glassTxt: sec.querySelector('.rglass span')};
     if (swap) new ResizeObserver(() => swap.resize()).observe(pxs);
+    o.markM = i => items.forEach((li, k) => { li.classList.toggle('on', k === i); li.classList.toggle('next', k > i); li.classList.toggle('done', k < i); });   /* Handy: ohne Nachmessen */
     o.mark = i => {
       items.forEach((li, k) => { li.classList.toggle('on', k === i); li.classList.toggle('next', k > i); li.classList.toggle('done', k < i); });
       clearTimeout(o.t); o.t = setTimeout(collectChars, 560);   /* Textpositionen nach dem Auf-/Zuklappen neu messen */
@@ -1271,7 +1272,7 @@ function pixSwap(cv, srcs) {
       if (!desk()) { o.bar.style.transform = '';
         if (o.cv && o.cv.setP) { const r = o.sec.getBoundingClientRect(), span = Math.max(1, o.sec.offsetHeight - o.pin.offsetHeight), p = Math.max(0, Math.min(1, (56 - r.top) / span)), n = o.items.length, k = Math.min(n - 1, Math.floor(p * n * .999));
           o.cv.setP(p, p); o.cv.style.opacity = 1; if (o.cv._f !== 'none') { o.cv._f = 'none'; o.cv.style.filter = 'none'; }
-          if (k !== o.vis) { o.vis = k; o.mark(k); } o.cv.atk = k === 1 && r.bottom > innerHeight * .3; }
+          const kk = o.vis == null ? k : (Math.abs(p * n - Math.round(p * n)) < .06 && Math.abs(k - o.vis) === 1 ? o.vis : k); if (kk !== o.vis) { o.vis = kk; o.markM(kk); } o.cv.atk = o.vis === 1 && r.bottom > innerHeight * .3; }
         continue; }   /* Handy: oberer Block klebt, Würfel läuft darunter */
       const p = Math.max(0, Math.min(1, (scrollY - o.start) / o.len)), n = o.items.length;
       o.bar.style.transform = `scaleY(${p.toFixed(4)})`; if (o.cv && o.cv.setP) o.cv.setP(p, (scrollY - o.start) / o.len);
@@ -1615,8 +1616,8 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
     const wide = W >= 900;
     R = wide ? Math.min(W * .27, H * .45) : Math.min(W * .42, H * .3); CX = wide ? W * .72 : W / 2; CY = wide ? H * .56 : H * .64;   /* Desktop: größer, darf unten leicht aus der Section ragen */
     if (!wide) {   /* schmal: Erde im freien Raum unter dem Text, darf nie in den Text ragen */
-      const cr = canvas.getBoundingClientRect(), extra = [...copyEl.querySelectorAll('details[open]')].reduce((s, d) => s + d.offsetHeight - d.querySelector('summary').offsetHeight, 0), top0 = 20, bot = copyEl.getBoundingClientRect().top + extra - cr.top - 24;   /* Text steht unten; gemessen wie mit zugeklappten Branchen */
-      R = Math.max(70, Math.min(W * .44, (bot - top0) / 2)); CY = (top0 + bot) / 2;
+      const cr = canvas.getBoundingClientRect(), extra = [...copyEl.querySelectorAll('details[open]')].reduce((s, d) => s + d.offsetHeight - d.querySelector('summary').offsetHeight, 0), tb = copyEl.getBoundingClientRect().bottom - extra - cr.top + 28, bot = H - 28;   /* Text oben, Erde darunter; gemessen wie mit zugeklappten Branchen */
+      R = Math.max(80, Math.min(W * .42, (bot - tb) / 2)); CY = Math.max(tb + R, (tb + bot) / 2);
     }
     window.ostGlobe = {x:CX, y:CY, r:R};   /* für das Raster: nur direkt hinter der Kugel kein Licht */
     const sc = document.getElementById('gscroll');
@@ -2758,9 +2759,9 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
       g.globalAlpha = 1;
     };
     new ResizeObserver(() => { size(); last = 0; }).observe(cv);
-    new IntersectionObserver(([e]) => { vis = e.isIntersecting; if (vis && !raf) raf = requestAnimationFrame(frame); }, {rootMargin: '100px'}).observe(fig);
+    new IntersectionObserver(([e]) => { vis = e.isIntersecting; if (vis && innerWidth <= 900) goal = 1; if (vis && !raf) raf = requestAnimationFrame(frame); }, {rootMargin: '100px'}).observe(fig);   /* Handy: Diagramm baut sich sicher auf */
     addEventListener('built', e => { if (e.detail === fig) goal = 1; });
-    addEventListener('unbuilt', e => { if (e.detail === fig) goal = 0; });
+    addEventListener('unbuilt', e => { if (e.detail === fig && innerWidth > 900) goal = 0; });
     if (RM) goal = 1;
   }
 }
@@ -3273,12 +3274,7 @@ document.querySelectorAll('.sv-row').forEach(r=>r.addEventListener('click',e=>{i
 </script>
 
 <script>
-/* Handy: schwebende Buttons starten zu und weichen beim Runterscrollen aus */
-(()=>{if(innerWidth>900)return;const R=document.documentElement;document.querySelectorAll('.fab.open').forEach(f=>f.classList.remove('open'));
-  let last=scrollY,acc=0;addEventListener('scroll',()=>{const y=scrollY,d=y-last;last=y;acc=(Math.sign(d)===Math.sign(acc)?acc:0)+d;
-    const atEnd=y+innerHeight>=document.documentElement.scrollHeight-40;
-    if(y<80||atEnd||acc<-30)R.classList.remove('fab-away');else if(acc>30)R.classList.add('fab-away');},{passive:true});})();
-</script>
+/* Handy: schwebende Buttons verhalten sich wie am Desktop */</script>
 
 <script>
 /* Facts am Handy: Siegel unter die Kennzahlen, am Desktop zurück */
@@ -3306,4 +3302,15 @@ document.querySelectorAll('.sv-row').forEach(r=>r.addEventListener('click',e=>{i
   vs.forEach(v=>io.observe(v));
   /* die Aktiv-Logik pausiert Videos beim Wechsel – hier sofort wieder starten */
   vs.forEach(v=>v.addEventListener('pause',()=>{const r=v.getBoundingClientRect();if(r.bottom>-100&&r.top<innerHeight+100)setTimeout(()=>{const p=v.play();p&&p.catch(()=>{});},30);}));})();
+</script>
+
+<script>
+/* Mobiles Menü: „Leistungen“ klappt die Inhalte des Mega-Menüs auf */
+(()=>{const nav=document.getElementById('nav'),a=nav&&nav.querySelector('a[href="#services"]'),mm=document.querySelector('.mm[data-mm="1"]');if(!a||!mm)return;
+  const PLUS='<svg viewBox="0 0 256 256" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>';
+  const sub=document.createElement('div');sub.className='nav-sub';sub.id='nav-sub';
+  sub.innerHTML='<div>'+[...mm.querySelectorAll('.mm-c')].filter(c=>c.querySelector('ul a')).map(c=>{const k=c.querySelector('.mm-k');return '<div class="ns-g">'+(k?'<p class="lab">'+k.textContent+'</p>':'')+[...c.querySelectorAll('ul a')].map(l=>'<a href="'+l.getAttribute('href')+'">'+l.textContent+'</a>').join('')+'</div>';}).join('')+'</div>';
+  a.after(sub);a.classList.add('has-sub');a.insertAdjacentHTML('beforeend',PLUS);a.setAttribute('aria-controls','nav-sub');a.setAttribute('aria-expanded','false');
+  a.addEventListener('click',e=>{if(innerWidth>900)return;e.preventDefault();e.stopImmediatePropagation();const o=!sub.classList.contains('open');sub.classList.toggle('open',o);a.setAttribute('aria-expanded',String(o));},true);
+  sub.addEventListener('click',e=>{if(e.target.closest('a')){const m=document.getElementById('menu');if(m&&m.getAttribute('aria-expanded')==='true')m.click();}});})();
 </script>
