@@ -3,6 +3,7 @@ title: NIS2-Check
 description: In einem Tag wissen, ob NIS2 Ihr Unternehmen betrifft – und was als Nächstes zu tun ist.
 blocks:
   - type: hero
+    vorschau: /uploads/bloecke/hero.jpg
     kicker: NIS2-Check
     headline: Betroffen oder nicht?
     highlight: In einem Tag Klarheit.
@@ -10,6 +11,7 @@ blocks:
     ctaLabel: Termin vereinbaren
     ctaLink: /#kontakt
   - type: stats
+    vorschau: /uploads/bloecke/stats.jpg
     kicker: Auf einen Blick
     heading: Was der Check liefert.
     items:
@@ -20,6 +22,7 @@ blocks:
       - value: 10 Tage
         label: bis Sie den schriftlichen Maßnahmenplan in der Hand haben
   - type: imageText
+    vorschau: /uploads/bloecke/imageText.jpg
     kicker: Ablauf
     heading: Vom Workshop zum Maßnahmenplan.
     body: |-
@@ -31,6 +34,7 @@ blocks:
     ctaLabel: Beratung vereinbaren
     ctaLink: /#kontakt
   - type: text
+    vorschau: /uploads/bloecke/text.jpg
     kicker: Für wen
     heading: Für den Mittelstand gemacht.
     body: |-
@@ -40,6 +44,7 @@ blocks:
       - Energie, Wasser und Entsorgung
       - IT-Dienstleister in kritischen Lieferketten
   - type: faq
+    vorschau: /uploads/bloecke/faq.jpg
     kicker: Häufige Fragen
     heading: Was Kunden uns vorher fragen.
     items:
@@ -50,11 +55,13 @@ blocks:
       - question: Übernehmen Sie danach auch die Umsetzung?
         answer: Wenn Sie wollen, ja. Der Maßnahmenplan ist aber so geschrieben, dass Ihre IT ihn auch selbst oder mit einem anderen Partner umsetzen kann.
   - type: blogTeaser
+    vorschau: /uploads/bloecke/blogTeaser.jpg
     kicker: Weiterlesen
     heading: Mehr zu Compliance.
     category: compliance
     count: 3
   - type: cta
+    vorschau: /uploads/bloecke/cta.jpg
     heading: Lassen Sie uns klären, wo Sie stehen.
     text: Ein Gespräch von 30 Minuten reicht, um den Check auf Ihr Unternehmen zuzuschneiden.
     buttonLabel: Termin vereinbaren
