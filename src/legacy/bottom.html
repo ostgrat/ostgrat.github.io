@@ -2949,6 +2949,11 @@ html.sb-drag .st-sframe{pointer-events:none}
 .st-drag:hover::after,.st-drag:focus-visible::after,html.sb-drag .st-drag::after{background:#f0704f}
 html.sb-on .st-launch,html.sb-on .st-lock{display:none!important}
 .st-side .st-menu h2{display:none}
+/* normaler Mauszeiger in der Leiste (die Seite blendet ihn sonst für den eigenen Zeiger aus) */
+html.cc.sb-on,html.cc.sb-on .st-side *{cursor:auto!important}
+html.cc.sb-on .st-side :is(button,select,a,label,input[type=range],input[type=color],canvas){cursor:pointer!important}
+html.cc.sb-on .st-side input:not([type]),html.cc.sb-on .st-side input[type=text]{cursor:text!important}
+html.cc.sb-on .st-drag{cursor:col-resize!important}
 /* in der Vorschau keine eigenen Studio-Bedienelemente */
 html.st-embed .st-launch,html.st-embed .st-lock,html.st-embed .st-menu,html.st-embed .ft{display:none!important}
 .st-pop[hidden],.st-panel[hidden]{display:none}
