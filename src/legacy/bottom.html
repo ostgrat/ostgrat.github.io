@@ -947,9 +947,9 @@ if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
 
 /* ---------- Font-Tester: Google Fonts live durchschalten ---------- */
 {
-  const PP = ['PP Altera Serif','PP Model Sans','PP Model Mono'];   /* hochgeladene Schriften, liegen unter /schriften/pp/ */
+  const PP = ['PP Fragment Serif','PP Fragment Glare','PP Fragment Text','PP Fragment Sans','Erode','PP Altera Serif','PP Model Sans','PP Model Mono'];   /* hochgeladene Schriften, liegen unter /schriften/ */
   const HEAD = [...PP, 'Noto Serif JP','Instrument Serif','Newsreader','Fraunces','Source Serif 4','Libre Caslon Text','EB Garamond','Cormorant Garamond','Gloock','Young Serif','Spectral','Literata','IBM Plex Serif','Crimson Pro','Bodoni Moda','Playfair Display','DM Serif Display','Libre Baskerville','Lora','Inter Tight','Manrope','Space Grotesk','Instrument Sans','Schibsted Grotesk'];
-  const BODY = ['PP Model Sans','PP Model Mono','PP Altera Serif', 'Space Grotesk','Red Hat Text','Inter Tight','Inter','Manrope','DM Sans','IBM Plex Sans','Instrument Sans','Geist','Figtree','Onest','Hanken Grotesk','Schibsted Grotesk','Public Sans','Work Sans','Sora','Albert Sans','Funnel Sans','Host Grotesk','Mona Sans','Familjen Grotesk','Archivo','Geologica','Plus Jakarta Sans','Outfit','Rethink Sans','Bricolage Grotesque'];
+  const BODY = ['PP Fragment Sans','PP Fragment Text','PP Model Sans','PP Model Mono','PP Fragment Serif','PP Fragment Glare','PP Altera Serif','Erode', 'Space Grotesk','Red Hat Text','Inter Tight','Inter','Manrope','DM Sans','IBM Plex Sans','Instrument Sans','Geist','Figtree','Onest','Hanken Grotesk','Schibsted Grotesk','Public Sans','Work Sans','Sora','Albert Sans','Funnel Sans','Host Grotesk','Mona Sans','Familjen Grotesk','Archivo','Geologica','Plus Jakarta Sans','Outfit','Rethink Sans','Bricolage Grotesque'];
   const DEF = {h:'IBM Plex Serif', b:'Space Grotesk'}, K = 'ostgrat-fonts-2';   /* neuer Schlüssel: alte Auswahl überschreibt die neuen Standards nicht */
   let cur = {...DEF}; try { Object.assign(cur, JSON.parse(localStorage.getItem(K) || '{}')); } catch (e) {}
   const loaded = new Set(['IBM Plex Serif','Space Grotesk']);

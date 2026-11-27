@@ -1,5 +1,37 @@
 
 <style>
+/* Erode (Fontshare) zum Testen im Studio */
+@font-face{font-family:'Erode';src:url(/schriften/erode/Erode-Bold.woff2) format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Erode';src:url(/schriften/erode/Erode-Italic.woff2) format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Erode';src:url(/schriften/erode/Erode-Regular.woff2) format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Erode';src:url(/schriften/erode/Erode-LightItalic.woff2) format('woff2');font-weight:300;font-style:italic;font-display:swap}
+@font-face{font-family:'Erode';src:url(/schriften/erode/Erode-MediumItalic.woff2) format('woff2');font-weight:500;font-style:italic;font-display:swap}
+@font-face{font-family:'Erode';src:url(/schriften/erode/Erode-Light.woff2) format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'Erode';src:url(/schriften/erode/Erode-BoldItalic.woff2) format('woff2');font-weight:700;font-style:italic;font-display:swap}
+@font-face{font-family:'Erode';src:url(/schriften/erode/Erode-Medium.woff2) format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Erode';src:url(/schriften/erode/Erode-Semibold.woff2) format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Erode';src:url(/schriften/erode/Erode-SemiboldItalic.woff2) format('woff2');font-weight:600;font-style:italic;font-display:swap}
+/* PP Fragment (Pangram Pangram) zum Testen im Studio */
+@font-face{font-family:'PP Fragment Glare';src:url(/schriften/pp/PPFragment-GlareLightItalic.woff2) format('woff2');font-weight:300;font-style:italic;font-display:swap}
+@font-face{font-family:'PP Fragment Sans';src:url(/schriften/pp/PPFragment-SansExtraBold.woff2) format('woff2');font-weight:800;font-style:normal;font-display:swap}
+@font-face{font-family:'PP Fragment Glare';src:url(/schriften/pp/PPFragment-GlareRegularItalic.woff2) format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'PP Fragment Sans';src:url(/schriften/pp/PPFragment-SansLightItalic.woff2) format('woff2');font-weight:300;font-style:italic;font-display:swap}
+@font-face{font-family:'PP Fragment Text';src:url(/schriften/pp/PPFragment-TextRegular.woff2) format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'PP Fragment Glare';src:url(/schriften/pp/PPFragment-GlareRegular.woff2) format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'PP Fragment Serif';src:url(/schriften/pp/PPFragment-SerifRegularItalic.woff2) format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'PP Fragment Text';src:url(/schriften/pp/PPFragment-TextRegularItalic.woff2) format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'PP Fragment Serif';src:url(/schriften/pp/PPFragment-SerifExtraBoldItalic.woff2) format('woff2');font-weight:800;font-style:italic;font-display:swap}
+@font-face{font-family:'PP Fragment Serif';src:url(/schriften/pp/PPFragment-SerifExtraBold.woff2) format('woff2');font-weight:800;font-style:normal;font-display:swap}
+@font-face{font-family:'PP Fragment Serif';src:url(/schriften/pp/PPFragment-SerifLight.woff2) format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'PP Fragment Sans';src:url(/schriften/pp/PPFragment-SansRegularitalic.woff2) format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'PP Fragment Sans';src:url(/schriften/pp/PPFragment-SansRegular.woff2) format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'PP Fragment Glare';src:url(/schriften/pp/PPFragment-GlareExtraBold.woff2) format('woff2');font-weight:800;font-style:normal;font-display:swap}
+@font-face{font-family:'PP Fragment Glare';src:url(/schriften/pp/PPFragment-GlareLight.woff2) format('woff2');font-weight:300;font-style:normal;font-display:swap}
+@font-face{font-family:'PP Fragment Glare';src:url(/schriften/pp/PPFragment-GlareExtraBoldItalic.woff2) format('woff2');font-weight:800;font-style:italic;font-display:swap}
+@font-face{font-family:'PP Fragment Serif';src:url(/schriften/pp/PPFragment-SerifLightItalic.woff2) format('woff2');font-weight:300;font-style:italic;font-display:swap}
+@font-face{font-family:'PP Fragment Sans';src:url(/schriften/pp/PPFragment-SansExtraBoldItalic.woff2) format('woff2');font-weight:800;font-style:italic;font-display:swap}
+@font-face{font-family:'PP Fragment Serif';src:url(/schriften/pp/PPFragment-SerifRegular.woff2) format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'PP Fragment Sans';src:url(/schriften/pp/PPFragment-SansLight.woff2) format('woff2');font-weight:300;font-style:normal;font-display:swap}
 /* PP-Schriften zum Testen im Studio (Pangram Pangram) */
 @font-face{font-family:'PP Altera Serif';src:url(/schriften/pp/PPAlteraSerif-Thin.woff2) format('woff2');font-weight:100;font-style:normal;font-display:swap}
 @font-face{font-family:'PP Altera Serif';src:url(/schriften/pp/PPAlteraSerif-Regular.woff2) format('woff2');font-weight:400;font-style:normal;font-display:swap}
