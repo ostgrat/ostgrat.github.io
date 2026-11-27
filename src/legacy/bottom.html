@@ -1588,7 +1588,7 @@ nav.addEventListener('click', e => { if (e.target.closest('a')) setTimeout(() =>
     if (gl) gl.viewport(0, 0, canvas.width, canvas.height);
     /* Erde rechts, links Platz für Headline und Text; schmal: Erde unten mittig */
     const wide = W >= 900;
-    R = wide ? Math.min(W * .27, H * .45) : Math.min(W * .42, H * .3); CX = wide ? W * .72 : W / 2; CY = wide ? H * .56 : H * .64;   /* Desktop: größer, darf unten leicht aus der Section ragen */
+    R = (wide ? Math.min(W * .27, H * .45) : Math.min(W * .42, H * .3)) * .85; CX = wide ? W * .72 : W / 2; CY = wide ? H * .56 : H * .64;   /* Desktop: größer, darf unten leicht aus der Section ragen */
     if (!wide) {   /* schmal: Erde im freien Raum unter dem Text, darf nie in den Text ragen */
       const cr = canvas.getBoundingClientRect(), extra = [...copyEl.querySelectorAll('details[open]')].reduce((s, d) => s + d.offsetHeight - d.querySelector('summary').offsetHeight, 0), tb = copyEl.getBoundingClientRect().bottom - extra - cr.top + 64, bot = H - 48; gTop = copyEl.getBoundingClientRect().top - cr.top;   /* Text oben, Erde darunter; gemessen wie mit zugeklappten Branchen */
       R = W * .42; CY = tb + R; gShift = Math.max(0, CY + R - bot);   /* Handy: Erde groß mit Abstand zum Text; reicht sie unter die Bühne, rückt am Ende alles nach oben (gShift) */
