@@ -10,13 +10,19 @@
     <h4>Headline</h4>
     <div class="ft-row"><button data-d="h" data-s="-1" aria-label="Vorherige Headline-Schrift">‹</button><select id="fth" aria-label="Headline-Schrift"></select><button data-d="h" data-s="1" aria-label="Nächste Headline-Schrift">›</button></div>
     <input id="fthx" placeholder="Eigene Google Font, Enter" aria-label="Eigene Headline-Schrift">
+    <div class="px-row"><label for="fthw">Schnitt</label><select id="fthw"></select></div>
+    <div class="px-row"><label for="fths">Größe</label><output id="fthso"></output><input type="range" id="fths" min="50" max="160" step="1"></div>
+    <div class="px-row"><label for="fthl">Zeilenabstand</label><output id="fthlo"></output><input type="range" id="fthl" min="70" max="150" step="1"></div>
+    <div class="px-row"><label for="ftht">Laufweite</label><output id="fthto"></output><input type="range" id="ftht" min="-8" max="20" step="0.5"></div>
     <h4>Fließtext &amp; Button</h4>
     <div class="ft-row"><button data-d="b" data-s="-1" aria-label="Vorherige Textschrift">‹</button><select id="ftb" aria-label="Textschrift"></select><button data-d="b" data-s="1" aria-label="Nächste Textschrift">›</button></div>
     <input id="ftbx" placeholder="Eigene Google Font, Enter" aria-label="Eigene Textschrift">
-    <h4>Schriftgröße (alle Stufen im gleichen Verhältnis)</h4>
-    <div class="px-row"><label for="ftz">Größe</label><output id="ftzo">100 %</output><input type="range" id="ftz" min="70" max="140" step="1" value="100"></div>
-    <div class="ft-act"><button id="ftr">Zurücksetzen</button><button id="ftc">Namen kopieren</button></div>
-    <small id="ftm">Tipp: Panel offen lassen und mit ‹ › durchklicken.</small>
+    <div class="px-row"><label for="ftbw">Schnitt</label><select id="ftbw"></select></div>
+    <div class="px-row"><label for="ftbs">Größe</label><output id="ftbso"></output><input type="range" id="ftbs" min="50" max="160" step="1"></div>
+    <div class="px-row"><label for="ftbl">Zeilenabstand</label><output id="ftblo"></output><input type="range" id="ftbl" min="70" max="150" step="1"></div>
+    <div class="px-row"><label for="ftbt">Laufweite</label><output id="ftbto"></output><input type="range" id="ftbt" min="-8" max="20" step="0.5"></div>
+    <div class="ft-act"><button id="ftr">Zurücksetzen</button><button id="ftc">Werte kopieren</button></div>
+    <small id="ftm">Größe, Zeilenabstand und Laufweite gelten für alle Stufen einer Rolle im gleichen Verhältnis.</small>
   </div>
   <div class="ft-p" id="pxp" hidden>
     <h4>Pixel-Bild (Hero 2)</h4>

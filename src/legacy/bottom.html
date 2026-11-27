@@ -945,88 +945,101 @@ if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
 }
 
 
-/* ---------- Font-Tester: Google Fonts live durchschalten ---------- */
+/* ---------- Schriften im Studio: Familie, Schnitt, Größe, Zeilenabstand und Laufweite je Rolle (Headline / Fließtext) ----------
+   Alles liegt in localStorage. Öffnet das Studio die Seite als Vorschau im iframe, wendet die Vorschau Änderungen über das storage-Event an. */
 {
   const PP = ['PP Fragment Serif','PP Fragment Glare','PP Fragment Text','PP Fragment Sans','Erode','PP Altera Serif','PP Model Sans','PP Model Mono'];   /* hochgeladene Schriften, liegen unter /schriften/ */
   const HEAD = [...PP, 'Noto Serif JP','Instrument Serif','Newsreader','Fraunces','Source Serif 4','Libre Caslon Text','EB Garamond','Cormorant Garamond','Gloock','Young Serif','Spectral','Literata','IBM Plex Serif','Crimson Pro','Bodoni Moda','Playfair Display','DM Serif Display','Libre Baskerville','Lora','Inter Tight','Manrope','Space Grotesk','Instrument Sans','Schibsted Grotesk'];
   const BODY = ['PP Fragment Sans','PP Fragment Text','PP Model Sans','PP Model Mono','PP Fragment Serif','PP Fragment Glare','PP Altera Serif','Erode', 'Space Grotesk','Red Hat Text','Inter Tight','Inter','Manrope','DM Sans','IBM Plex Sans','Instrument Sans','Geist','Figtree','Onest','Hanken Grotesk','Schibsted Grotesk','Public Sans','Work Sans','Sora','Albert Sans','Funnel Sans','Host Grotesk','Mona Sans','Familjen Grotesk','Archivo','Geologica','Plus Jakarta Sans','Outfit','Rethink Sans','Bricolage Grotesque'];
-  const DEF = {h:'IBM Plex Serif', b:'Space Grotesk'}, K = 'ostgrat-fonts-2';   /* neuer Schlüssel: alte Auswahl überschreibt die neuen Standards nicht */
-  let cur = {...DEF}; try { Object.assign(cur, JSON.parse(localStorage.getItem(K) || '{}')); } catch (e) {}
+  const DEF = {h:'IBM Plex Serif', b:'Space Grotesk', hw:'', bw:'', hs:100, bs:100, hl:100, bl:100, ht:0, bt:0}, K = 'ostgrat-fonts-2';
+  const read = () => { const c = {...DEF}; try { Object.assign(c, JSON.parse(localStorage.getItem(K) || '{}')); } catch (e) {} return c; };
+  let cur = read();
+  try { localStorage.removeItem('ostgrat-fsize'); } catch (e) {}   /* alter Einzel-Regler */
   const loaded = new Set(['IBM Plex Serif','Space Grotesk']);
   const $ = id => document.getElementById(id), msg = $('ftm');
+  const say = t => { if (msg) msg.textContent = t; };
   const load = name => new Promise(res => {
     if (loaded.has(name)) return res(true);
-    if (PP.includes(name)) return document.fonts.load(`500 20px "${name}"`).then(() => { loaded.add(name); res(true); }, () => res(false));
-    const fam = name.trim().replace(/ +/g, '+'), add = (q, fb) => {
+    if (PP.includes(name)) return document.fonts.load(`400 20px "${name}"`).then(() => { loaded.add(name); res(true); }, () => res(false));
+    const fam = name.trim().replace(/ +/g, '+'), Q = [':wght@100;200;300;400;500;600;700;800;900', ':wght@300;400;500;600;700', ':wght@400;500;600;700', ':wght@400;600', ''];
+    const add = i => {
       const l = document.createElement('link'); l.rel = 'stylesheet';
-      l.href = `https://fonts.googleapis.com/css2?family=${fam}${q}&display=swap`;
+      l.href = `https://fonts.googleapis.com/css2?family=${fam}${Q[i]}&display=swap`;
       l.onload = () => { loaded.add(name); document.fonts.load(`400 20px "${name}"`).then(() => res(true), () => res(true)); };
-      l.onerror = () => { l.remove(); fb ? fb() : res(false); };
+      l.onerror = () => { l.remove(); i + 1 < Q.length ? add(i + 1) : res(false); };
       document.head.append(l);
     };
-    add(':wght@400;500;600;700', () => add(':wght@400;600', () => add('', null)));
+    add(0);
   });
-  const apply = async (d, name, quiet) => {
-    msg.textContent = `Lade ${name} …`;
-    const ok = await load(name);
-    if (!ok) { msg.textContent = `„${name}“ konnte nicht geladen werden – Schreibweise wie auf fonts.google.com?`; return; }
-    cur[d] = name;
-    document.documentElement.style.setProperty(d === 'h' ? '--fh' : '--fb', `"${name}"`);
-    try { localStorage.setItem(K, JSON.stringify(cur)); } catch (e) {}
-    sync(); relayout(); dispatchEvent(new Event('ostgrat-font'));
-    if (!quiet) msg.textContent = `Headline: ${cur.h} · Text: ${cur.b}`;
-  };
-  const fill = (sel, list) => { sel.innerHTML = list.map(n => `<option>${n}</option>`).join(''); };
-  fill($('fth'), HEAD); fill($('ftb'), BODY);
-  const sync = () => {
-    for (const [id, d, list] of [['fth','h',HEAD],['ftb','b',BODY]]) {
-      const s = $(id);
-      if (!list.includes(cur[d]) && ![...s.options].some(o => o.value === cur[d])) s.append(new Option(cur[d]));
-      s.value = cur[d];
+
+  /* Rolle eines Elements = erste Schrift seiner font-family; jeder Wert wird pro Element aus dem Original berechnet, die Abstufungen bleiben */
+  const SKIP = '#ftp, #pxp, #tkp, .ft-bar, #fe, .st-side, [class^="st-"], script, style, svg, canvas, noscript';
+  let undo = [], rt = 0;
+  const first = ff => ff.split(',')[0].trim().replace(/^["']|["']$/g, '');
+  const neutral = d => !cur[d + 'w'] && cur[d + 's'] == 100 && cur[d + 'l'] == 100 && cur[d + 't'] == 0;
+  const typeApply = () => {
+    for (const [el, pr, v, pri] of undo) el.style.setProperty(pr, v, pri); undo = [];
+    if (neutral('h') && neutral('b')) return;
+    const els = [document.body, ...[...document.body.querySelectorAll('*')].filter(el => !el.closest(SKIP))];
+    const rd = els.map(el => { const s = getComputedStyle(el); return [el, first(s.fontFamily), parseFloat(s.fontSize), s.lineHeight, parseFloat(s.letterSpacing) || 0]; });
+    const set = (el, pr, v) => { undo.push([el, pr, el.style.getPropertyValue(pr), el.style.getPropertyPriority(pr)]); el.style.setProperty(pr, v, 'important'); };
+    for (const [el, fam, fs, lh, ls] of rd) {
+      const d = fam === cur.h ? 'h' : fam === cur.b ? 'b' : '';
+      if (!d || neutral(d)) continue;
+      const k = cur[d + 's'] / 100, nfs = fs * k;
+      if (k !== 1) set(el, 'font-size', nfs.toFixed(2) + 'px');
+      if (cur[d + 'w']) set(el, 'font-weight', cur[d + 'w']);
+      if (cur[d + 'l'] != 100 || k !== 1) { const l = lh === 'normal' ? 0 : parseFloat(lh); if (l) set(el, 'line-height', (l * k * cur[d + 'l'] / 100).toFixed(2) + 'px'); }
+      if (cur[d + 't'] || k !== 1) set(el, 'letter-spacing', (ls * k + cur[d + 't'] / 100 * nfs).toFixed(3) + 'px');
     }
   };
-  $('fth').addEventListener('change', e => apply('h', e.target.value));
-  $('ftb').addEventListener('change', e => apply('b', e.target.value));
+  const inSide = () => document.documentElement.classList.contains('sb-on');   /* Seite selbst ist ausgeblendet, die Vorschau rendert */
+  const render = async quiet => {
+    for (const d of ['h', 'b']) if (!(await load(cur[d]))) { say(`„${cur[d]}“ konnte nicht geladen werden – Schreibweise wie auf fonts.google.com?`); cur[d] = DEF[d]; }
+    const r = document.documentElement.style;
+    r.setProperty('--fh', `"${cur.h}"`); r.setProperty('--fb', `"${cur.b}"`);
+    if (!inSide()) { typeApply(); relayout(); dispatchEvent(new Event('ostgrat-font')); }
+    sync(); if (!quiet) say(`Headline: ${cur.h} · Text: ${cur.b}`);
+  };
+  const save = () => { try { localStorage.setItem(K, JSON.stringify(cur)); } catch (e) {} };
+  const set = (patch, quiet) => { Object.assign(cur, patch); save(); render(quiet); };
+
+  /* Bedienfeld */
+  const W = [['', 'Standard'], ['100', '100 Thin'], ['200', '200 ExtraLight'], ['300', '300 Light'], ['400', '400 Regular'], ['500', '500 Medium'], ['600', '600 Semibold'], ['700', '700 Bold'], ['800', '800 ExtraBold'], ['900', '900 Black']];
+  const fill = (sel, list) => { if (sel) sel.innerHTML = list.map(n => `<option>${n}</option>`).join(''); };
+  fill($('fth'), HEAD); fill($('ftb'), BODY);
+  for (const d of ['h', 'b']) { const s = $('ft' + d + 'w'); if (s) s.innerHTML = W.map(([v, l]) => `<option value="${v}">${l}</option>`).join(''); }
+  const fmt = {s: v => v + ' %', l: v => v + ' %', t: v => (v > 0 ? '+' : '') + (v / 100).toFixed(2).replace('.', ',') + ' em'};
+  function sync() {
+    for (const [d, list] of [['h', HEAD], ['b', BODY]]) {
+      const s = $('ft' + d); if (!s) continue;
+      if (![...s.options].some(o => o.value === cur[d])) s.append(new Option(cur[d]));
+      s.value = cur[d]; $('ft' + d + 'w').value = cur[d + 'w'];
+      for (const k of ['s', 'l', 't']) { const i = $('ft' + d + k); if (i) { i.value = cur[d + k]; $('ft' + d + k + 'o').textContent = fmt[k](+cur[d + k]); } }
+    }
+  }
+  for (const d of ['h', 'b']) {
+    $('ft' + d)?.addEventListener('change', e => set({[d]: e.target.value}));
+    $('ft' + d + 'w')?.addEventListener('change', e => set({[d + 'w']: e.target.value}));
+    for (const k of ['s', 'l', 't']) $('ft' + d + k)?.addEventListener('input', e => set({[d + k]: +e.target.value}, true));
+    $('ft' + d + 'x')?.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.value.trim()) set({[d]: e.target.value.trim()}); });
+  }
   for (const b of document.querySelectorAll('.ft-row button')) b.addEventListener('click', () => {
     const d = b.dataset.d, list = d === 'h' ? HEAD : BODY, i = list.indexOf(cur[d]);
-    apply(d, list[(i + +b.dataset.s + list.length) % list.length]);
+    set({[d]: list[(i + +b.dataset.s + list.length) % list.length]});
   });
-  for (const [id, d] of [['fthx','h'],['ftbx','b']]) $(id).addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.value.trim()) apply(d, e.target.value.trim()); });
-  $('ftr').addEventListener('click', () => { apply('h', DEF.h, true); apply('b', DEF.b); });
-  /* Schriftgröße: alle Schriftgrade mit einem Faktor skalieren, die Abstufungen bleiben im Verhältnis */
-  const KZ = 'ostgrat-fsize'; let zk = 1, zset = [], zt = 0;
-  try { zk = +localStorage.getItem(KZ) || 1; } catch (e) {}
-  const SKIP = '#ftp, #pxp, #tkp, .ft-bar, #fe, [class^="st-"], script, style, svg, canvas, noscript';
-  const zoomText = () => {
-    for (const [el, v] of zset) el.style.setProperty('font-size', v.val, v.pri); zset = [];   /* vorherige Werte zurück */
-    if (zk === 1) return;
-    const els = [...document.body.querySelectorAll('*')].filter(el => !el.closest(SKIP));
-    const fs = new Map(els.map(el => [el, parseFloat(getComputedStyle(el).fontSize)]));
-    fs.set(document.body, parseFloat(getComputedStyle(document.body).fontSize));
-    for (const el of [document.body, ...els]) {
-      const own = fs.get(el);   /* jedes Element bekommt seinen eigenen Wert, auch wenn das CSS die Größe fest setzt */
-      zset.push([el, {val: el.style.getPropertyValue('font-size'), pri: el.style.getPropertyPriority('font-size')}]);
-      el.style.setProperty('font-size', (own * zk).toFixed(2) + 'px', 'important');
-    }
-  };
-  const setZoom = (v, quiet) => {
-    zk = Math.round(v) / 100; $('ftz').value = Math.round(zk * 100); $('ftzo').textContent = Math.round(zk * 100) + ' %';
-    try { zk === 1 ? localStorage.removeItem(KZ) : localStorage.setItem(KZ, zk); } catch (e) {}
-    zoomText(); relayout(); dispatchEvent(new Event('ostgrat-font'));
-    if (!quiet) msg.textContent = `Schriftgröße: ${Math.round(zk * 100)} %`;
-  };
-  $('ftz').addEventListener('input', e => setZoom(+e.target.value));
-  addEventListener('resize', () => { if (zk === 1) return; clearTimeout(zt); zt = setTimeout(() => setZoom(zk * 100, true), 300); });
-  $('ftr').addEventListener('click', () => setZoom(100, true));
-  if (zk !== 1) (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => setZoom(zk * 100, true)); else setZoom(100, true);
-  $('ftc').addEventListener('click', async () => {
-    const txt = `Headline: ${cur.h}\nFließtext & Button: ${cur.b}\nSchriftgröße: ${Math.round(zk * 100)} %`;
-    try { await navigator.clipboard.writeText(txt); msg.textContent = 'Kopiert.'; } catch (e) { msg.textContent = txt; }
+  $('ftr')?.addEventListener('click', () => { cur = {...DEF}; save(); render(true); say('Zurückgesetzt.'); });
+  $('ftc')?.addEventListener('click', async () => {
+    const row = d => `${cur[d]}${cur[d + 'w'] ? ' ' + cur[d + 'w'] : ''} · Größe ${cur[d + 's']} % · Zeilenabstand ${cur[d + 'l']} % · Laufweite ${fmt.t(cur[d + 't'])}`;
+    const txt = `Headline: ${row('h')}\nFließtext & Button: ${row('b')}`;
+    try { await navigator.clipboard.writeText(txt); say('Kopiert.'); } catch (e) { say(txt); }
   });
-  $('ftt').addEventListener('click', () => { const p = $('ftp'), o = p.hidden; p.hidden = !o; $('ftt').setAttribute('aria-expanded', o); });
+  $('ftt')?.addEventListener('click', () => { const p = $('ftp'), o = p.hidden; p.hidden = !o; $('ftt').setAttribute('aria-expanded', o); });
+  addEventListener('resize', () => { if (inSide() || (neutral('h') && neutral('b'))) return; clearTimeout(rt); rt = setTimeout(() => { typeApply(); relayout(); }, 300); });
+  addEventListener('storage', e => { if (e.key === K) { cur = read(); render(true); } });   /* Vorschau im Studio folgt dem Bedienfeld */
+  addEventListener('ostgrat-side', () => render(true));   /* Studio geschlossen: Seite selbst wieder anpassen */
   sync();
-  if (cur.h !== DEF.h) apply('h', cur.h, true);
-  if (cur.b !== DEF.b) apply('b', cur.b, true);
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => render(true));
 }
 
 /* ---------- Bildwechsel aus Pixeln ----------
@@ -2271,6 +2284,7 @@ if (document.getElementById('tick')) {   /* Block „Hero“ kann im CMS fehlen 
   $('cesat').addEventListener('input', e => { st.rc.sk = +e.target.value; apply(); });
   $('cebri').addEventListener('input', e => { st.rc.vb = +e.target.value; apply(); });
   $('cerc0').addEventListener('click', () => { st.rc = {...RC0}; apply(); });
+  addEventListener('storage', e => { if (e.key !== KEY || !e.newValue) return; try { st = Object.assign(st, JSON.parse(e.newValue)); } catch (er) { return; } apply(); });   /* Studio-Vorschau folgt dem Farb-Editor */
 
   const apply = () => {
     const c = resolve(), root = document.documentElement.style;
@@ -2911,6 +2925,32 @@ if (document.getElementById('tick')) {   /* Block „Hero“ kann im CMS fehlen 
 .st-menu,.st-pop,.st-panel{position:fixed;z-index:71;background:#fff;border:1.5px solid #161612;box-shadow:0 18px 40px rgba(22,22,18,.22);font:13px/1.4 system-ui,sans-serif;color:#161612;letter-spacing:0;color-scheme:light}   /* hell auch auf dunklen Seiten: Formularfelder und Buttons behalten Kontrast */
 .st-menu{left:0;bottom:20px;width:max-content;min-width:220px;padding:4px 0;border-left:0;transform:translateY(calc(100% + 20px));visibility:hidden;transition:transform .3s cubic-bezier(.22,1,.36,1),visibility 0s .3s}
 .st-menu.open{transform:none;visibility:visible;transition:transform .3s cubic-bezier(.22,1,.36,1)}   /* schiebt sich aus dem unteren Rand */
+/* Seitenleiste: Studio links, die Seite läuft rechts daneben als Vorschau */
+.st-side,.st-sframe{display:none}
+html.sb-on{overflow:hidden}
+html.sb-on body > :not(.st-side):not(.st-sframe):not(.st-ov):not(.st-ovb):not(script):not(style){display:none!important}
+html.sb-on .st-side{display:flex;flex-direction:column;position:fixed;z-index:80;left:0;top:0;bottom:0;width:var(--sbw,360px);background:#131217;color:#f1eee8;border-right:1.5px solid rgba(241,238,232,.18);font:13px/1.3 system-ui,sans-serif;--mut:rgba(241,238,232,.55)}
+html.sb-on .st-sframe{display:block;position:fixed;z-index:79;top:0;left:var(--sbw,360px);width:calc(100vw - var(--sbw,360px));height:100vh;border:0;background:#0f0e12}
+html.sb-drag .st-sframe{pointer-events:none}
+.st-sh{display:flex;align-items:center;justify-content:space-between;padding:12px 12px 12px 16px;border-bottom:1.5px solid rgba(241,238,232,.18)}
+.st-sh h2{margin:0;font:700 11px/1.3 system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.st-sx{width:32px;height:32px;display:grid;place-items:center;border:1.5px solid rgba(241,238,232,.18);background:none;color:inherit;cursor:pointer}
+.st-sx svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round}
+.st-sb{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:0 0 24px;position:static!important}
+.st-side .st-menu{position:static;transform:none;visibility:visible;width:auto;min-width:0;border:0;border-bottom:1.5px solid rgba(241,238,232,.18);box-shadow:none;background:none;color:inherit}
+.st-side .st-menu button,.st-side .st-menu a{color:inherit}
+.st-side .st-menu button:hover{background:rgba(241,238,232,.06)}
+.st-side .ft-p{display:block!important;width:auto;margin:0;border:0;border-bottom:1.5px solid rgba(241,238,232,.18);background:none;padding:16px}
+.st-side .ft-p h4{margin-top:14px}.st-side .ft-p h4:first-child{margin-top:0}
+.st-side .px-row select{grid-column:1/-1;border:1.5px solid rgba(241,238,232,.18)}
+.st-side .px-row input[type=range]{grid-column:1/-1;width:100%}
+.st-drag{position:absolute;top:0;right:-5px;width:10px;height:100%;cursor:col-resize;z-index:2}
+.st-drag::after{content:"";position:absolute;left:4px;top:0;bottom:0;width:1.5px;background:transparent;transition:background .2s}
+.st-drag:hover::after,.st-drag:focus-visible::after,html.sb-drag .st-drag::after{background:#f0704f}
+html.sb-on .st-launch,html.sb-on .st-lock{display:none!important}
+.st-side .st-menu h2{display:none}
+/* in der Vorschau keine eigenen Studio-Bedienelemente */
+html.st-embed .st-launch,html.st-embed .st-lock,html.st-embed .st-menu,html.st-embed .ft{display:none!important}
 .st-pop[hidden],.st-panel[hidden]{display:none}
 .st-menu h2,.st-pop h3,.st-panel h2{margin:0;font:700 11px/1.3 system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#6B6A60}
 .st-menu h2{padding:8px 12px 4px}
@@ -3055,18 +3095,19 @@ if (document.getElementById('tick')) {   /* Block „Hero“ kann im CMS fehlen 
       ${CFG.links.length?'<hr>'+CFG.links.map(([l,u])=>`<a role="menuitem" class="st-link" href="${esc(u)}" target="_blank" rel="noopener">${esc(l)}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5h10v10M19 5 6 18"/></svg></a>`).join(''):''}
       <hr><button type="button" role="menuitem" data-act="resetAll">Alle Varianten zurücksetzen${changed?` <small>${changed} geändert</small>`:''}</button>`}
   const isOpen=()=>menu.classList.contains('open');
-  function menuOpen(o){menu.classList.toggle('open',o);launch.setAttribute('aria-expanded',String(o));if(o){renderMenu();setTimeout(()=>menu.querySelector('button').focus(),50)}}
+  function menuOpen(o){if(!o&&sideOn)return;menu.classList.toggle('open',o);launch.setAttribute('aria-expanded',String(o));if(o){renderMenu();setTimeout(()=>menu.querySelector('button').focus(),50)}}
   /* Kindersicherung: 4-stelliger PIN, gilt pro Browser-Sitzung – kein echter Schutz */
   const lock=$('stLock'),pin=$('stPin'),PIN=String(CFG.pin||'0865'),UK=CFG.key+':ok';
   let unlocked=false;try{unlocked=sessionStorage.getItem(UK)==='1'}catch(e){}
   function lockOpen(o){lock.classList.toggle('open',o);pin.tabIndex=o?0:-1;launch.setAttribute('aria-expanded',String(o));if(o){pin.value='';setTimeout(()=>pin.focus(),60)}}
   pin.addEventListener('input',()=>{pin.value=pin.value.replace(/\D/g,'').slice(0,4);if(pin.value.length<4)return;
-    if(pin.value===PIN){unlocked=true;try{sessionStorage.setItem(UK,'1')}catch(e){}lockOpen(false);menuOpen(true)}
+    if(pin.value===PIN){unlocked=true;try{sessionStorage.setItem(UK,'1')}catch(e){}lockOpen(false);sideOpen(true)}
     else{lock.classList.remove('no');void lock.offsetWidth;lock.classList.add('no');pin.value=''}});
-  launch.addEventListener('click',()=>{closeTools();if(!unlocked){lockOpen(!lock.classList.contains('open'));return}menuOpen(!isOpen())});
+  launch.addEventListener('click',()=>{if(!unlocked){lockOpen(!lock.classList.contains('open'));return}sideOpen(!sideOn)});
   menu.addEventListener('click',e=>{const a=e.target.closest('button')?.dataset.act;if(!a)return;
     if(a==='pins'){setOn(!S.on);menu.querySelector('[data-act=pins]').focus();return}
     menuOpen(false);
+    if(sideOn&&(a==='fonts'||a==='colors')){document.getElementById(a==='fonts'?'ftp':'tkp')?.scrollIntoView({behavior:'smooth',block:'start'});return}
     if(a==='fonts'&&feBtn)feBtn.click();
     if(a==='colors'){const t=document.getElementById('tkt');if(t){if(document.getElementById('tkp').hidden)t.click()}else{renderColors();cp.hidden=false;cp.querySelector('input').focus()}}
     if(a==='overview')ovOpen();
@@ -3075,6 +3116,50 @@ if (document.getElementById('tick')) {   /* Block „Hero“ kann im CMS fehlen 
     if(typeof ov!=='undefined'&&!ov.hidden){ovClose();e.stopPropagation()}else if(cur){closePop(true);e.stopPropagation()}else if(lock.classList.contains('open')){lockOpen(false);launch.focus()}else if(isOpen()){menuOpen(false);launch.focus()}else if(!cp.hidden){cp.hidden=true;launch.focus()}},true);
   document.addEventListener('pointerdown',e=>{if(isOpen()&&!menu.contains(e.target)&&!launch.contains(e.target))menuOpen(false);if(lock.classList.contains('open')&&!lock.contains(e.target)&&!launch.contains(e.target))lockOpen(false);
     if(cur&&!pop.contains(e.target)&&!cur.pin.contains(e.target))closePop()});
+
+  /* ---- Seitenleiste ----
+     Das Studio öffnet sich als Leiste links, die Seite rückt nach rechts: sie läuft dafür als Vorschau in einem Rahmen (gleiche Adresse,
+     ?studio=frame), damit Layout und Umbrüche zur schmaleren Breite passen. Die Leiste schreibt in localStorage, die Vorschau übernimmt
+     die Werte über das storage-Event. Breite per Ziehen am rechten Rand, wird gemerkt. */
+  var sideOn=false;
+  const EMBED=/[?&]studio=frame\b/.test(location.search)||(window.top!==window&&!window.__studioOverview&&(()=>{try{return !!parent.document.querySelector('.st-sframe')}catch(e){return false}})());   /* auch nach Klick auf einen Link in der Vorschau */
+  if(EMBED)R.classList.add('st-embed');
+  const side=document.createElement('aside');side.className='st-side';side.setAttribute('aria-label','Studio');
+  side.innerHTML='<div class="st-sh"><h2>Studio</h2><button type="button" class="st-sx" aria-label="Studio schließen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="st-sb ft"></div><div class="st-drag" role="separator" aria-orientation="vertical" aria-label="Breite der Leiste ändern" tabindex="0"></div>';
+  const sframe=document.createElement('iframe');sframe.className='st-sframe';sframe.title='Vorschau der Seite';
+  if(!EMBED){document.body.appendChild(side);document.body.appendChild(sframe)}
+  const sbody=side.querySelector('.st-sb');
+  let sbw=360;try{sbw=+localStorage.getItem('ostgrat-studio-w')||360}catch(e){}
+  const setW=w=>{sbw=Math.round(Math.max(260,Math.min(innerWidth*.6,w)));R.style.setProperty('--sbw',sbw+'px')};setW(sbw);
+  function sideOpen(o){
+    if(EMBED)return;
+    if(o===sideOn)return;sideOn=o;
+    if(o){
+      lockOpen(false);closePop();
+      for(const id of ['ftp','tkp']){const el=document.getElementById(id);if(el){el.hidden=false;sbody.appendChild(el)}}
+      sbody.prepend(menu);menu.classList.add('open');renderMenu();
+      const u=new URL(location.href);u.searchParams.set('studio','frame');
+      if(!sframe.src)sframe.src=u.href;
+      R.classList.add('sb-on');
+    }else{
+      R.classList.remove('sb-on');menu.classList.remove('open');document.body.appendChild(menu);
+      for(const id of ['ftp','tkp']){const el=document.getElementById(id);if(el)el.hidden=true}
+      dispatchEvent(new Event('ostgrat-side'));dispatchEvent(new Event('resize'));
+    }
+    launch.setAttribute('aria-expanded',String(o));
+    try{o?sessionStorage.setItem('ostgrat-studio-side','1'):sessionStorage.removeItem('ostgrat-studio-side')}catch(e){}
+  }
+  side.querySelector('.st-sx').addEventListener('click',()=>sideOpen(false));
+  { const dr=side.querySelector('.st-drag');let x0=0,w0=0;
+    const mv=e=>setW(w0+e.clientX-x0);
+    dr.addEventListener('pointerdown',e=>{x0=e.clientX;w0=sbw;dr.setPointerCapture(e.pointerId);R.classList.add('sb-drag');dr.addEventListener('pointermove',mv)});
+    const up=()=>{dr.removeEventListener('pointermove',mv);R.classList.remove('sb-drag');try{localStorage.setItem('ostgrat-studio-w',sbw)}catch(e){}};
+    dr.addEventListener('pointerup',up);dr.addEventListener('pointercancel',up);
+    dr.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){setW(sbw+(e.key==='ArrowLeft'?-20:20));up();e.preventDefault()}}); }
+  /* Pins und Varianten zwischen Leiste und Vorschau abgleichen */
+  addEventListener('storage',e=>{if(e.key!==CFG.key||!e.newValue)return;try{S=Object.assign(S,JSON.parse(e.newValue))}catch(er){return}
+    P.forEach(p=>apply(p,true));R.classList.toggle('st-on',S.on);layer.hidden=!S.on;kick();if(isOpen())renderMenu()});
+  if(!EMBED&&unlocked){try{if(sessionStorage.getItem('ostgrat-studio-side')==='1')setTimeout(()=>sideOpen(true),0)}catch(e){}}
 
   /* ---- Übersicht ----
      Lädt dieselbe Seite in einen Rahmen, so hoch wie Fensterhöhe ÷ Zoom, und verkleinert ihn. Damit das Layout wie im echten
