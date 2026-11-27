@@ -947,14 +947,16 @@ if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
 
 /* ---------- Font-Tester: Google Fonts live durchschalten ---------- */
 {
-  const HEAD = ['Noto Serif JP','Instrument Serif','Newsreader','Fraunces','Source Serif 4','Libre Caslon Text','EB Garamond','Cormorant Garamond','Gloock','Young Serif','Spectral','Literata','IBM Plex Serif','Crimson Pro','Bodoni Moda','Playfair Display','DM Serif Display','Libre Baskerville','Lora','Inter Tight','Manrope','Space Grotesk','Instrument Sans','Schibsted Grotesk'];
-  const BODY = ['Space Grotesk','Red Hat Text','Inter Tight','Inter','Manrope','DM Sans','IBM Plex Sans','Instrument Sans','Geist','Figtree','Onest','Hanken Grotesk','Schibsted Grotesk','Public Sans','Work Sans','Sora','Albert Sans','Funnel Sans','Host Grotesk','Mona Sans','Familjen Grotesk','Archivo','Geologica','Plus Jakarta Sans','Outfit','Rethink Sans','Bricolage Grotesque'];
+  const PP = ['PP Altera Serif','PP Model Sans','PP Model Mono'];   /* hochgeladene Schriften, liegen unter /schriften/pp/ */
+  const HEAD = [...PP, 'Noto Serif JP','Instrument Serif','Newsreader','Fraunces','Source Serif 4','Libre Caslon Text','EB Garamond','Cormorant Garamond','Gloock','Young Serif','Spectral','Literata','IBM Plex Serif','Crimson Pro','Bodoni Moda','Playfair Display','DM Serif Display','Libre Baskerville','Lora','Inter Tight','Manrope','Space Grotesk','Instrument Sans','Schibsted Grotesk'];
+  const BODY = ['PP Model Sans','PP Model Mono','PP Altera Serif', 'Space Grotesk','Red Hat Text','Inter Tight','Inter','Manrope','DM Sans','IBM Plex Sans','Instrument Sans','Geist','Figtree','Onest','Hanken Grotesk','Schibsted Grotesk','Public Sans','Work Sans','Sora','Albert Sans','Funnel Sans','Host Grotesk','Mona Sans','Familjen Grotesk','Archivo','Geologica','Plus Jakarta Sans','Outfit','Rethink Sans','Bricolage Grotesque'];
   const DEF = {h:'IBM Plex Serif', b:'Space Grotesk'}, K = 'ostgrat-fonts-2';   /* neuer Schlüssel: alte Auswahl überschreibt die neuen Standards nicht */
   let cur = {...DEF}; try { Object.assign(cur, JSON.parse(localStorage.getItem(K) || '{}')); } catch (e) {}
   const loaded = new Set(['IBM Plex Serif','Space Grotesk']);
   const $ = id => document.getElementById(id), msg = $('ftm');
   const load = name => new Promise(res => {
     if (loaded.has(name)) return res(true);
+    if (PP.includes(name)) return document.fonts.load(`500 20px "${name}"`).then(() => { loaded.add(name); res(true); }, () => res(false));
     const fam = name.trim().replace(/ +/g, '+'), add = (q, fb) => {
       const l = document.createElement('link'); l.rel = 'stylesheet';
       l.href = `https://fonts.googleapis.com/css2?family=${fam}${q}&display=swap`;
