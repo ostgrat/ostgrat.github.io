@@ -993,8 +993,34 @@ if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
   });
   for (const [id, d] of [['fthx','h'],['ftbx','b']]) $(id).addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.value.trim()) apply(d, e.target.value.trim()); });
   $('ftr').addEventListener('click', () => { apply('h', DEF.h, true); apply('b', DEF.b); });
+  /* Schriftgröße: alle Schriftgrade mit einem Faktor skalieren, die Abstufungen bleiben im Verhältnis */
+  const KZ = 'ostgrat-fsize'; let zk = 1, zset = [], zt = 0;
+  try { zk = +localStorage.getItem(KZ) || 1; } catch (e) {}
+  const SKIP = '#ftp, #pxp, #tkp, .ft-bar, #fe, [class^="st-"], script, style, svg, canvas, noscript';
+  const zoomText = () => {
+    for (const [el, v] of zset) el.style.setProperty('font-size', v.val, v.pri); zset = [];   /* vorherige Werte zurück */
+    if (zk === 1) return;
+    const els = [...document.body.querySelectorAll('*')].filter(el => !el.closest(SKIP));
+    const fs = new Map(els.map(el => [el, parseFloat(getComputedStyle(el).fontSize)]));
+    fs.set(document.body, parseFloat(getComputedStyle(document.body).fontSize));
+    for (const el of [document.body, ...els]) {
+      const own = fs.get(el);   /* jedes Element bekommt seinen eigenen Wert, auch wenn das CSS die Größe fest setzt */
+      zset.push([el, {val: el.style.getPropertyValue('font-size'), pri: el.style.getPropertyPriority('font-size')}]);
+      el.style.setProperty('font-size', (own * zk).toFixed(2) + 'px', 'important');
+    }
+  };
+  const setZoom = (v, quiet) => {
+    zk = Math.round(v) / 100; $('ftz').value = Math.round(zk * 100); $('ftzo').textContent = Math.round(zk * 100) + ' %';
+    try { zk === 1 ? localStorage.removeItem(KZ) : localStorage.setItem(KZ, zk); } catch (e) {}
+    zoomText(); relayout(); dispatchEvent(new Event('ostgrat-font'));
+    if (!quiet) msg.textContent = `Schriftgröße: ${Math.round(zk * 100)} %`;
+  };
+  $('ftz').addEventListener('input', e => setZoom(+e.target.value));
+  addEventListener('resize', () => { if (zk === 1) return; clearTimeout(zt); zt = setTimeout(() => setZoom(zk * 100, true), 300); });
+  $('ftr').addEventListener('click', () => setZoom(100, true));
+  if (zk !== 1) (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => setZoom(zk * 100, true)); else setZoom(100, true);
   $('ftc').addEventListener('click', async () => {
-    const txt = `Headline: ${cur.h}\nFließtext & Button: ${cur.b}`;
+    const txt = `Headline: ${cur.h}\nFließtext & Button: ${cur.b}\nSchriftgröße: ${Math.round(zk * 100)} %`;
     try { await navigator.clipboard.writeText(txt); msg.textContent = 'Kopiert.'; } catch (e) { msg.textContent = txt; }
   });
   $('ftt').addEventListener('click', () => { const p = $('ftp'), o = p.hidden; p.hidden = !o; $('ftt').setAttribute('aria-expanded', o); });
