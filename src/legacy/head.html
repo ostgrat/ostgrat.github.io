@@ -829,10 +829,10 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:calc(-1 * var(-
 .fq summary h3{margin:0;font:500 clamp(19px,1.5vw,23px)/1.3 var(--fh),serif;letter-spacing:-.015em;transition:-webkit-text-stroke-width .2s}
 .fq summary:hover h3,.fq summary:focus-visible h3{-webkit-text-stroke:.3px currentColor}
 .fq summary:focus-visible{outline:var(--sw) solid var(--acc-hi);outline-offset:4px}
-.fq summary i{flex:none;display:grid;place-items:center;width:34px;height:34px;border:var(--sw) solid var(--line);transition:border-color .3s,background .3s,color .3s}
-.fq summary i svg{width:14px;height:14px;fill:currentColor;transition:rotate .45s cubic-bezier(.2,.7,.2,1)}
-.fq details[open] summary i{border-color:var(--ink)}   /* offen: Rahmen kräftiger, Icon kippt – keine volle Fläche */
-.fq details[open] summary i svg{rotate:180deg}
+.fq summary > i{flex:none;display:grid;place-items:center;width:34px;height:34px;border:var(--sw) solid var(--line);transition:border-color .3s,background .3s,color .3s}
+.fq summary > i svg{width:14px;height:14px;fill:currentColor;transition:rotate .45s cubic-bezier(.2,.7,.2,1)}
+.fq details[open] summary > i{border-color:var(--ink)}   /* offen: Rahmen kräftiger, Icon kippt – keine volle Fläche */
+.fq details[open] summary > i svg{rotate:180deg}
 .fq details::details-content{block-size:0;overflow:hidden;transition:block-size .5s cubic-bezier(.2,.7,.2,1),content-visibility .5s allow-discrete}
 .fq details[open]::details-content{block-size:auto}
 .fq details p{margin:0;padding:0 64px 28px 0;max-width:64ch;color:var(--mut)}
@@ -1646,7 +1646,7 @@ video{pointer-events:none}   /* dekorative Videos: keine Browser-Bedienelemente 
   /* FAQ: Trennlinien bis zum Rand */
   .fq-list{margin-left:-28px!important;margin-right:-28px!important}
   .fq details summary,.fq details p{padding-left:28px!important;padding-right:28px!important}
-  .fq summary i{margin-right:0}
+  .fq summary > i{margin-right:0}
   /* Kontakt: Trennlinien bis zum Rand, Formular im inneren Raster */
   .ct .ct-opts{margin-left:-28px!important;margin-right:-28px!important;width:auto!important;max-width:none!important}
   .ct .ct-opts li{padding-left:28px;padding-right:28px}
