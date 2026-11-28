@@ -58,7 +58,7 @@ export function inlineSvg(cover?: string) {
   return fs.existsSync(file) ? fs.readFileSync(file, 'utf-8') : null;
 }
 
-/** Beitrag als einfache Daten für den gemeinsamen Renderer (src/lib/blocks.mjs). */
+/** Beitrag als einfache Daten für den Insights-Block (src/lib/home-blocks.mjs). */
 export const toCard = (p: Post) => ({
   url: postUrl(p),
   title: p.data.title,

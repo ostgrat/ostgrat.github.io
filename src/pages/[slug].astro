@@ -1,8 +1,8 @@
 ---
-// Seiten aus dem Seitenbaukasten (CMS → „Seiten“), Adresse = Dateiname. Englisch: Datei name.en.md unter /en/name/.
+// Seiten aus dem CMS („Seiten“), Adresse = Dateiname. Gleiche Blöcke wie die Startseite (src/lib/home-blocks.mjs).
+// Englisch: Datei name.en.md unter /en/<urlSlug oder name>/
 import { getCollection } from 'astro:content';
-import SiteLayout from '../layouts/SiteLayout.astro';
-import Blocks from '../components/Blocks.astro';
+import FramePage from '../components/FramePage.astro';
 
 export async function getStaticPaths() {
   const pages = await getCollection('pages', (p) => !p.data.draft);
@@ -11,6 +11,4 @@ export async function getStaticPaths() {
 }
 const { page, alt } = Astro.props;
 ---
-<SiteLayout title={page.data.title} description={page.data.description} alt={alt}>
-  <Blocks blocks={page.data.blocks} lang="de" />
-</SiteLayout>
+<FramePage lang="de" title={`${page.data.title} – Ostgrat`} description={page.data.description} alt={alt} blocks={page.data.blocks} />

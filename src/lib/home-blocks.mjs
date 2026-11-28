@@ -173,18 +173,18 @@ const R = {
 </section></div>`,
 
   insights: (b, c) => {
-    const n = Math.max(1, Math.min(12, Number(b.count) || 6));
+    const n = b.all ? 999 : Math.max(1, Math.min(12, Number(b.count) || 6));   /* all: Blog-Übersicht zeigt alle */
     const posts = (c.posts || []).slice(0, n);
     const cards = posts.map((p) => `<article class="bl-card${p.alert ? ' is-alert' : ''}" data-cat="${esc(p.cat)}" data-date="${esc(p.iso)}"><a class="bl-hit" href="${esc(p.url)}" aria-label="${esc(p.title)}"></a><figure class="bl-img">${p.coverSvg || (p.cover ? `<img src="${esc(p.cover)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover">` : '')}${p.alert ? ALERT : ''}</figure><h3>${esc(p.title)}</h3><p class="bl-ex">${esc(p.excerpt)}</p><div class="bl-meta"><span>${esc(p.author)}</span><span>${esc(p.dateText)}</span></div></article>`).join('');
     return `<section class="bl" id="insights" aria-labelledby="h-bl">
-    <div class="bl-hd"><div><h2 id="h-bl">${esc(b.heading)}</h2><p class="bl-k sub">${esc(b.kicker)}</p></div>${cta('bl-cta', '/blog/', b.ctaLabel)}</div>
+    <div class="bl-hd"><div><h2 id="h-bl">${esc(b.heading)}</h2><p class="bl-k sub">${esc(b.kicker)}</p></div>${b.all ? '' : cta('bl-cta', '/blog/', b.ctaLabel)}</div>
     <div class="bl-bar">
       <div class="bl-tabs" role="tablist" aria-label="Kategorien"><button type="button" role="tab" data-f="alle" aria-selected="true"><span>Alle</span></button><button type="button" role="tab" data-f="warnung" aria-selected="false"><span>Warnungen</span></button><button type="button" role="tab" data-f="soc" aria-selected="false"><span>SOC</span></button><button type="button" role="tab" data-f="redteam" aria-selected="false"><span>Red Team</span></button><button type="button" role="tab" data-f="ot" aria-selected="false"><span>OT</span></button><button type="button" role="tab" data-f="compliance" aria-selected="false"><span>Compliance</span></button></div>
       <div class="bl-tools"><label class="bl-search"><span class="sr">Artikel durchsuchen</span><input type="search" placeholder="Suchen …" tabindex="-1"></label><button type="button" class="bl-ic" data-act="search" aria-label="Suche öffnen" aria-expanded="false">${S.insights[1]}</button></div>
     </div>
     <div class="bl-grid">${cards}</div>
     <p class="bl-empty" hidden>Keine Artikel gefunden.</p>
-    <p class="bl-more"><a class="tlink" href="/blog/">${esc(b.ctaLabel || 'Alle Beiträge ansehen')}</a></p>
+    ${b.all ? '' : `<p class="bl-more"><a class="tlink" href="/blog/">${esc(b.ctaLabel || 'Alle Beiträge ansehen')}</a></p>`}
   </section>`;
   },
 

@@ -1,4 +1,9 @@
 ---
-import BlogIndex from '../../../components/BlogIndex.astro';
+// Blog-Übersicht: der Insights-Block der Startseite mit allen Beiträgen
+import FramePage from '../../../components/FramePage.astro';
+const lang = 'en';
+const de = lang === 'de';
+const blocks = [{ type: 'insights', theme: 'dunkel', all: true,
+  heading: 'Was unsere Welt gerade bewegt.', kicker: 'News & Insights aus SOC und Red Team' }];
 ---
-<BlogIndex lang="en" />
+<FramePage lang={lang} title="News &amp; Insights – Ostgrat" description="Was unsere Welt gerade bewegt: Sicherheitswarnungen, Einblicke aus dem SOC und Fallstudien aus dem Red Team." alt={de ? '/en/blog/' : '/blog/'} blocks={blocks} />

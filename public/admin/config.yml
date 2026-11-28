@@ -121,138 +121,6 @@ collections:
       - *body
       - *draft
 
-  # ---------- Seitenbaukasten ----------
-  - name: seiten
-    i18n: true
-    label: Seiten
-    label_singular: Seite
-    description: Eigene Seiten aus Blöcken zusammenstellen. Die Adresse entsteht aus dem Titel. Alle Blöcke mit Beispiel unter /bloecke/
-    icon: web
-    folder: src/content/pages
-    create: true
-    extension: md
-    format: frontmatter
-    slug: "{{slug}}"
-    fields:
-      - { label: Titel, name: title, widget: string, hint: "Wird auch zur Adresse, z. B. „NIS2-Check“ → /nis2-check/", i18n: true }
-      - *urlslug
-      - { label: Beschreibung für Google, name: description, widget: text, required: false, i18n: true }
-      - *draft
-      - label: Blöcke
-        name: blocks
-        i18n: duplicate
-        widget: list
-        label_singular: Block
-        thumbnail: vorschau
-        hint: "Mit „Add Block“ einen Block wählen, mit den Pfeilen sortieren. Alle Blöcke mit Beispiel: [Blockübersicht öffnen](/bloecke/)"
-        types:
-          - label: Hero
-            name: hero
-            widget: object
-            description: "Seitenanfang: große Überschrift, hervorgehobene Zeile, Einleitung, Button, optional Bild rechts."
-            summary: "{{fields.headline}}"
-            fields:
-              - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/hero.jpg, readonly: true, required: false, choose_url: false }
-              - { label: Dachzeile, name: kicker, widget: string, required: false, i18n: true }
-              - { label: Headline, name: headline, widget: string, i18n: true }
-              - { label: Hervorgehobene Zeile, name: highlight, widget: string, required: false, i18n: true }
-              - { label: Einleitung, name: lead, widget: text, required: false, i18n: true }
-              - { label: Button-Text, name: ctaLabel, widget: string, required: false, i18n: true }
-              - { label: Button-Link, name: ctaLink, widget: string, required: false }
-              - { label: Bild (optional), name: image, widget: image, required: false }
-          - label: Text
-            name: text
-            widget: object
-            description: "Überschrift links, längerer Text rechts. Für Erklärungen, Listen, Absätze."
-            summary: "{{fields.heading}}"
-            fields:
-              - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/text.jpg, readonly: true, required: false, choose_url: false }
-              - { label: Dachzeile, name: kicker, widget: string, required: false, i18n: true }
-              - { label: Überschrift, name: heading, widget: string, required: false, i18n: true }
-              - { label: Text, name: body, widget: markdown, i18n: true }
-          - label: Bild mit Text
-            name: imageText
-            widget: object
-            description: "Großes Bild neben Überschrift, Text und optionalem Button. Bild links oder rechts."
-            summary: "{{fields.heading}}"
-            fields:
-              - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/imageText.jpg, readonly: true, required: false, choose_url: false }
-              - { label: Bild, name: image, widget: image }
-              - { label: Bild-Position, name: imagePosition, widget: select, options: [links, rechts], default: links }
-              - { label: Dachzeile, name: kicker, widget: string, required: false, i18n: true }
-              - { label: Überschrift, name: heading, widget: string, required: false, i18n: true }
-              - { label: Text, name: body, widget: markdown, required: false, i18n: true }
-              - { label: Button-Text, name: ctaLabel, widget: string, required: false, i18n: true }
-              - { label: Button-Link, name: ctaLink, widget: string, required: false }
-          - label: Kennzahlen
-            name: stats
-            widget: object
-            description: "Große Zahlen in einer Reihe, jeweils mit kurzer Beschreibung darunter."
-            summary: "{{fields.heading}}"
-            fields:
-              - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/stats.jpg, readonly: true, required: false, choose_url: false }
-              - { label: Dachzeile, name: kicker, widget: string, required: false, i18n: true }
-              - { label: Überschrift, name: heading, widget: string, required: false, i18n: true }
-              - label: Kennzahlen
-                name: items
-                i18n: duplicate
-                widget: list
-                label_singular: Kennzahl
-                summary: "{{fields.value}} – {{fields.label}}"
-                fields:
-                  - { label: Zahl, name: value, widget: string, i18n: true }
-                  - { label: Beschreibung, name: label, widget: string, i18n: true }
-          - label: FAQ
-            name: faq
-            widget: object
-            description: "Überschrift links, aufklappbare Fragen und Antworten rechts."
-            summary: "{{fields.heading}}"
-            fields:
-              - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/faq.jpg, readonly: true, required: false, choose_url: false }
-              - { label: Dachzeile, name: kicker, widget: string, required: false, i18n: true }
-              - { label: Überschrift, name: heading, widget: string, required: false, i18n: true }
-              - label: Fragen
-                name: items
-                i18n: duplicate
-                widget: list
-                label_singular: Frage
-                summary: "{{fields.question}}"
-                fields:
-                  - { label: Frage, name: question, widget: string, i18n: true }
-                  - { label: Antwort, name: answer, widget: text, i18n: true }
-          - label: Call-to-Action
-            name: cta
-            widget: object
-            description: "Umrandeter Kasten mit Überschrift, kurzem Text und Button – meist am Seitenende."
-            summary: "{{fields.heading}}"
-            fields:
-              - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/cta.jpg, readonly: true, required: false, choose_url: false }
-              - { label: Überschrift, name: heading, widget: string, i18n: true }
-              - { label: Text, name: text, widget: text, required: false, i18n: true }
-              - { label: Button-Text, name: buttonLabel, widget: string, i18n: true }
-              - { label: Button-Link, name: buttonLink, widget: string }
-          - label: Blog-Teaser
-            name: blogTeaser
-            widget: object
-            description: "Die neuesten Blogbeiträge als Karten, optional nach Thema gefiltert."
-            summary: "{{fields.heading}}"
-            fields:
-              - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/blogTeaser.jpg, readonly: true, required: false, choose_url: false }
-              - { label: Dachzeile, name: kicker, widget: string, required: false, i18n: true }
-              - { label: Überschrift, name: heading, widget: string, required: false, i18n: true }
-              - label: Thema
-                name: category
-                widget: select
-                default: alle
-                options:
-                  - { label: Alle, value: alle }
-                  - { label: Warnungen, value: warnung }
-                  - { label: SOC, value: soc }
-                  - { label: Red Team, value: redteam }
-                  - { label: OT, value: ot }
-                  - { label: Compliance, value: compliance }
-              - { label: Anzahl Beiträge, name: count, widget: number, value_type: int, min: 1, max: 6, default: 3 }
-
   # ---------- Startseite: Blöcke (Markup in src/lib/home-blocks.mjs) ----------
   - name: startseite
     i18n: true
@@ -271,7 +139,7 @@ collections:
         label_singular: Block
         thumbnail: ansicht
         hint: Blöcke wählen, sortieren und befüllen. Hell/Dunkel pro Block bestimmt den Farbwechsel beim Scrollen.
-        types:
+        types: &homeblocks
         - label: Hero mit Monitor & Laufband
           name: hero
           widget: object
@@ -1003,3 +871,29 @@ collections:
             i18n: true
             widget: text
             hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
+
+  # ---------- Seiten: aus den Blöcken der Startseite (muss nach „Startseite“ stehen, wegen *homeblocks) ----------
+  - name: seiten
+    i18n: true
+    label: Seiten
+    label_singular: Seite
+    description: Eigene Seiten aus den Blöcken der Startseite zusammenstellen. Die Adresse entsteht aus dem Titel.
+    icon: web
+    folder: src/content/pages
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    fields:
+      - { label: Titel, name: title, widget: string, hint: "Wird auch zur Adresse, z. B. „NIS2-Check“ → /nis2-check/", i18n: true }
+      - *urlslug
+      - { label: Beschreibung für Google, name: description, widget: text, required: false, i18n: true }
+      - *draft
+      - label: Blöcke
+        name: blocks
+        widget: list
+        i18n: duplicate
+        label_singular: Block
+        thumbnail: ansicht
+        hint: "Dieselben Blöcke wie auf der Startseite. Mit „Add Block“ wählen, mit den Pfeilen sortieren."
+        types: *homeblocks

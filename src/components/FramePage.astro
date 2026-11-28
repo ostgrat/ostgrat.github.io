@@ -1,0 +1,42 @@
+---
+// Rahmen aller Seiten (Startseite, Seiten aus dem CMS, Blog): Navbar, ASCII-Raster, Footer und Seitenskripte aus dem Design-Entwurf.
+// Inhalt: entweder Startseiten-Blöcke (blocks) oder fertiges HTML (html), z. B. ein Blogbeitrag.
+// Englisch: Oberflächentexte und Links übersetzt die Middleware (src/i18n/en.json).
+import head from '../legacy/head.html?raw';
+import top from '../legacy/top.html?raw';
+import bottom from '../legacy/bottom.html?raw';
+import { renderHome } from '../lib/home-blocks.mjs';
+import { getPosts, toCard, type Lang } from '../lib/blog';
+interface Props { lang: Lang; title: string; description?: string; alt: string; blocks?: any[]; html?: string; home?: boolean }
+const { lang, title, description, alt, blocks, html, home = false } = Astro.props;
+const posts = blocks?.some((b) => b?.type === 'insights') ? (await getPosts(lang)).map(toCard) : [];
+const body = html ?? renderHome(blocks || [], { posts });
+const site = 'https://ostgrat.github.io';
+const path = Astro.url.pathname;
+const deUrl = site + (lang === 'de' ? path : alt), enUrl = site + (lang === 'en' ? path : alt);
+// Sprachumschalter: gleiche Seite in der anderen Sprache, aktive Sprache hell, die andere leise
+const sw = lang === 'en'
+  ? `<a class="lang" href="${alt}" hreflang="de" lang="de" aria-label="Language: English, switch to German"><span class="off">DE</span><span>EN</span></a>`
+  : `<a class="lang" href="${alt}" hreflang="en" lang="en" aria-label="Sprache: Deutsch, zu Englisch wechseln"><span>DE</span><span class="off">EN</span></a>`;
+// Sprungmarken aus Navbar und Footer (#team, #kontakt …) zeigen auf die Startseite, wenn es das Ziel auf dieser Seite nicht gibt
+const ids = new Set([...body.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]));
+const anchors = (s: string) => (home ? s : s.replace(/href="#([^"]+)"/g, (m, id) => (ids.has(id) ? m : `href="/#${id}"`)));
+const topHtml = anchors(top.replace(/<a class="lang"[^>]*>.*?<\/a>/, sw));
+---
+<html lang={lang}>
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{title}</title>
+{description && <meta name="description" content={description}>}
+<link rel="alternate" hreflang="de" href={deUrl}><link rel="alternate" hreflang="en" href={enUrl}><link rel="alternate" hreflang="x-default" href={deUrl}>
+<link rel="stylesheet" href="/styles/fonts.css">
+<Fragment set:html={head} />
+</head>
+<body class:list={[!home && 'pg-sub']}>
+<Fragment set:html={topHtml} />
+<Fragment set:html={body} />
+<Fragment set:html={anchors(bottom)} />
+</body>
+</html>

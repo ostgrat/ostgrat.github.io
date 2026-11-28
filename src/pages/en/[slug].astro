@@ -1,8 +1,7 @@
 ---
-// Englische Seiten aus dem Seitenbaukasten: Datei name.en.md → /en/name/
+// Englische Seiten aus dem CMS: Datei name.en.md → /en/<urlSlug oder name>/
 import { getCollection } from 'astro:content';
-import SiteLayout from '../../layouts/SiteLayout.astro';
-import Blocks from '../../components/Blocks.astro';
+import FramePage from '../../components/FramePage.astro';
 
 export async function getStaticPaths() {
   const pages = await getCollection('pages', (p) => !p.data.draft && p.id.endsWith('.en'));
@@ -10,6 +9,4 @@ export async function getStaticPaths() {
 }
 const { page } = Astro.props;
 ---
-<SiteLayout title={page.data.title} description={page.data.description} alt={`/${page.id.slice(0, -3)}/`}>
-  <Blocks blocks={page.data.blocks} lang="en" />
-</SiteLayout>
+<FramePage lang="en" title={`${page.data.title} – Ostgrat`} description={page.data.description} alt={`/${page.id.slice(0, -3)}/`} blocks={page.data.blocks} />

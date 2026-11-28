@@ -14,11 +14,8 @@
 <body>
   <script>
     import CMS, { React } from '@sveltia/cms';
-    import { marked } from 'marked';
-    import { renderBlocks } from '../../lib/blocks.mjs';
 
     const h = React.createElement;
-    const md = (s) => (s ? marked.parse(String(s), { async: false }) : '');
 
     // Daten aus der Vorschau-Entry holen (Immutable.js oder einfaches Objekt)
     const toData = (entry) => {
@@ -60,20 +57,6 @@
         return () => window.removeEventListener('ost-block', fn);
       }, []);
     };
-
-    // ---------- Seitenbaukasten: Blöcke direkt in der Vorschau rendern ----------
-    function PagePreview({ entry, getAsset }) {
-      const data = toData(entry);
-      const ref = React.useRef(null);
-      const html = renderBlocks(data.blocks || [], { md, asset: makeAsset(getAsset) });
-      const scrollTo = (i, smooth = true) => {
-        const el = ref.current?.querySelector(`[data-bi="${i}"]`);
-        if (el) el.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
-      };
-      useActiveBlock((i) => scrollTo(i));
-      React.useEffect(() => { if (activeBlock != null) scrollTo(activeBlock, false); });   // nach jeder Änderung am Block bleiben
-      return h('main', { ref, className: 'preview', dangerouslySetInnerHTML: { __html: html } });
-    }
 
     // ---------- Startseite: echte Seite (/vorschau/) mit allen Effekten, aus dem Entwurf gerendert ----------
     // Bei Änderungen wird im Hintergrund eine neue Vorschau geladen und erst getauscht, wenn sie fertig ist (kein Flackern).
@@ -128,13 +111,12 @@
     }
 
     CMS.registerPreviewStyle('/styles/fonts.css');
-    CMS.registerPreviewStyle('/styles/site.css');
     CMS.registerPreviewStyle(`main.preview{min-height:100vh}.preview .blk:last-child{padding-bottom:96px}
       .ost-home-preview{position:relative;height:100vh;overflow:hidden;background:#0f0e12}
       .ost-home-preview iframe{position:absolute;inset:0;width:100%;height:100%;border:0;transition:opacity .25s}
       .ost-home-preview iframe.next{opacity:0;pointer-events:none}
       .ost-home-preview iframe.live{opacity:1}`, { raw: true });
-    CMS.registerPreviewTemplate('seiten', PagePreview);
+    CMS.registerPreviewTemplate('seiten', HomePreview);   // Seiten nutzen dieselben Blöcke und dieselbe Vorschau wie die Startseite
     CMS.registerPreviewTemplate('startseite', HomePreview);
     CMS.registerPreviewTemplate('home', HomePreview); // Datei-Sammlungen: Vorlage über den Dateinamen
     CMS.init();

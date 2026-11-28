@@ -13,12 +13,14 @@ Die Startseite besteht aus Blöcken, die im CMS sortiert, entfernt und hinzugef�
 | Navbar, Seitenrahmen vor den Blöcken | `src/legacy/top.html` |
 | Footer, Popups, alle Seitenskripte | `src/legacy/bottom.html` |
 | `<head>` | `src/legacy/head.html` |
-| Styles | `public/styles/site.css` |
+| Styles | `<style>` in `src/legacy/head.html` |
 | Inhalte, Reihenfolge, Hell/Dunkel | `src/data/home.json` (wird vom CMS überschrieben) |
 | Felder im CMS | `public/admin/config.yml`, Collection „Startseite“ |
 | Bilder und Videos der Startseite | `public/uploads/start/` |
 
-`home-blocks.mjs` rendert sowohl die Website (`src/pages/index.astro`) als auch die CMS-Vorschau (`src/pages/vorschau.astro`). Eine Änderung dort gilt für beide.
+`home-blocks.mjs` rendert die Startseite, alle Seiten aus dem CMS und die CMS-Vorschau (`src/pages/vorschau.astro`). Eine Änderung dort gilt überall.
+
+Alle Seiten (Startseite, CMS-Seiten, Blog) laufen durch denselben Rahmen `src/components/FramePage.astro`: Head, Navbar, ASCII-Raster, Footer und Seitenskripte wie auf der Startseite. Sprungmarken wie `#team` zeigen auf Unterseiten automatisch auf die Startseite, wenn es das Ziel dort nicht gibt.
 
 ## Regeln für Änderungen an der Startseite
 
@@ -47,9 +49,12 @@ Deutsch ist Standard (ohne Präfix), Englisch liegt unter `/en/`.
 - **Neues Textfeld im CMS?** `i18n: true` dazuschreiben, sonst ist es auf Englisch nicht bearbeitbar.
 - Asset-Pfade immer absolut (`/img/…`), relative Pfade brechen unter `/en/`.
 
-## Seitenbaukasten (Unterseiten)
+## Unterseiten
 
-Blöcke in `src/lib/blocks.mjs`, Seiten in `src/content/pages/*.md`, Übersicht aller Blöcke unter `/bloecke/`. Gleiche Regeln: Texte über CMS-Felder, Screenshots aktuell halten.
+- **Seiten aus dem CMS** (`src/content/pages/*.md`, Sammlung „Seiten“) nutzen genau dieselben Blöcke wie die Startseite (`types: *homeblocks` in `config.yml`). Es gibt keinen eigenen Seitenbaukasten mehr; keine neuen Blocktypen nur für Unterseiten anlegen.
+- **Blog-Übersicht** (`src/pages/blog/index.astro`) ist der Insights-Block mit `all: true`.
+- **Blogbeitrag** (`src/components/PostPage.astro`): eigenes Markup im Rahmen, Styles unter `.pst` in `head.html`. Kein `<header>`-Element verwenden, das ist die Navbar.
+- Die Klasse `.sub` ist die Subline-Schrift, nicht für Seitenzustände verwenden (Unterseiten tragen `body.pg-sub`).
 
 ## Prüfen vor dem Push
 

@@ -1,39 +1,12 @@
 ---
-// Startseite in einer Sprache: Rahmen (Navbar, Footer, Skripte) aus dem Design-Entwurf, dazwischen die Blöcke aus dem CMS.
-// Deutsch: src/data/home.json · Englisch: src/data/home.en.json (fehlt sie, gilt die deutsche Fassung).
-// Oberflächentexte im Rahmen übersetzt die Middleware (src/i18n/en.json).
+// Startseite in einer Sprache. Deutsch: src/data/home.json · Englisch: src/data/home.en.json (fehlt sie, gilt Deutsch).
 import homeDe from '../data/home.json';
-import head from '../legacy/head.html?raw';
-import top from '../legacy/top.html?raw';
-import bottom from '../legacy/bottom.html?raw';
-import { renderHome } from '../lib/home-blocks.mjs';
-import { getPosts, toCard, type Lang } from '../lib/blog';
+import FramePage from './FramePage.astro';
+import type { Lang } from '../lib/blog';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const enFiles = import.meta.glob('../data/home.en.json', { eager: true, import: 'default' });
 const home: any = lang === 'en' ? (Object.values(enFiles)[0] ?? homeDe) : homeDe;
-const posts = (await getPosts(lang)).map(toCard);
-const site = 'https://ostgrat.github.io';
-// Sprachumschalter: führt zur gleichen Seite in der anderen Sprache, aktive Sprache hell, die andere leise
-const sw = lang === 'en'
-  ? '<a class="lang" href="/" hreflang="de" lang="de" aria-label="Language: English, switch to German"><span class="off">DE</span><span>EN</span></a>'
-  : '<a class="lang" href="/en/" hreflang="en" lang="en" aria-label="Sprache: Deutsch, zu Englisch wechseln"><span>DE</span><span class="off">EN</span></a>';
-const topHtml = top.replace(/<a class="lang"[^>]*>.*?<\/a>/, sw);
 const title = lang === 'en' ? 'Ostgrat – Security for mid-sized companies' : 'Ostgrat – Sicherheit für den Mittelstand';
 ---
-<html lang={lang}>
-<head>
-<meta charset="utf-8">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{title}</title>
-<link rel="alternate" hreflang="de" href={site + '/'}><link rel="alternate" hreflang="en" href={site + '/en/'}><link rel="alternate" hreflang="x-default" href={site + '/'}>
-<link rel="stylesheet" href="/styles/fonts.css">
-<Fragment set:html={head} />
-</head>
-<body>
-<Fragment set:html={topHtml} />
-<Fragment set:html={renderHome(home.blocks, { posts })} />
-<Fragment set:html={bottom} />
-</body>
-</html>
+<FramePage lang={lang} title={title} alt={lang === 'en' ? '/' : '/en/'} blocks={home.blocks} home />
