@@ -951,7 +951,7 @@ if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
   const PP = ['PP Fragment Serif','PP Fragment Glare','PP Fragment Text','PP Fragment Sans','Erode','PP Altera Serif','PP Model Sans','PP Model Mono'];   /* hochgeladene Schriften, liegen unter /schriften/ */
   const HEAD = [...PP, 'Noto Serif JP','Instrument Serif','Newsreader','Fraunces','Source Serif 4','Libre Caslon Text','EB Garamond','Cormorant Garamond','Gloock','Young Serif','Spectral','Literata','IBM Plex Serif','Crimson Pro','Bodoni Moda','Playfair Display','DM Serif Display','Libre Baskerville','Lora','Inter Tight','Manrope','Space Grotesk','Instrument Sans','Schibsted Grotesk'];
   const BODY = ['PP Fragment Sans','PP Fragment Text','PP Model Sans','PP Model Mono','PP Fragment Serif','PP Fragment Glare','PP Altera Serif','Erode', 'Space Grotesk','Red Hat Text','Inter Tight','Inter','Manrope','DM Sans','IBM Plex Sans','Instrument Sans','Geist','Figtree','Onest','Hanken Grotesk','Schibsted Grotesk','Public Sans','Work Sans','Sora','Albert Sans','Funnel Sans','Host Grotesk','Mona Sans','Familjen Grotesk','Archivo','Geologica','Plus Jakarta Sans','Outfit','Rethink Sans','Bricolage Grotesque'];
-  const DEF = {h:'Erode', b:'PP Model Sans', hw:'', bw:'300', hs:108, bs:88, hl:77, bl:117, ht:0, bt:1}, K = 'ostgrat-fonts-3';   /* Standard = von Sascha im Studio gewählt (28.11.) */
+  const DEF = {h:'Erode', b:'PP Model Sans', hw:'', bw:'', hs:108, bs:88, hl:77, bl:117, ht:0, bt:1}, K = 'ostgrat-fonts-3';   /* Standard = von Sascha im Studio gewählt (28.11.) */
   const read = () => { const c = {...DEF}; try { Object.assign(c, JSON.parse(localStorage.getItem(K) || '{}')); } catch (e) {} return c; };
   let cur = read();
   try { localStorage.removeItem('ostgrat-fsize'); localStorage.removeItem('ostgrat-fonts-2'); } catch (e) {}   /* alte Regler und Auswahl */
@@ -981,14 +981,14 @@ if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
     for (const [el, pr, v, pri] of undo) el.style.setProperty(pr, v, pri); undo = [];
     if (neutral('h') && neutral('b')) return;
     const els = [document.body, ...[...document.body.querySelectorAll('*')].filter(el => !el.closest(SKIP))];
-    const rd = els.map(el => { const s = getComputedStyle(el); return [el, first(s.fontFamily), parseFloat(s.fontSize), s.lineHeight, parseFloat(s.letterSpacing) || 0]; });
+    const rd = els.map(el => { const s = getComputedStyle(el); return [el, first(s.fontFamily), parseFloat(s.fontSize), s.lineHeight, parseFloat(s.letterSpacing) || 0, +s.fontWeight]; });
     const set = (el, pr, v) => { undo.push([el, pr, el.style.getPropertyValue(pr), el.style.getPropertyPriority(pr)]); el.style.setProperty(pr, v, 'important'); };
-    for (const [el, fam, fs, lh, ls] of rd) {
+    for (const [el, fam, fs, lh, ls, fw] of rd) {
       const d = fam === cur.h ? 'h' : fam === cur.b ? 'b' : '';
       if (!d || neutral(d)) continue;
       const k = cur[d + 's'] / 100, nfs = fs * k;
       if (k !== 1) set(el, 'font-size', nfs.toFixed(2) + 'px');
-      if (cur[d + 'w']) set(el, 'font-weight', cur[d + 'w']);
+      if (cur[d + 'w'] && fw < 500) set(el, 'font-weight', cur[d + 'w']);   /* Auszeichnungen (Medium und kräftiger) behalten ihren Schnitt */
       if (cur[d + 'l'] != 100 || k !== 1) { const l = lh === 'normal' ? 0 : parseFloat(lh); if (l) set(el, 'line-height', (l * k * cur[d + 'l'] / 100).toFixed(2) + 'px'); }
       if (cur[d + 't'] || k !== 1) set(el, 'letter-spacing', (ls * k + cur[d + 't'] / 100 * nfs).toFixed(3) + 'px');
     }
@@ -3236,11 +3236,24 @@ window.ostGlobeKF=(()=>{const sc=document.getElementById('gscroll');if(!sc)retur
   const stop=()=>{if(!busy)return;cancelAnimationFrame(raf);busy=false;root.style.scrollBehavior='';};
   const go=to=>{stop();const from=scrollY,d=to-from;if(Math.abs(d)<3)return;const dur=Math.min(1100,450+Math.abs(d)*.9),t0=performance.now();busy=true;root.style.scrollBehavior='auto';
     const step=n=>{const u=Math.min(1,(n-t0)/dur);scrollTo(0,from+d*ease(u));if(u<1)raf=requestAnimationFrame(step);else{busy=false;root.style.scrollBehavior='';}};raf=requestAnimationFrame(step);};
-  const snap=()=>{if(busy||document.querySelector('.pp.open,dialog[open]'))return;const [k1,k2]=kf(),D=k2-k1,y=scrollY;
+  const snap=()=>{if(busy||window.ostResizing||document.querySelector('.pp.open,dialog[open]'))return;const [k1,k2]=kf(),D=k2-k1,y=scrollY;
     if(y>k1+1&&y<=k1+D*.15)go(k1);else if(y>=k2-D*.15&&y<k2-1)go(k2);};
   addEventListener('scroll',()=>{if(busy)return;clearTimeout(t);t=setTimeout(snap,180);},{passive:true});
   ['wheel','touchstart','keydown','pointerdown'].forEach(ev=>addEventListener(ev,stop,{passive:true}));
   return {kf,go};
+})();
+</script>
+
+<script>
+/* Fenstergröße ändern: Abschnitte mit vh-Höhen (Globus, Progress) werden länger oder kürzer, der Browser hält aber die Pixel-Position –
+   dadurch sprang die Seite weit weg. Jetzt merkt sich die Seite beim ersten Resize, wo im Abschnitt man steht (Anteil), und stellt das danach wieder her. */
+(()=>{let anc=null,t=0;
+  const blocks=()=>[...document.querySelectorAll('[data-block], #gscroll, .s2')];
+  const pick=()=>{const y=innerHeight*.35;let best=null;for(const b of blocks()){const r=b.getBoundingClientRect();if(r.height&&r.top<=y&&r.bottom>y){if(!best||r.height<best.r.height)best={b,r};}}
+    return best?{el:best.b,f:(y-best.r.top)/best.r.height,y}:null;};
+  addEventListener('resize',()=>{if(!anc){anc=pick();window.ostResizing=true;}clearTimeout(t);t=setTimeout(()=>{
+    const a=anc;anc=null;if(a&&a.el.isConnected){const r=a.el.getBoundingClientRect();const top=r.top+scrollY+a.f*r.height-innerHeight*.35;scrollTo({top:Math.max(0,top),behavior:'instant'});}
+    setTimeout(()=>{window.ostResizing=false;},400);},450);},{passive:true});
 })();
 </script>
 

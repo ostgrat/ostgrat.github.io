@@ -1770,4 +1770,13 @@ video{pointer-events:none}   /* dekorative Videos: keine Browser-Bedienelemente 
 .why-c .why-svc{margin:32px 0 0;max-width:56ch}
 .why-c .why-svc + .why-logos,.why-c .why-svc ~ .why-logos{margin-top:40px}
 @media(max-width:900px){.why-c .why-svc{margin:32px -28px 0!important}}
+
+/* Paragraph ist Paragraph: alle Fließtext-Absätze gleiche Größe und gleicher Zeilenabstand */
+:is(.hero .lead,.why-p,.why-svc li > span,.team-lead,.ti-p,.ti-steps li > span,.s2-text p,.s2-list li p,.why-card p.lq,.sv-top p,.sv-txt,.gcopy p.lq,.gcopy details p,.bl-ex,.bl-more,.fq p.lq,.fq-bs,.ct-sub){font-size:var(--fs-p)!important;line-height:var(--lh)!important}
+/* Auszeichnungen in Listen und Karten: Medium */
+.ti-steps li b,.why-svc li b,.s2-list h3,.why-card .lab{font-weight:500!important}
+/* Hero-Text breiter: vier bis fünf Zeilen */
+.hero .lead{max-width:520px}
+/* Sprachumschalter: inaktive Sprache deutlich leiser */
+nav a.lang span.off{opacity:.28}
 </style>
