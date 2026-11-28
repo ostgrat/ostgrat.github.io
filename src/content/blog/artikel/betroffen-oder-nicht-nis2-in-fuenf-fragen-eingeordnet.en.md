@@ -1,5 +1,6 @@
 ---
 title: "Affected or not? NIS2 in five questions"
+urlSlug: affected-or-not-nis2-in-five-questions
 date: 2026-10-21
 author: "Theresa Gruber"
 category: compliance

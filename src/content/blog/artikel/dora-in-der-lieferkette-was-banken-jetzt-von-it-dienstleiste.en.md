@@ -1,5 +1,6 @@
 ---
 title: "DORA in the supply chain: what banks now expect from IT service providers"
+urlSlug: dora-in-the-supply-chain
 date: 2026-09-10
 author: "Elena Fuchs"
 category: compliance

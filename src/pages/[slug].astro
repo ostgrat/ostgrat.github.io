@@ -6,8 +6,8 @@ import Blocks from '../components/Blocks.astro';
 
 export async function getStaticPaths() {
   const pages = await getCollection('pages', (p) => !p.data.draft);
-  const en = new Set(pages.filter((p) => p.id.endsWith('.en')).map((p) => p.id.slice(0, -3)));
-  return pages.filter((p) => !p.id.endsWith('.en')).map((page) => ({ params: { slug: page.id }, props: { page, alt: en.has(page.id) ? `/en/${page.id}/` : '/en/' } }));
+  const en = new Map(pages.filter((p) => p.id.endsWith('.en')).map((p) => [p.id.slice(0, -3), p.data.urlSlug || p.id.slice(0, -3)]));
+  return pages.filter((p) => !p.id.endsWith('.en')).map((page) => ({ params: { slug: page.id }, props: { page, alt: en.has(page.id) ? `/en/${en.get(page.id)}/` : '/en/' } }));
 }
 const { page, alt } = Astro.props;
 ---

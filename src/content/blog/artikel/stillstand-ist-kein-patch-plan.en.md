@@ -1,5 +1,6 @@
 ---
 title: "Downtime is not a patch plan"
+urlSlug: downtime-is-not-a-patch-plan
 date: 2026-09-24
 author: "David Reiter"
 category: ot

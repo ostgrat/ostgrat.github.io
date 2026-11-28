@@ -1,5 +1,6 @@
 ---
 title: "Eleven minutes to containment: a night in the SOC"
+urlSlug: eleven-minutes-to-containment-a-night-in-the-soc
 date: 2026-11-03
 author: "Lukas Ebner"
 category: soc

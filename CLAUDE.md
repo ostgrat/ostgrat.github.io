@@ -38,6 +38,7 @@ Deutsch ist Standard (ohne Präfix), Englisch liegt unter `/en/`.
 | --- | --- |
 | Startseite EN | `src/data/home.en.json` (gleicher Aufbau wie `home.json`; fehlt sie, gilt Deutsch) |
 | Seiten und Blog EN | gleiche Datei mit `.en.md`, z. B. `nis2-check.en.md`, `artikel/name.en.md` |
+| Englische Adressen | Feld `urlSlug` in der `.en.md`; Blog-Ordner auf Englisch: articles, alerts, case-studies (`typePathEn` in `src/lib/blog.ts`) |
 | Feste Oberflächentexte (Navbar, Footer, Popups, Vorlagen, Skripte) | `src/i18n/en.json`: deutscher Text genau wie im Code → Englisch |
 | Übersetzung beim Rendern, Links auf `/en/` umschreiben | `src/middleware.ts` + `src/i18n/index.mjs` |
 | CMS | `i18n` in `config.yml` (multiple_files, Standard ohne Sprachendung); Textfelder `i18n: true`, Block-Listen `i18n: duplicate` |

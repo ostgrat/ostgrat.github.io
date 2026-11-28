@@ -1,5 +1,6 @@
 ---
 title: "Outlook vulnerability actively exploited: install the November updates now"
+urlSlug: outlook-vulnerability-actively-exploited-install-november-updates
 date: 2026-11-11
 author: "Nina Pichler"
 excerpt: "Microsoft has closed a spoofing vulnerability in Outlook that is already being exploited (CVE-2026-124194). At the same time, a zero-day in Chrome is circulating. What you should do today."

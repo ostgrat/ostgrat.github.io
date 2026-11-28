@@ -998,7 +998,7 @@ if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
     for (const d of ['h', 'b']) if (!(await load(cur[d]))) { say(`„${cur[d]}“ konnte nicht geladen werden – Schreibweise wie auf fonts.google.com?`); cur[d] = DEF[d]; }
     const r = document.documentElement.style;
     r.setProperty('--fh', `"${cur.h}"`); r.setProperty('--fb', `"${cur.b}"`);
-    if (!inSide()) { typeApply(); relayout(); dispatchEvent(new Event('ostgrat-font')); }
+    if (!inSide()) { typeApply(); titleWeight(); relayout(); dispatchEvent(new Event('ostgrat-font')); }
     sync(); if (!quiet) say(`Headline: ${cur.h} · Text: ${cur.b}`);
   };
   const save = () => { try { localStorage.setItem(K, JSON.stringify(cur)); } catch (e) {} };
@@ -1008,13 +1008,36 @@ if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
   const W = [['', 'Standard'], ['100', '100 Thin'], ['200', '200 ExtraLight'], ['300', '300 Light'], ['400', '400 Regular'], ['500', '500 Medium'], ['600', '600 Semibold'], ['700', '700 Bold'], ['800', '800 ExtraBold'], ['900', '900 Black']];
   const fill = (sel, list) => { if (sel) sel.innerHTML = list.map(n => `<option>${n}</option>`).join(''); };
   fill($('fth'), HEAD); fill($('ftb'), BODY);
-  for (const d of ['h', 'b']) { const s = $('ft' + d + 'w'); if (s) s.innerHTML = W.map(([v, l]) => `<option value="${v}">${l}</option>`).join(''); }
+  /* Schnitte, die die Schrift wirklich hat (aus den geladenen @font-face-Regeln); unbekannt = alle */
+  const avail = name => {
+    const ws = new Set();
+    for (const f of document.fonts) if (f.family.replace(/["']/g, '') === name && f.style === 'normal') {
+      const [a, b = a] = String(f.weight).split(' ').map(n => parseInt(n)); for (let w = Math.ceil(a / 100) * 100; w <= b; w += 100) ws.add(w);
+    }
+    return ws.size ? [...ws].sort((x, y) => x - y) : [100, 200, 300, 400, 500, 600, 700, 800, 900];
+  };
+  /* Welcher Schnitt wirklich erscheint (Regel der Browser, wenn der gewünschte fehlt) */
+  const shown = (name, w) => {
+    const A = avail(name); if (A.includes(w)) return w;
+    const up = A.filter(a => a > w), dn = A.filter(a => a < w).reverse();
+    if (w >= 400 && w <= 500) { const u5 = up.filter(a => a <= 500); return u5[0] ?? dn[0] ?? up[0]; }
+    return w < 400 ? (dn[0] ?? up[0]) : (up[0] ?? dn[0]);
+  };
+  /* Titel in Listen und Karten: immer ein Schnitt kräftiger als der Fließtext */
+  const TITLES = '.ti-steps li b, .why-svc li b, .s2-list h3, .why-card .lab';
+  const titleWeight = () => {
+    const A = avail(cur.b), bw = shown(cur.b, +(cur.bw || 400)), tw = A.find(a => a > bw) ?? bw;
+    for (const el of document.querySelectorAll(TITLES)) el.style.setProperty('font-weight', tw, 'important');
+    return tw;
+  };
+  const fillW = d => { const s = $('ft' + d + 'w'); if (!s) return; const N = Object.fromEntries(W);
+    s.innerHTML = `<option value="">Standard (${shown(cur[d], 400)})</option>` + avail(cur[d]).map(w => `<option value="${w}">${N[w] || w}</option>`).join(''); };
   const fmt = {s: v => v + ' %', l: v => v + ' %', t: v => (v > 0 ? '+' : '') + (v / 100).toFixed(2).replace('.', ',') + ' em'};
   function sync() {
     for (const [d, list] of [['h', HEAD], ['b', BODY]]) {
       const s = $('ft' + d); if (!s) continue;
       if (![...s.options].some(o => o.value === cur[d])) s.append(new Option(cur[d]));
-      s.value = cur[d]; $('ft' + d + 'w').value = cur[d + 'w'];
+      s.value = cur[d]; fillW(d); $('ft' + d + 'w').value = cur[d + 'w'];
       for (const k of ['s', 'l', 't']) { const i = $('ft' + d + k); if (i) { i.value = cur[d + k]; $('ft' + d + k + 'o').textContent = fmt[k](+cur[d + k]); } }
     }
   }

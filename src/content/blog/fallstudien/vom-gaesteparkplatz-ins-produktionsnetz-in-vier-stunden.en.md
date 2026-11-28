@@ -1,5 +1,6 @@
 ---
 title: "From the visitor car park to the production network in four hours"
+urlSlug: from-visitor-car-park-to-production-network-in-four-hours
 date: 2026-10-08
 author: "Lena Hofbauer"
 category: redteam

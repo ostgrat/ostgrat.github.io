@@ -5,8 +5,9 @@ import { getPosts } from '../../../lib/blog';
 
 export async function getStaticPaths() {
   const [mine, other] = await Promise.all([getPosts('en'), getPosts('de')]);
-  const has = new Set(other.map((p) => p.slug));
-  return mine.map((post) => ({ params: { slug: post.slug }, props: { post, alt: has.has(post.slug) ? `/blog/${post.slug}/` : '/blog/' } }));
+  const other_ = new Map(other.map((p) => [p.slug, p]));   /* gleiche Datei = gleicher Beitrag */
+  return mine.map((post) => { const o = other_.get(post.slug);
+    return { params: { slug: post.path }, props: { post, alt: o ? `/blog/${o.path}/` : '/blog/' } }; });
 }
 const { post, alt } = Astro.props;
 ---

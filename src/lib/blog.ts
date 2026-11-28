@@ -20,7 +20,13 @@ export const types = {
 export type PostType = keyof typeof types;
 
 export type Lang = 'de' | 'en';
-export type Post = CollectionEntry<'blog'> & { type: PostType; cat: keyof typeof categories; alert: boolean; lang: Lang; slug: string };
+export type Post = CollectionEntry<'blog'> & { type: PostType; cat: keyof typeof categories; alert: boolean; lang: Lang; slug: string; path: string };
+
+/** Ordner der Beitragsarten in englischen Adressen. */
+export const typePathEn: Record<PostType, string> = { artikel: 'articles', warnungen: 'alerts', fallstudien: 'case-studies' };
+/** Adresse ohne /blog/: Deutsch = Datei-Id, Englisch = englischer Ordner + urlSlug (oder Dateiname). */
+const pathOf = (p: { lang: Lang; slug: string; type: PostType; data: { urlSlug?: string } }) =>
+  p.lang === 'en' ? `${typePathEn[p.type]}/${(p.data.urlSlug || p.slug.split('/')[1]).trim()}` : p.slug;
 
 /** Sprache aus der Id: „artikel/name.en“ ist Englisch, sonst Deutsch. */
 export const splitId = (id: string) => (id.endsWith('.en') ? { lang: 'en' as Lang, slug: id.slice(0, -3) } : { lang: 'de' as Lang, slug: id });
@@ -32,12 +38,13 @@ export async function getPosts(lang: Lang = 'de'): Promise<Post[]> {
     .map((p) => {
       const type = p.id.split('/')[0] as PostType;
       const alert = type === 'warnungen';
-      return { ...p, ...splitId(p.id), type, alert, cat: alert ? 'warnung' : (p.data.category ?? 'soc') } as Post;
+      const q = { ...p, ...splitId(p.id), type, alert, cat: alert ? 'warnung' : (p.data.category ?? 'soc') };
+      return { ...q, path: pathOf(q) } as Post;
     })
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
 
-export const postUrl = (p: Post) => `${p.lang === 'en' ? '/en' : ''}/blog/${p.slug}/`;
+export const postUrl = (p: Post) => `${p.lang === 'en' ? '/en' : ''}/blog/${p.path}/`;
 
 export const formatDate = (d: Date, lang: Lang = 'de') =>
   d.toLocaleDateString(lang === 'en' ? 'en-GB' : 'de-AT', { day: 'numeric', month: 'long', year: 'numeric' });

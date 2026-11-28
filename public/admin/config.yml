@@ -33,6 +33,7 @@ collections:
     sortable_fields: [date, title]
     fields:
       - &title { label: Titel, name: title, widget: string, i18n: true }
+      - &urlslug { label: "Adresse (nur auf Englisch ausfüllen)", name: urlSlug, widget: string, required: false, i18n: true, hint: "Englische Adresse, z. B. downtime-is-not-a-patch-plan. Leer = deutscher Dateiname." }
       - &date { label: Datum, name: date, widget: datetime, time_format: false, format: "YYYY-MM-DD", i18n: duplicate }
       - &author { label: Autor:in, name: author, widget: string, i18n: duplicate }
       - &category
@@ -65,6 +66,7 @@ collections:
     sortable_fields: [date, title]
     fields:
       - *title
+      - *urlslug
       - *date
       - *author
       - { label: "Kennung (z. B. CVE-Nummer)", name: cve, widget: string, required: false, i18n: duplicate }
@@ -94,6 +96,7 @@ collections:
     sortable_fields: [date, title]
     fields:
       - *title
+      - *urlslug
       - *date
       - *author
       - *category
@@ -132,6 +135,7 @@ collections:
     slug: "{{slug}}"
     fields:
       - { label: Titel, name: title, widget: string, hint: "Wird auch zur Adresse, z. B. „NIS2-Check“ → /nis2-check/", i18n: true }
+      - *urlslug
       - { label: Beschreibung für Google, name: description, widget: text, required: false, i18n: true }
       - *draft
       - label: Blöcke

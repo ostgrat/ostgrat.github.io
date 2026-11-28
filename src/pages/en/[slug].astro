@@ -6,7 +6,7 @@ import Blocks from '../../components/Blocks.astro';
 
 export async function getStaticPaths() {
   const pages = await getCollection('pages', (p) => !p.data.draft && p.id.endsWith('.en'));
-  return pages.map((page) => ({ params: { slug: page.id.slice(0, -3) }, props: { page } }));
+  return pages.map((page) => ({ params: { slug: page.data.urlSlug || page.id.slice(0, -3) }, props: { page } }));
 }
 const { page } = Astro.props;
 ---

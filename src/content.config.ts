@@ -8,6 +8,8 @@ const blog = defineCollection({
   loader: glob({ pattern: '{artikel,warnungen,fallstudien}/*.md', base: './src/content/blog', generateId: ({ entry }) => entry.replace(/\.md$/, '') }),
   schema: z.object({
     title: z.string(),
+    // Englische Adresse (nur in der .en.md); leer = Dateiname
+    urlSlug: z.string().optional(),
     date: z.coerce.date(),
     author: z.string(),
     draft: z.boolean().default(false),
@@ -37,6 +39,7 @@ const pages = defineCollection({
   loader: glob({ pattern: '*.md', base: './src/content/pages', generateId: ({ entry }) => entry.replace(/\.md$/, '') }),
   schema: z.object({
     title: z.string(),
+    urlSlug: z.string().optional(),
     description: z.string().optional(),
     draft: z.boolean().default(false),
     blocks: z.array(block).default([]),
