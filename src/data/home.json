@@ -14,7 +14,7 @@
       "ticker": [
         "24/7 Security Operations Center",
         "Reaktion in unter 15 Minuten",
-        "[NIS2](#nis2)-ready",
+        "[NIS2](/nis2-check/)-ready",
         "Red Teaming",
         "ISO 27001",
         "OT- & Produktionssicherheit",
@@ -118,7 +118,7 @@
       "lead": "Pentester, SOC-Analystinnen, OT-Ingenieure und Beraterinnen – keine Callcenter, keine Subunternehmer.",
       "hint": "Wer hinter Ostgrat steht und wem Sie im Ernstfall vertrauen.",
       "ctaLabel": "Das ganze Team",
-      "ctaLink": "#",
+      "ctaLink": "/ueber-uns/",
       "image": "/uploads/start/team-gruppe.jpg",
       "imageAlt": "Das Ostgrat-Team vor dem Büro in Linz"
     },
@@ -127,7 +127,7 @@
       "ansicht": "/uploads/bloecke/start-nis2.jpg",
       "theme": "hell",
       "heading": "Wir machen Sie NIS2-konform.",
-      "text": "Mit [NIS2](#nis2) werden Risikomanagement, Meldepflichten und die Haftung der Geschäftsführung für viele Mittelständler verbindlich. Wir klären, ob Sie betroffen sind, schließen die Lücken und dokumentieren alles so, dass es vor Behörde und Audit hält.",
+      "text": "Mit [NIS2](/nis2-check/) werden Risikomanagement, Meldepflichten und die Haftung der Geschäftsführung für viele Mittelständler verbindlich. Wir klären, ob Sie betroffen sind, schließen die Lücken und dokumentieren alles so, dass es vor Behörde und Audit hält.",
       "steps": [
         {
           "title": "Betroffenheitscheck",
@@ -144,8 +144,8 @@
       ],
       "image": "/uploads/start/aufbauen.jpg",
       "imageAlt": "Serverschrank mit sauber geführten Netzwerkkabeln",
-      "ctaLabel": "NIS2-Check anfragen",
-      "ctaLink": "#kontakt"
+      "ctaLabel": "Zum NIS2-Check",
+      "ctaLink": "/nis2-check/"
     },
     {
       "type": "redteam",
@@ -155,7 +155,7 @@
       "headingAccent": "greifen wir selbst an.",
       "text": "So arbeiten wir: Jede Maßnahme durchläuft drei Schritte. Wir setzen sie um, unser eigenes Red Team versucht sie zu knacken, und erst dann geht sie live – rund um die Uhr überwacht von unserem SOC in Linz.",
       "ctaLabel": "Fallstudien ansehen",
-      "ctaLink": "#",
+      "ctaLink": "/blog/",
       "steps": [
         {
           "title": "Aufbauen",
@@ -190,8 +190,8 @@
         },
         {
           "label": "NIS2-Pflicht kommt",
-          "text": "Mit [NIS2](#nis2) werden Sicherheitsmaßnahmen und Meldepflichten für viele Mittelständler verbindlich. Die Verantwortung liegt bei der Geschäftsführung.",
-          "link": "#kontakt"
+          "text": "Mit [NIS2](/nis2-check/) werden Sicherheitsmaßnahmen und Meldepflichten für viele Mittelständler verbindlich. Die Verantwortung liegt bei der Geschäftsführung.",
+          "link": "/nis2-check/"
         },
         {
           "label": "Kunden fragen nach",
@@ -217,7 +217,7 @@
           "value2": "Start in 4 Wochen",
           "video": "/uploads/start/sv-soc.mp4",
           "poster": "/uploads/start/sv-soc.jpg",
-          "link": "#kontakt"
+          "link": "/managed-soc/"
         },
         {
           "title": "Pentest & Red Teaming",
@@ -228,7 +228,7 @@
           "value2": "1 bis 3 Wochen",
           "video": "/uploads/start/sv-pentest.mp4",
           "poster": "/uploads/start/sv-pentest.jpg",
-          "link": "#kontakt"
+          "link": "/pentest-red-teaming/"
         },
         {
           "title": "Incident Response",
@@ -239,7 +239,7 @@
           "value2": "12 Monate",
           "video": "/uploads/start/sv-ir.mp4",
           "poster": "/uploads/start/sv-ir.jpg",
-          "link": "#kontakt"
+          "link": "/incident-response/"
         },
         {
           "title": "OT-Security",
@@ -250,7 +250,7 @@
           "value2": "2 bis 6 Wochen",
           "video": "/uploads/start/sv-ot.mp4",
           "poster": "/uploads/start/sv-ot.jpg",
-          "link": "#kontakt"
+          "link": "/ot-security/"
         },
         {
           "title": "NIS2 & ISO 27001",
@@ -261,7 +261,7 @@
           "value2": "3 bis 9 Monate",
           "video": "/uploads/start/sv-nis2.mp4",
           "poster": "/uploads/start/sv-nis2.jpg",
-          "link": "#kontakt",
+          "link": "/nis2-check/",
           "anchor": "nis2"
         }
       ]
@@ -294,7 +294,7 @@
         {
           "title": "Finanz",
           "subtitle": "DORA statt NIS2",
-          "text": "Für Banken und Versicherungen gilt DORA statt [NIS2](#nis2) – mit eigenen Vorgaben für IT-Risikomanagement, Resilienztests und Dienstleister."
+          "text": "Für Banken und Versicherungen gilt DORA statt [NIS2](/nis2-check/) – mit eigenen Vorgaben für IT-Risikomanagement, Resilienztests und Dienstleister."
         }
       ]
     },

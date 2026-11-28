@@ -8,7 +8,7 @@ Die Startseite besteht aus Blöcken, die im CMS sortiert, entfernt und hinzugef�
 
 | Was | Datei |
 | --- | --- |
-| HTML der Sections (11 Blöcke) | `src/lib/home-blocks.mjs` |
+| HTML der Sections (12 Blöcke, inkl. Leistungs-Hero `intro`) | `src/lib/home-blocks.mjs` |
 | SVGs der Sections | `src/lib/home-svgs.mjs` |
 | Navbar, Seitenrahmen vor den Blöcken | `src/legacy/top.html` |
 | Footer, Popups, alle Seitenskripte | `src/legacy/bottom.html` |
@@ -52,6 +52,9 @@ Deutsch ist Standard (ohne Präfix), Englisch liegt unter `/en/`.
 ## Unterseiten
 
 - **Seiten aus dem CMS** (`src/content/pages/*.md`, Sammlung „Seiten“) nutzen genau dieselben Blöcke wie die Startseite (`types: *homeblocks` in `config.yml`). Es gibt keinen eigenen Seitenbaukasten mehr; keine neuen Blocktypen nur für Unterseiten anlegen.
+- **Navigation führt auf Seiten, nicht auf Sprungmarken.** Navbar, Mega-Menü und Footer verlinken `/ueber-uns/`, `/leistungen/`, `/branchen/`, `/blog/` und die Leistungsseiten (`/managed-soc/`, `/pentest-red-teaming/`, `/incident-response/`, `/ot-security/`, `/nis2-check/`). Alle NIS2-Links zeigen auf `/nis2-check/`. Nur `#kontakt` und `#faq` bleiben Sprungmarken.
+- **Leistungsseiten** beginnen mit dem Block `intro` (Titel zweitonig, Video aus `public/uploads/start/sv-*.mp4`, Text und Liste rechts).
+- **Englische Links**: Die Middleware ersetzt deutsche Seitenadressen durch die englische Adresse aus `urlSlug` (z. B. `/leistungen/` → `/en/services/`). Links immer auf die deutsche Adresse setzen.
 - **Blog-Übersicht** (`src/pages/blog/index.astro`) ist der Insights-Block mit `all: true`.
 - **Blogbeitrag** (`src/components/PostPage.astro`): eigenes Markup im Rahmen, Styles unter `.pst` in `head.html`. Kein `<header>`-Element verwenden, das ist die Navbar.
 - Die Klasse `.sub` ist die Subline-Schrift, nicht für Seitenzustände verwenden (Unterseiten tragen `body.pg-sub`).

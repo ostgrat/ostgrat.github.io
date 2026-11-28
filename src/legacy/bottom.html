@@ -15,9 +15,9 @@
       </div>
       <div class="fo-r">
         <div class="fo-cols" role="navigation" aria-label="Fußnavigation">
-          <div><p class="lab fo-h">Leistungen</p><ul><li><a href="#services">Managed SOC</a></li><li><a href="#services">Pentest &amp; Red Teaming</a></li><li><a href="#services">Incident Response</a></li><li><a href="#services">OT-Security</a></li><li><a href="#nis2">NIS2 &amp; ISO 27001</a></li></ul></div>
-          <div><p class="lab fo-h">Unternehmen</p><ul><li><a href="#team">Über uns</a></li><li><a href="#branchen">Branchen</a></li><li><a href="#" title="Seite noch nicht angelegt">Karriere</a></li><li><a href="#kontakt">Kontakt</a></li></ul></div>
-          <div><p class="lab fo-h">Wissen</p><ul><li><a href="#insights">News &amp; Insights</a></li><li><a href="#faq">FAQ</a></li><li><a href="#nis2-umsetzen">NIS2-Check</a></li><li><a href="#" title="Seite noch nicht angelegt">PGP-Schlüssel</a></li></ul></div>
+          <div><p class="lab fo-h">Leistungen</p><ul><li><a href="/managed-soc/">Managed SOC</a></li><li><a href="/pentest-red-teaming/">Pentest &amp; Red Teaming</a></li><li><a href="/incident-response/">Incident Response</a></li><li><a href="/ot-security/">OT-Security</a></li><li><a href="/nis2-check/">NIS2 &amp; ISO 27001</a></li></ul></div>
+          <div><p class="lab fo-h">Unternehmen</p><ul><li><a href="/ueber-uns/">Über uns</a></li><li><a href="/branchen/">Branchen</a></li><li><a href="#" title="Seite noch nicht angelegt">Karriere</a></li><li><a href="#kontakt">Kontakt</a></li></ul></div>
+          <div><p class="lab fo-h">Wissen</p><ul><li><a href="/blog/">News &amp; Insights</a></li><li><a href="#faq">FAQ</a></li><li><a href="/nis2-check/">NIS2-Check</a></li><li><a href="#" title="Seite noch nicht angelegt">PGP-Schlüssel</a></li></ul></div>
         </div>
         <form class="fo-nl fq-box" novalidate><label class="lab fo-h" for="fonl">Newsletter</label><p>Das Lagebild für den Mittelstand – einmal im Monat.</p>
           <div class="fo-nf"><input id="fonl" type="email" required placeholder="name@firma.at" autocomplete="email"><button type="submit" aria-label="Anmelden"><svg viewBox="0 0 256 256" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></button></div>
@@ -3232,8 +3232,9 @@ html.st-embed .st-launch,html.st-embed .st-lock,html.st-embed .st-menu,html.st-e
   addEventListener('resize',set);L.addEventListener('studio:variant',()=>requestAnimationFrame(set));requestAnimationFrame(set);setTimeout(set,300);})();
 addEventListener('hashchange',()=>{const t=document.querySelector('.sv-row'+(location.hash==='#nis2'?'#nis2':':not(*)'));if(!t)return;setTimeout(()=>{t.classList.add('flash');setTimeout(()=>t.classList.remove('flash'),1800)},500)});
 /* Textlinks in Karten (Span statt verschachteltem Link) */
-document.addEventListener('click',e=>{const t=e.target.closest('span.tlink[data-href]');if(!t)return;e.preventDefault();e.stopPropagation();location.hash=t.dataset.href;},true);
-document.addEventListener('keydown',e=>{const t=e.target.closest&&e.target.closest('span.tlink[data-href]');if(t&&e.key==='Enter'){e.preventDefault();location.hash=t.dataset.href;}});
+const tlGo=h=>{if(h.charAt(0)==='#')location.hash=h;else location.href=h;};
+document.addEventListener('click',e=>{const t=e.target.closest('span.tlink[data-href]');if(!t)return;e.preventDefault();e.stopPropagation();tlGo(t.dataset.href);},true);
+document.addEventListener('keydown',e=>{const t=e.target.closest&&e.target.closest('span.tlink[data-href]');if(t&&e.key==='Enter'){e.preventDefault();tlGo(t.dataset.href);}});
 /* Branchen: Nav springt an die Stelle, an der der Text steht; Globus-Text oben verankert, damit Aufklappen nichts verschiebt */
 (()=>{const gc=document.getElementById('gcopy'),sc=document.getElementById('gscroll');if(!gc||!sc)return;
   const fix=()=>{gc.style.top='';gc.style.translate='';if(innerWidth<=900)return;const gx=gc.querySelector('.gx'),open=[...gc.querySelectorAll('details[open]')];open.forEach(d=>d.open=false);
@@ -3443,7 +3444,7 @@ document.querySelectorAll('.sv-row').forEach(r=>r.addEventListener('click',e=>{i
 
 <script>
 /* Mobiles Menü: „Leistungen“ klappt die Inhalte des Mega-Menüs auf */
-(()=>{const nav=document.getElementById('nav'),a=nav&&nav.querySelector('a[href="#services"]'),mm=document.querySelector('.mm[data-mm="1"]');if(!a||!mm)return;
+(()=>{const nav=document.getElementById('nav'),a=nav&&nav.querySelector('a[data-mm-nav]'),mm=document.querySelector('.mm[data-mm="1"]');if(!a||!mm)return;
   const PLUS='<svg viewBox="0 0 256 256" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>';
   const sub=document.createElement('div');sub.className='nav-sub';sub.id='nav-sub';
   sub.innerHTML='<div>'+[...mm.querySelectorAll('.mm-c')].filter(c=>c.querySelector('ul a')).map(c=>{const k=c.querySelector('.mm-k');return '<div class="ns-g">'+(k?'<p class="lab">'+k.textContent+'</p>':'')+[...c.querySelectorAll('ul a')].map(l=>'<a href="'+l.getAttribute('href')+'">'+l.textContent+'</a>').join('')+'</div>';}).join('')+'</div>';

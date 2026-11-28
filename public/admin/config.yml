@@ -140,6 +140,29 @@ collections:
         thumbnail: ansicht
         hint: Blöcke wählen, sortieren und befüllen. Hell/Dunkel pro Block bestimmt den Farbwechsel beim Scrollen.
         types: &homeblocks
+        - label: Leistungs-Hero mit Video
+          name: intro
+          widget: object
+          description: 'Seitenanfang für Leistungsseiten: Titel in zwei Tönen, Button, Video im Raster mit Text und Liste daneben.'
+          summary: '{{fields.heading}}'
+          fields:
+          - label: So sieht der Block aus
+            name: ansicht
+            widget: image
+            default: /uploads/bloecke/start-intro.jpg
+            readonly: true
+            required: false
+          - { label: Hintergrund, name: theme, widget: select, default: dunkel, options: [{ label: Dunkel, value: dunkel }, { label: Hell, value: hell }], hint: Beim Scrollen blendet die Seite in diese Farbe über. }
+          - { label: Titel, name: heading, widget: string, i18n: true }
+          - { label: Titel, zweite Zeile (grau), name: subheading, widget: string, required: false, i18n: true }
+          - { label: Button-Text, name: ctaLabel, widget: string, required: false, i18n: true }
+          - { label: Button-Ziel, name: ctaLink, widget: string, required: false, hint: 'z. B. #kontakt' }
+          - { label: Video, name: video, widget: file, required: false }
+          - { label: Standbild zum Video, name: poster, widget: image, required: false }
+          - { label: Text rechts, hell, name: sideHeading, widget: string, i18n: true }
+          - { label: Text rechts, grau, name: sideText, widget: text, required: false, i18n: true }
+          - { label: Überschrift der Liste, name: pointsLabel, widget: string, required: false, default: Im Paket, i18n: true }
+          - { label: Liste, name: points, widget: list, required: false, label_singular: Punkt, i18n: true }
         - label: Hero mit Monitor & Laufband
           name: hero
           widget: object

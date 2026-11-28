@@ -2,9 +2,27 @@
 title: NIS2 check
 description: Know within one day whether NIS2 applies to your company – and what to do next.
 blocks:
+- type: intro
+  ansicht: /uploads/bloecke/start-intro.jpg
+  theme: dunkel
+  heading: NIS2 & ISO 27001
+  subheading: From the applicability check to the audit.
+  ctaLabel: Book a consultation
+  ctaLink: '#kontakt'
+  video: /uploads/start/sv-nis2.mp4
+  poster: /uploads/start/sv-nis2.jpg
+  sideHeading: Clarify obligations, close the gaps.
+  sideText: We check whether NIS2 applies to you, close the gaps according to ISO 27001 and document everything so it holds up to authorities and auditors.
+  pointsLabel: Included
+  points:
+  - Applicability check in one day
+  - Gap analysis per ISO 27001
+  - Action plan with priorities
+  - Support up to self-declaration
+  - Documentation for authorities and audits
 - type: nis2
   ansicht: /uploads/bloecke/start-nis2.jpg
-  theme: dunkel
+  theme: hell
   heading: Affected or not? Clarity in one day.
   text: Sector, size, supply chain – together with you, we check whether [NIS2](#faq) applies to your company, where you stand today and which steps are still missing before registration.
   steps:

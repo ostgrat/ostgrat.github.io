@@ -2,9 +2,27 @@
 title: NIS2-Check
 description: In einem Tag wissen, ob NIS2 für Ihr Unternehmen gilt – und was als Nächstes zu tun ist.
 blocks:
+- type: intro
+  ansicht: /uploads/bloecke/start-intro.jpg
+  theme: dunkel
+  heading: NIS2 & ISO 27001
+  subheading: Vom Betroffenheitscheck bis zum Audit.
+  ctaLabel: Beratung vereinbaren
+  ctaLink: '#kontakt'
+  video: /uploads/start/sv-nis2.mp4
+  poster: /uploads/start/sv-nis2.jpg
+  sideHeading: Pflichten klären, Lücken schließen.
+  sideText: Wir prüfen, ob NIS2 für Sie gilt, schließen die Lücken nach ISO 27001 und dokumentieren alles so, dass es vor Behörde und Audit hält.
+  pointsLabel: Im Paket
+  points:
+  - Betroffenheitscheck in einem Tag
+  - Gap-Analyse nach ISO 27001
+  - Maßnahmenplan mit Prioritäten
+  - Begleitung bis zur Selbstdeklaration
+  - Dokumentation für Behörde und Audit
 - type: nis2
   ansicht: /uploads/bloecke/start-nis2.jpg
-  theme: dunkel
+  theme: hell
   heading: Betroffen oder nicht? Klarheit an einem Tag.
   text: Branche, Größe, Lieferkette – wir prüfen mit Ihnen, ob [NIS2](#faq) für Ihr Unternehmen gilt, wo Sie heute stehen und welche Schritte bis zur Registrierung fehlen.
   steps:

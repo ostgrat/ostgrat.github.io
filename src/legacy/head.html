@@ -1814,4 +1814,26 @@ nav a.lang span.off{opacity:.28}
 .pst-back{margin:72px 0 0}.pst-back a{display:inline-flex;align-items:center;gap:10px;color:var(--mut)}.pst-back a:hover{color:var(--ink)}
 .pst-back i{display:flex;rotate:180deg}.pst-back svg{width:18px;height:18px;fill:currentColor}
 @media(max-width:900px){.pst{padding:120px 28px 110px}.pst-facts{grid-template-columns:1fr}.pst-facts div+div{padding-left:0;border-left:0;border-top:var(--sw) solid var(--line)}.pst-res div+div{padding-left:0;border-left:0}}
+
+/* Leistungs-Hero (Block „intro“): Titel zweitonig, Video im Raster, Text und Liste rechts – Linien statt Rundungen */
+.lh{position:relative;z-index:1;padding:clamp(150px,22vh,230px) var(--col) clamp(110px,16vh,190px)}
+.lh-h,.lh-lead{margin:0;font-family:var(--fh),Georgia,serif;font-weight:var(--fhw,400);color:var(--ink);text-wrap:balance}
+.lh-h{font-size:clamp(38px,4.6vw,68px);line-height:1.08;letter-spacing:-.02em}
+.lh-h span{display:block}.lh .lh-sub{color:var(--mut)}
+.lh-cta{margin-top:48px}
+.lh-grid{position:relative;display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);margin:clamp(72px,10vh,120px) calc(-1 * var(--col)) 0;border-top:var(--sw) solid var(--line);border-bottom:var(--sw) solid var(--line)}
+.lh-media{position:relative;margin:0;aspect-ratio:16/9.5;overflow:hidden;border-right:var(--sw) solid var(--line);background:var(--box)}
+.lh-media video,.lh-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.lh-side{display:flex;flex-direction:column;justify-content:center;gap:48px;padding:48px clamp(28px,3.2vw,56px)}
+.lh-lead{font-size:clamp(20px,1.65vw,26px);line-height:1.25;letter-spacing:-.01em}
+.lh-k{margin:0 0 16px;color:var(--mut)}
+.lh-list ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.lh-list li{color:var(--ink);font-size:var(--fs-p);line-height:1.4}
+@media(max-width:900px){
+  .lh{padding:128px 28px 96px}
+  .lh-cta{margin-top:36px}
+  .lh-grid{grid-template-columns:1fr;margin:56px -28px 0}
+  .lh-media{border-right:0;border-bottom:var(--sw) solid var(--line);aspect-ratio:4/3}
+  .lh-side{padding:40px 28px;gap:40px}
+}
 </style>

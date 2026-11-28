@@ -34,7 +34,7 @@ const CERT_COLORS = [
 
 /** Standard-Farbe je Block, wenn im CMS nichts gewählt ist (entspricht dem Entwurf). */
 export const defaultTheme = {
-  hero: 'dunkel', fakten: 'hell', team: 'hell', nis2: 'hell', redteam: 'hell', warum: 'dunkel',
+  hero: 'dunkel', intro: 'dunkel', fakten: 'hell', team: 'hell', nis2: 'hell', redteam: 'hell', warum: 'dunkel',
   services: 'dunkel', globus: 'dunkel', insights: 'dunkel', faq: 'dunkel', kontakt: 'dunkel',
 };
 
@@ -54,6 +54,21 @@ const R = {
       <div class="h2box" id="h2box"><canvas id="pxc" aria-hidden="true"></canvas></div>
     </div>
     <div class="tick" id="tick" aria-label="Leistungen"><div class="tick-r"><div class="tick-g">${list(b.ticker).map((t) => `<span>${inl(t)}</span>`).join('')}</div></div></div>
+  </section>`,
+
+  /* Leistungs-Hero: Titel in zwei Tönen, Button, darunter Video im Raster mit Text und Liste daneben */
+  intro: (b, c) => `<section class="lh" aria-labelledby="h-lh">
+    <div class="lh-top">
+      <h1 id="h-lh" class="lh-h"><span>${esc(b.heading)}</span>${b.subheading ? ` <span class="lh-sub">${esc(b.subheading)}</span>` : ''}</h1>
+      ${cta('lh-cta', b.ctaLink, b.ctaLabel)}
+    </div>
+    <div class="lh-grid">
+      <figure class="lh-media">${b.video ? `<video src="${img(b.video, c.asset)}"${b.poster ? ` poster="${img(b.poster, c.asset)}"` : ''} autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>` : b.poster ? `<img src="${img(b.poster, c.asset)}" alt="" loading="lazy">` : ''}</figure>
+      <div class="lh-side">
+        <p class="lh-lead"><span>${esc(b.sideHeading)}</span>${b.sideText ? ` <span class="lh-sub">${esc(b.sideText)}</span>` : ''}</p>
+        ${list(b.points).length ? `<div class="lh-list"><p class="lh-k lab">${esc(b.pointsLabel || 'Im Paket')}</p><ul>${list(b.points).map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
+      </div>
+    </div>
   </section>`,
 
   fakten: (b, c) => `<section class="why" id="fakten" aria-labelledby="h-fakten">

@@ -14,7 +14,7 @@
       "ticker": [
         "24/7 Security Operations Center",
         "Response in under 15 minutes",
-        "[NIS2](#nis2)-ready",
+        "[NIS2](/nis2-check/)-ready",
         "Red Teaming",
         "ISO 27001",
         "OT & production security",
@@ -118,7 +118,7 @@
       "lead": "Pentesters, SOC analysts, OT engineers and consultants – no call centres, no subcontractors.",
       "hint": "Who is behind Ostgrat and who you can rely on when it matters.",
       "ctaLabel": "Meet the whole team",
-      "ctaLink": "#",
+      "ctaLink": "/ueber-uns/",
       "image": "/uploads/start/team-gruppe.jpg",
       "imageAlt": "The Ostgrat team in front of the office in Linz"
     },
@@ -127,7 +127,7 @@
       "ansicht": "/uploads/bloecke/start-nis2.jpg",
       "theme": "hell",
       "heading": "We make you NIS2-compliant.",
-      "text": "With [NIS2](#nis2), risk management, reporting obligations and management liability become mandatory for many mid-sized companies. We clarify whether you are affected, close the gaps and document everything so that it holds up in front of authorities and auditors.",
+      "text": "With [NIS2](/nis2-check/), risk management, reporting obligations and management liability become mandatory for many mid-sized companies. We clarify whether you are affected, close the gaps and document everything so that it holds up in front of authorities and auditors.",
       "steps": [
         {
           "title": "Applicability check",
@@ -144,8 +144,8 @@
       ],
       "image": "/uploads/start/aufbauen.jpg",
       "imageAlt": "Server rack with neatly routed network cables",
-      "ctaLabel": "Request a NIS2 check",
-      "ctaLink": "#kontakt"
+      "ctaLabel": "Go to the NIS2 check",
+      "ctaLink": "/nis2-check/"
     },
     {
       "type": "redteam",
@@ -155,7 +155,7 @@
       "headingAccent": "we attack ourselves.",
       "text": "This is how we work: every measure goes through three steps. We implement it, our own Red Team tries to break it, and only then does it go live – monitored around the clock by our SOC in Linz.",
       "ctaLabel": "View case studies",
-      "ctaLink": "#",
+      "ctaLink": "/blog/",
       "steps": [
         {
           "title": "Build",
@@ -190,8 +190,8 @@
         },
         {
           "label": "NIS2 is coming",
-          "text": "With [NIS2](#nis2), security measures and reporting obligations become mandatory for many mid-sized companies. Responsibility lies with management.",
-          "link": "#kontakt"
+          "text": "With [NIS2](/nis2-check/), security measures and reporting obligations become mandatory for many mid-sized companies. Responsibility lies with management.",
+          "link": "/nis2-check/"
         },
         {
           "label": "Customers are asking",
@@ -217,7 +217,7 @@
           "value2": "Start in 4 weeks",
           "video": "/uploads/start/sv-soc.mp4",
           "poster": "/uploads/start/sv-soc.jpg",
-          "link": "#kontakt"
+          "link": "/managed-soc/"
         },
         {
           "title": "Pentest & Red Teaming",
@@ -228,7 +228,7 @@
           "value2": "1 to 3 weeks",
           "video": "/uploads/start/sv-pentest.mp4",
           "poster": "/uploads/start/sv-pentest.jpg",
-          "link": "#kontakt"
+          "link": "/pentest-red-teaming/"
         },
         {
           "title": "Incident Response",
@@ -239,7 +239,7 @@
           "value2": "12 months",
           "video": "/uploads/start/sv-ir.mp4",
           "poster": "/uploads/start/sv-ir.jpg",
-          "link": "#kontakt"
+          "link": "/incident-response/"
         },
         {
           "title": "OT security",
@@ -250,7 +250,7 @@
           "value2": "2 to 6 weeks",
           "video": "/uploads/start/sv-ot.mp4",
           "poster": "/uploads/start/sv-ot.jpg",
-          "link": "#kontakt"
+          "link": "/ot-security/"
         },
         {
           "title": "NIS2 & ISO 27001",
@@ -261,7 +261,7 @@
           "value2": "3 to 9 months",
           "video": "/uploads/start/sv-nis2.mp4",
           "poster": "/uploads/start/sv-nis2.jpg",
-          "link": "#kontakt",
+          "link": "/nis2-check/",
           "anchor": "nis2"
         }
       ]
@@ -294,7 +294,7 @@
         {
           "title": "Finance",
           "subtitle": "DORA instead of NIS2",
-          "text": "Banks and insurers fall under DORA instead of [NIS2](#nis2) – with their own requirements for ICT risk management, resilience testing and service providers."
+          "text": "Banks and insurers fall under DORA instead of [NIS2](/nis2-check/) – with their own requirements for ICT risk management, resilience testing and service providers."
         }
       ]
     },

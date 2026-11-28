@@ -23,13 +23,18 @@ export const t = (lang, s) => (lang === 'en' ? MAP.get(s) ?? s : s);
 
 // Interne Links auf /en/ umschreiben; Dateien, Admin und schon englische Pfade bleiben.
 const KEEP = /^\/(en\/|en$|uploads|styles|schriften|fonts|img|scripts|admin|favicon|apple-touch|vorschau|bloecke)/;
-const fixHref = (p) => (KEEP.test(p) || /\.[a-z0-9]{2,5}(?:[?#]|$)/i.test(p) ? p : '/en' + p);
+// routes: deutsche Seitenadresse → englische (Seiten und Beiträge mit eigener englischer Adresse)
+const fixHref = (p, routes) => {
+  if (KEEP.test(p) || /\.[a-z0-9]{2,5}(?:[?#]|$)/i.test(p)) return p;
+  const m = p.match(/^([^?#]*)(.*)$/), base = m[1], rest = m[2];
+  return routes?.get(base) ? routes.get(base) + rest : '/en' + p;
+};
 
 /** Fertiges HTML einer englischen Seite: Sprache, Oberflächentexte, interne Links. */
-export function localizeHtml(html) {
+export function localizeHtml(html, routes) {
   let out = html.replace(/<html lang="de"/, '<html lang="en"');
   if (RX) out = out.replace(RX, (m) => MAP.get(m) ?? m);
   // Links zur deutschen Fassung (hreflang="de") bleiben unverändert
-  out = out.replace(/<(?:a|form)\b[^>]*>/g, (tag) => (/\bhreflang="de"/.test(tag) ? tag : tag.replace(/\b(href|action)="(\/[^"]*)"/g, (m, a, p) => `${a}="${fixHref(p)}"`)));
+  out = out.replace(/<(?:a|form|span)\b[^>]*>/g, (tag) => (/\bhreflang="de"/.test(tag) ? tag : tag.replace(/\b(href|action|data-href)="(\/[^"]*)"/g, (m, a, p) => `${a}="${fixHref(p, routes)}"`)));
   return out;
 }
