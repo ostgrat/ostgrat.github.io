@@ -19,24 +19,28 @@ export const types = {
 } as const;
 export type PostType = keyof typeof types;
 
-export type Post = CollectionEntry<'blog'> & { type: PostType; cat: keyof typeof categories; alert: boolean };
+export type Lang = 'de' | 'en';
+export type Post = CollectionEntry<'blog'> & { type: PostType; cat: keyof typeof categories; alert: boolean; lang: Lang; slug: string };
+
+/** Sprache aus der Id: „artikel/name.en“ ist Englisch, sonst Deutsch. */
+export const splitId = (id: string) => (id.endsWith('.en') ? { lang: 'en' as Lang, slug: id.slice(0, -3) } : { lang: 'de' as Lang, slug: id });
 
 /** Veröffentlichte Beiträge, neueste zuerst. Entwürfe bleiben unsichtbar. */
-export async function getPosts(): Promise<Post[]> {
-  const posts = await getCollection('blog', (p) => !p.data.draft);
+export async function getPosts(lang: Lang = 'de'): Promise<Post[]> {
+  const posts = await getCollection('blog', (p) => !p.data.draft && splitId(p.id).lang === lang);
   return posts
     .map((p) => {
       const type = p.id.split('/')[0] as PostType;
       const alert = type === 'warnungen';
-      return { ...p, type, alert, cat: alert ? 'warnung' : (p.data.category ?? 'soc') } as Post;
+      return { ...p, ...splitId(p.id), type, alert, cat: alert ? 'warnung' : (p.data.category ?? 'soc') } as Post;
     })
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
 
-export const postUrl = (p: Post) => `/blog/${p.id}/`;
+export const postUrl = (p: Post) => `${p.lang === 'en' ? '/en' : ''}/blog/${p.slug}/`;
 
-export const formatDate = (d: Date) =>
-  d.toLocaleDateString('de-AT', { day: 'numeric', month: 'long', year: 'numeric' });
+export const formatDate = (d: Date, lang: Lang = 'de') =>
+  d.toLocaleDateString(lang === 'en' ? 'en-GB' : 'de-AT', { day: 'numeric', month: 'long', year: 'numeric' });
 
 export const isoDate = (d: Date) => d.toISOString().slice(0, 10);
 
@@ -53,7 +57,7 @@ export const toCard = (p: Post) => ({
   title: p.data.title,
   excerpt: p.data.excerpt,
   author: p.data.author,
-  dateText: formatDate(p.data.date),
+  dateText: formatDate(p.data.date, p.lang),
   iso: isoDate(p.data.date),
   cover: p.data.cover,
   coverSvg: inlineSvg(p.data.cover),

@@ -22,7 +22,10 @@ img { display:block; max-width:100% }
 .top nav { display:flex }
 .top nav a { display:flex; align-items:center; padding:0 16px; border-left:var(--sw) solid var(--line); font-size:15px; transition:background .3s,color .3s }
 .top nav a:hover, .top nav a.on { background:var(--ink); color:var(--bg) }
-@media (max-width:760px) { .top nav a:not(:last-child) { display:none } }
+@media (max-width:760px) { .top nav a:not(:nth-last-child(-n+2)) { display:none } }   /* Handy: Kontakt und Sprache bleiben */
+.top nav a.lang { gap:8px; font-size:14px; letter-spacing:.06em }
+.top nav a.lang .off { opacity:.28 }
+.top nav a.lang:hover .off { opacity:.6 }
 main { flex:1 }
 .foot { display:grid; grid-template-columns:auto 1fr auto; gap:24px; align-items:center; padding:32px var(--pad) 40px calc(var(--pad) - 16px); border-top:var(--sw) solid var(--line); color:var(--mut); font-size:15px }
 .foot p { margin:0 }

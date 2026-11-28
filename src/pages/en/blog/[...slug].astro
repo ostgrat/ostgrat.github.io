@@ -1,0 +1,13 @@
+---
+// Beitragsseiten Englisch (/en/blog/…, Dateien name.en.md). Aufbau: src/components/PostPage.astro
+import PostPage from '../../../components/PostPage.astro';
+import { getPosts } from '../../../lib/blog';
+
+export async function getStaticPaths() {
+  const [mine, other] = await Promise.all([getPosts('en'), getPosts('de')]);
+  const has = new Set(other.map((p) => p.slug));
+  return mine.map((post) => ({ params: { slug: post.slug }, props: { post, alt: has.has(post.slug) ? `/blog/${post.slug}/` : '/blog/' } }));
+}
+const { post, alt } = Astro.props;
+---
+<PostPage post={post} alt={alt} />

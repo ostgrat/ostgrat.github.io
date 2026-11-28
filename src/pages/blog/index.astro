@@ -1,17 +1,4 @@
 ---
-import SiteLayout from '../../layouts/SiteLayout.astro';
-import { card } from '../../lib/blocks.mjs';
-import { getPosts, toCard } from '../../lib/blog';
-const cards = (await getPosts()).map((p) => card(toCard(p), { showType: true })).join('');
+import BlogIndex from '../../components/BlogIndex.astro';
 ---
-<SiteLayout title="News & Insights" description="Was unsere Welt gerade bewegt: Sicherheitswarnungen, Einblicke aus dem SOC und Fallstudien aus dem Red Team.">
-  <section class="blk">
-    <p class="lab">News &amp; Insights</p>
-    <h1 class="h1">Was unsere Welt gerade bewegt.</h1>
-    <div class="cards" set:html={cards} />
-  </section>
-</SiteLayout>
-<style>
-  .blk { padding-top:clamp(120px,22vh,240px); padding-bottom:clamp(96px,16vh,180px) }
-  .cards { margin-top:clamp(64px,10vh,120px) }
-</style>
+<BlogIndex lang="de" />

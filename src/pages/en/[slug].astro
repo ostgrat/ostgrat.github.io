@@ -1,0 +1,15 @@
+---
+// Englische Seiten aus dem Seitenbaukasten: Datei name.en.md → /en/name/
+import { getCollection } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Blocks from '../../components/Blocks.astro';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages', (p) => !p.data.draft && p.id.endsWith('.en'));
+  return pages.map((page) => ({ params: { slug: page.id.slice(0, -3) }, props: { page } }));
+}
+const { page } = Astro.props;
+---
+<SiteLayout title={page.data.title} description={page.data.description} alt={`/${page.id.slice(0, -3)}/`}>
+  <Blocks blocks={page.data.blocks} lang="en" />
+</SiteLayout>

@@ -7,12 +7,20 @@ backend:
 site_url: https://ostgrat.github.io
 display_url: https://ostgrat.github.io
 
+# Sprachen: Deutsch (Standard, Dateien ohne Endung) und Englisch (Dateien mit .en, Website unter /en/)
+i18n:
+  structure: multiple_files
+  locales: [de, en]
+  default_locale: de
+  omit_default_locale_from_file_path: true
+
 media_folder: public/uploads
 public_folder: /uploads
 
 collections:
   # ---------- Blog: eine Sammlung pro Beitragsart ----------
   - name: artikel
+    i18n: true
     label: "Blog: Artikel"
     label_singular: Artikel
     description: Normale Beiträge mit Text und Bild.
@@ -24,12 +32,13 @@ collections:
     slug: "{{slug}}"
     sortable_fields: [date, title]
     fields:
-      - &title { label: Titel, name: title, widget: string }
-      - &date { label: Datum, name: date, widget: datetime, time_format: false, format: "YYYY-MM-DD" }
-      - &author { label: Autor:in, name: author, widget: string }
+      - &title { label: Titel, name: title, widget: string, i18n: true }
+      - &date { label: Datum, name: date, widget: datetime, time_format: false, format: "YYYY-MM-DD", i18n: duplicate }
+      - &author { label: Autor:in, name: author, widget: string, i18n: duplicate }
       - &category
         label: Thema
         name: category
+        i18n: duplicate
         widget: select
         hint: Bestimmt den Filter auf der Startseite.
         options:
@@ -37,12 +46,13 @@ collections:
           - { label: Red Team, value: redteam }
           - { label: OT, value: ot }
           - { label: Compliance, value: compliance }
-      - &excerpt { label: Kurztext für die Vorschau, name: excerpt, widget: text }
-      - &cover { label: Titelbild, name: cover, widget: image, required: false }
-      - &body { label: Text, name: body, widget: markdown, required: false }
-      - &draft { label: "Entwurf (wird nicht veröffentlicht)", name: draft, widget: boolean, default: false, required: false }
+      - &excerpt { label: Kurztext für die Vorschau, name: excerpt, widget: text, i18n: true }
+      - &cover { label: Titelbild, name: cover, widget: image, required: false, i18n: duplicate }
+      - &body { label: Text, name: body, widget: markdown, required: false, i18n: true }
+      - &draft { label: "Entwurf (wird nicht veröffentlicht)", name: draft, widget: boolean, default: false, required: false, i18n: duplicate }
 
   - name: warnungen
+    i18n: true
     label: "Blog: Sicherheitswarnungen"
     label_singular: Sicherheitswarnung
     description: Akute Warnungen – werden orange markiert und mit Handlungsschritten angezeigt.
@@ -57,19 +67,21 @@ collections:
       - *title
       - *date
       - *author
-      - { label: "Kennung (z. B. CVE-Nummer)", name: cve, widget: string, required: false }
+      - { label: "Kennung (z. B. CVE-Nummer)", name: cve, widget: string, required: false, i18n: duplicate }
       - label: Schweregrad
         name: severity
+        i18n: duplicate
         widget: select
         options: [{ label: Kritisch, value: kritisch }, { label: Hoch, value: hoch }, { label: Mittel, value: mittel }]
-      - { label: Betroffene Systeme, name: affected, widget: list, required: false, label_singular: System }
-      - { label: Was jetzt tun (Schritte), name: actions, widget: list, required: false, label_singular: Schritt }
+      - { label: Betroffene Systeme, name: affected, widget: list, required: false, label_singular: System, i18n: true }
+      - { label: Was jetzt tun (Schritte), name: actions, widget: list, required: false, label_singular: Schritt, i18n: true }
       - *excerpt
       - *cover
       - *body
       - *draft
 
   - name: fallstudien
+    i18n: true
     label: "Blog: Fallstudien"
     label_singular: Fallstudie
     description: Kundenprojekte mit Ausgangslage, Vorgehen und Ergebnis in Zahlen.
@@ -85,21 +97,22 @@ collections:
       - *date
       - *author
       - *category
-      - { label: Branche, name: industry, widget: string, required: false }
-      - { label: Unternehmensgröße, name: companySize, widget: string, required: false }
-      - { label: Umfang / Dauer, name: duration, widget: string, required: false }
+      - { label: Branche, name: industry, widget: string, required: false, i18n: true }
+      - { label: Unternehmensgröße, name: companySize, widget: string, required: false, i18n: true }
+      - { label: Umfang / Dauer, name: duration, widget: string, required: false, i18n: true }
       - label: Ergebnisse in Zahlen
         name: results
+        i18n: duplicate
         widget: list
         required: false
         label_singular: Kennzahl
         summary: "{{fields.value}} – {{fields.label}}"
         fields:
-          - { label: Zahl, name: value, widget: string, hint: "z. B. 4 h oder 98 %" }
-          - { label: Beschreibung, name: label, widget: string }
-      - { label: Ausgangslage, name: challenge, widget: text, required: false }
-      - { label: Vorgehen, name: approach, widget: text, required: false }
-      - { label: Ergebnis, name: outcome, widget: text, required: false }
+          - { label: Zahl, name: value, widget: string, hint: "z. B. 4 h oder 98 %", i18n: true }
+          - { label: Beschreibung, name: label, widget: string, i18n: true }
+      - { label: Ausgangslage, name: challenge, widget: text, required: false, i18n: true }
+      - { label: Vorgehen, name: approach, widget: text, required: false, i18n: true }
+      - { label: Ergebnis, name: outcome, widget: text, required: false, i18n: true }
       - *excerpt
       - *cover
       - *body
@@ -107,6 +120,7 @@ collections:
 
   # ---------- Seitenbaukasten ----------
   - name: seiten
+    i18n: true
     label: Seiten
     label_singular: Seite
     description: Eigene Seiten aus Blöcken zusammenstellen. Die Adresse entsteht aus dem Titel. Alle Blöcke mit Beispiel unter /bloecke/
@@ -117,11 +131,12 @@ collections:
     format: frontmatter
     slug: "{{slug}}"
     fields:
-      - { label: Titel, name: title, widget: string, hint: "Wird auch zur Adresse, z. B. „NIS2-Check“ → /nis2-check/" }
-      - { label: Beschreibung für Google, name: description, widget: text, required: false }
+      - { label: Titel, name: title, widget: string, hint: "Wird auch zur Adresse, z. B. „NIS2-Check“ → /nis2-check/", i18n: true }
+      - { label: Beschreibung für Google, name: description, widget: text, required: false, i18n: true }
       - *draft
       - label: Blöcke
         name: blocks
+        i18n: duplicate
         widget: list
         label_singular: Block
         thumbnail: vorschau
@@ -134,11 +149,11 @@ collections:
             summary: "{{fields.headline}}"
             fields:
               - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/hero.jpg, readonly: true, required: false, choose_url: false }
-              - { label: Dachzeile, name: kicker, widget: string, required: false }
-              - { label: Headline, name: headline, widget: string }
-              - { label: Hervorgehobene Zeile, name: highlight, widget: string, required: false }
-              - { label: Einleitung, name: lead, widget: text, required: false }
-              - { label: Button-Text, name: ctaLabel, widget: string, required: false }
+              - { label: Dachzeile, name: kicker, widget: string, required: false, i18n: true }
+              - { label: Headline, name: headline, widget: string, i18n: true }
+              - { label: Hervorgehobene Zeile, name: highlight, widget: string, required: false, i18n: true }
+              - { label: Einleitung, name: lead, widget: text, required: false, i18n: true }
+              - { label: Button-Text, name: ctaLabel, widget: string, required: false, i18n: true }
               - { label: Button-Link, name: ctaLink, widget: string, required: false }
               - { label: Bild (optional), name: image, widget: image, required: false }
           - label: Text
@@ -148,9 +163,9 @@ collections:
             summary: "{{fields.heading}}"
             fields:
               - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/text.jpg, readonly: true, required: false, choose_url: false }
-              - { label: Dachzeile, name: kicker, widget: string, required: false }
-              - { label: Überschrift, name: heading, widget: string, required: false }
-              - { label: Text, name: body, widget: markdown }
+              - { label: Dachzeile, name: kicker, widget: string, required: false, i18n: true }
+              - { label: Überschrift, name: heading, widget: string, required: false, i18n: true }
+              - { label: Text, name: body, widget: markdown, i18n: true }
           - label: Bild mit Text
             name: imageText
             widget: object
@@ -160,10 +175,10 @@ collections:
               - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/imageText.jpg, readonly: true, required: false, choose_url: false }
               - { label: Bild, name: image, widget: image }
               - { label: Bild-Position, name: imagePosition, widget: select, options: [links, rechts], default: links }
-              - { label: Dachzeile, name: kicker, widget: string, required: false }
-              - { label: Überschrift, name: heading, widget: string, required: false }
-              - { label: Text, name: body, widget: markdown, required: false }
-              - { label: Button-Text, name: ctaLabel, widget: string, required: false }
+              - { label: Dachzeile, name: kicker, widget: string, required: false, i18n: true }
+              - { label: Überschrift, name: heading, widget: string, required: false, i18n: true }
+              - { label: Text, name: body, widget: markdown, required: false, i18n: true }
+              - { label: Button-Text, name: ctaLabel, widget: string, required: false, i18n: true }
               - { label: Button-Link, name: ctaLink, widget: string, required: false }
           - label: Kennzahlen
             name: stats
@@ -172,16 +187,17 @@ collections:
             summary: "{{fields.heading}}"
             fields:
               - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/stats.jpg, readonly: true, required: false, choose_url: false }
-              - { label: Dachzeile, name: kicker, widget: string, required: false }
-              - { label: Überschrift, name: heading, widget: string, required: false }
+              - { label: Dachzeile, name: kicker, widget: string, required: false, i18n: true }
+              - { label: Überschrift, name: heading, widget: string, required: false, i18n: true }
               - label: Kennzahlen
                 name: items
+                i18n: duplicate
                 widget: list
                 label_singular: Kennzahl
                 summary: "{{fields.value}} – {{fields.label}}"
                 fields:
-                  - { label: Zahl, name: value, widget: string }
-                  - { label: Beschreibung, name: label, widget: string }
+                  - { label: Zahl, name: value, widget: string, i18n: true }
+                  - { label: Beschreibung, name: label, widget: string, i18n: true }
           - label: FAQ
             name: faq
             widget: object
@@ -189,16 +205,17 @@ collections:
             summary: "{{fields.heading}}"
             fields:
               - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/faq.jpg, readonly: true, required: false, choose_url: false }
-              - { label: Dachzeile, name: kicker, widget: string, required: false }
-              - { label: Überschrift, name: heading, widget: string, required: false }
+              - { label: Dachzeile, name: kicker, widget: string, required: false, i18n: true }
+              - { label: Überschrift, name: heading, widget: string, required: false, i18n: true }
               - label: Fragen
                 name: items
+                i18n: duplicate
                 widget: list
                 label_singular: Frage
                 summary: "{{fields.question}}"
                 fields:
-                  - { label: Frage, name: question, widget: string }
-                  - { label: Antwort, name: answer, widget: text }
+                  - { label: Frage, name: question, widget: string, i18n: true }
+                  - { label: Antwort, name: answer, widget: text, i18n: true }
           - label: Call-to-Action
             name: cta
             widget: object
@@ -206,9 +223,9 @@ collections:
             summary: "{{fields.heading}}"
             fields:
               - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/cta.jpg, readonly: true, required: false, choose_url: false }
-              - { label: Überschrift, name: heading, widget: string }
-              - { label: Text, name: text, widget: text, required: false }
-              - { label: Button-Text, name: buttonLabel, widget: string }
+              - { label: Überschrift, name: heading, widget: string, i18n: true }
+              - { label: Text, name: text, widget: text, required: false, i18n: true }
+              - { label: Button-Text, name: buttonLabel, widget: string, i18n: true }
               - { label: Button-Link, name: buttonLink, widget: string }
           - label: Blog-Teaser
             name: blogTeaser
@@ -217,8 +234,8 @@ collections:
             summary: "{{fields.heading}}"
             fields:
               - { label: "So sieht der Block aus", name: vorschau, widget: image, default: /uploads/bloecke/blogTeaser.jpg, readonly: true, required: false, choose_url: false }
-              - { label: Dachzeile, name: kicker, widget: string, required: false }
-              - { label: Überschrift, name: heading, widget: string, required: false }
+              - { label: Dachzeile, name: kicker, widget: string, required: false, i18n: true }
+              - { label: Überschrift, name: heading, widget: string, required: false, i18n: true }
               - label: Thema
                 name: category
                 widget: select
@@ -234,16 +251,18 @@ collections:
 
   # ---------- Startseite: Blöcke (Markup in src/lib/home-blocks.mjs) ----------
   - name: startseite
+    i18n: true
     label: Startseite
     icon: home
     files:
     - name: home
       label: Startseite
-      file: src/data/home.json
+      file: src/data/home.{{locale}}.json
       format: json
       fields:
       - label: Blöcke
         name: blocks
+        i18n: duplicate
         widget: list
         label_singular: Block
         thumbnail: ansicht
@@ -274,21 +293,27 @@ collections:
             hint: Beim Scrollen blendet die Seite in diese Farbe über.
           - label: Subline (unter der Headline)
             name: kicker
+            i18n: true
             widget: string
           - label: Headline – Zeile 1
             name: line1
+            i18n: true
             widget: string
           - label: Headline – Zeile 2
             name: line2
+            i18n: true
             widget: string
           - label: Headline – Zeile 3 (getippt, hervorgehoben)
             name: highlight
+            i18n: true
             widget: string
           - label: Einleitung
             name: lead
+            i18n: true
             widget: text
           - label: Button-Text
             name: ctaLabel
+            i18n: true
             widget: string
             required: false
           - label: Button-Link
@@ -298,6 +323,7 @@ collections:
             hint: 'z. B. #kontakt oder /nis2-check/'
           - label: Laufband
             name: ticker
+            i18n: true
             widget: list
             label_singular: Eintrag
             hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
@@ -326,16 +352,20 @@ collections:
             hint: Beim Scrollen blendet die Seite in diese Farbe über.
           - label: Überschrift (Zeilenumbruch = neue Zeile)
             name: heading
+            i18n: true
             widget: text
           - label: Unterzeile
             name: sub
+            i18n: true
             widget: string
           - label: Text
             name: text
+            i18n: true
             widget: text
             hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
           - label: Button-Text
             name: ctaLabel
+            i18n: true
             widget: string
             required: false
           - label: Button-Link
@@ -345,6 +375,7 @@ collections:
             hint: 'z. B. #kontakt oder /nis2-check/'
           - label: Textlink
             name: linkLabel
+            i18n: true
             widget: string
             required: false
           - label: Textlink-Ziel
@@ -353,6 +384,7 @@ collections:
             required: false
           - label: Wichtigste Leistungen
             name: services
+            i18n: duplicate
             widget: list
             label_singular: Leistung
             required: false
@@ -361,12 +393,15 @@ collections:
             fields:
             - label: Titel
               name: title
+              i18n: true
               widget: string
             - label: Erklärung (ein Satz)
               name: text
+              i18n: true
               widget: text
           - label: Logos
             name: logos
+            i18n: duplicate
             widget: list
             label_singular: Logo
             summary: '{{fields.alt}}'
@@ -376,6 +411,7 @@ collections:
               widget: image
             - label: Beschreibung (Alt-Text)
               name: alt
+              i18n: true
               widget: string
             - label: Höhe in Pixel
               name: height
@@ -386,27 +422,33 @@ collections:
               max: 80
           - label: Kennzahlen
             name: stats
+            i18n: duplicate
             widget: list
             label_singular: Kennzahl
             summary: '{{fields.value}} – {{fields.label}}'
             fields:
             - label: Zahl
               name: value
+              i18n: true
               widget: string
             - label: Beschreibung
               name: label
+              i18n: true
               widget: string
           - label: Zertifikats-Kacheln
             name: certs
+            i18n: duplicate
             widget: list
             label_singular: Kachel
             summary: '{{fields.title}}'
             fields:
             - label: Titel
               name: title
+              i18n: true
               widget: string
             - label: Untertitel
               name: subtitle
+              i18n: true
               widget: string
         - label: Team mit Gruppenfoto
           name: team
@@ -433,16 +475,20 @@ collections:
             hint: Beim Scrollen blendet die Seite in diese Farbe über.
           - label: Überschrift
             name: heading
+            i18n: true
             widget: string
           - label: Text
             name: lead
+            i18n: true
             widget: text
           - label: Zusatz (hervorgehoben)
             name: hint
+            i18n: true
             widget: string
             required: false
           - label: Button-Text
             name: ctaLabel
+            i18n: true
             widget: string
             required: false
           - label: Button-Link
@@ -455,6 +501,7 @@ collections:
             widget: image
           - label: Bildbeschreibung (Alt-Text)
             name: imageAlt
+            i18n: true
             widget: string
         - label: Bild, Text & Schritte
           name: nis2
@@ -481,31 +528,38 @@ collections:
             hint: Beim Scrollen blendet die Seite in diese Farbe über.
           - label: Überschrift
             name: heading
+            i18n: true
             widget: string
           - label: Text
             name: text
+            i18n: true
             widget: text
             hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
           - label: Schritte
             name: steps
+            i18n: duplicate
             widget: list
             label_singular: Schritt
             summary: '{{fields.title}}'
             fields:
             - label: Titel
               name: title
+              i18n: true
               widget: string
             - label: Text
               name: text
+              i18n: true
               widget: string
           - label: Bild
             name: image
             widget: image
           - label: Bildbeschreibung (Alt-Text)
             name: imageAlt
+            i18n: true
             widget: string
           - label: Button-Text
             name: ctaLabel
+            i18n: true
             widget: string
             required: false
           - label: Button-Link
@@ -538,17 +592,21 @@ collections:
             hint: Beim Scrollen blendet die Seite in diese Farbe über. Dieser Block ist immer hell gestaltet – „Hell“ lassen.
           - label: Überschrift
             name: heading
+            i18n: true
             widget: string
           - label: Überschrift – farbiger Teil
             name: headingAccent
+            i18n: true
             widget: string
             required: false
           - label: Text
             name: text
+            i18n: true
             widget: text
             hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
           - label: Button-Text
             name: ctaLabel
+            i18n: true
             widget: string
             required: false
           - label: Button-Link
@@ -558,15 +616,18 @@ collections:
             hint: 'z. B. #kontakt oder /nis2-check/'
           - label: Schritte
             name: steps
+            i18n: duplicate
             widget: list
             label_singular: Schritt
             summary: '{{fields.title}}'
             fields:
             - label: Titel
               name: title
+              i18n: true
               widget: string
             - label: Text
               name: text
+              i18n: true
               widget: text
               hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
             - label: Bild
@@ -574,6 +635,7 @@ collections:
               widget: image
             - label: Bildbeschreibung (Alt-Text)
               name: imageAlt
+              i18n: true
               widget: string
         - label: Video mit drei Karten
           name: warum
@@ -600,18 +662,22 @@ collections:
             hint: Beim Scrollen blendet die Seite in diese Farbe über.
           - label: Überschrift
             name: heading
+            i18n: true
             widget: string
           - label: Karten
             name: cards
+            i18n: duplicate
             widget: list
             label_singular: Karte
             summary: '{{fields.label}}'
             fields:
             - label: Titel
               name: label
+              i18n: true
               widget: string
             - label: Text
               name: text
+              i18n: true
               widget: text
               hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
             - label: Link
@@ -644,40 +710,50 @@ collections:
             hint: Beim Scrollen blendet die Seite in diese Farbe über.
           - label: Überschrift – Zeile 1
             name: line1
+            i18n: true
             widget: string
           - label: Überschrift – Zeile 2
             name: line2
+            i18n: true
             widget: string
           - label: Einleitung
             name: intro
+            i18n: true
             widget: text
             hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
           - label: Leistungen
             name: items
+            i18n: duplicate
             widget: list
             label_singular: Leistung
             summary: '{{fields.title}}'
             fields:
             - label: Titel
               name: title
+              i18n: true
               widget: string
             - label: Text
               name: text
+              i18n: true
               widget: text
               hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
             - label: Angabe 1 – Bezeichnung
               name: label1
+              i18n: true
               widget: string
               default: Einstieg
             - label: Angabe 1 – Wert
               name: value1
+              i18n: true
               widget: string
             - label: Angabe 2 – Bezeichnung
               name: label2
+              i18n: true
               widget: string
               default: Dauer
             - label: Angabe 2 – Wert
               name: value2
+              i18n: true
               widget: string
             - label: Video
               name: video
@@ -722,34 +798,43 @@ collections:
             hint: Beim Scrollen blendet die Seite in diese Farbe über.
           - label: Unsichtbare Überschrift (für Screenreader)
             name: srHeading
+            i18n: true
             widget: string
           - label: Überschrift – Zeile 1
             name: line1
+            i18n: true
             widget: string
           - label: Überschrift – Zeile 2
             name: line2
+            i18n: true
             widget: string
           - label: Unterzeile
             name: sub
+            i18n: true
             widget: string
           - label: Text
             name: text
+            i18n: true
             widget: text
             hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
           - label: Branchen
             name: branches
+            i18n: duplicate
             widget: list
             label_singular: Branche
             summary: '{{fields.title}}'
             fields:
             - label: Titel
               name: title
+              i18n: true
               widget: string
             - label: Untertitel
               name: subtitle
+              i18n: true
               widget: string
             - label: Text
               name: text
+              i18n: true
               widget: text
               hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
         - label: News & Insights
@@ -777,12 +862,15 @@ collections:
             hint: Beim Scrollen blendet die Seite in diese Farbe über.
           - label: Subline (unter der Headline)
             name: kicker
+            i18n: true
             widget: string
           - label: Überschrift
             name: heading
+            i18n: true
             widget: string
           - label: Button-Text
             name: ctaLabel
+            i18n: true
             widget: string
           - label: Anzahl Beiträge
             name: count
@@ -816,9 +904,11 @@ collections:
             hint: Beim Scrollen blendet die Seite in diese Farbe über.
           - label: Überschrift
             name: heading
+            i18n: true
             widget: string
           - label: Text im Kasten
             name: boxText
+            i18n: true
             widget: text
             hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
           - label: Kontakt-E-Mail
@@ -826,15 +916,18 @@ collections:
             widget: string
           - label: Fragen
             name: items
+            i18n: duplicate
             widget: list
             label_singular: Frage
             summary: '{{fields.question}}'
             fields:
             - label: Frage
               name: question
+              i18n: true
               widget: string
             - label: Antwort
               name: answer
+              i18n: true
               widget: text
               hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'
         - label: Kontakt mit Formular
@@ -862,21 +955,26 @@ collections:
             hint: Beim Scrollen blendet die Seite in diese Farbe über.
           - label: Überschrift
             name: heading
+            i18n: true
             widget: string
           - label: Unterzeile
             name: sub
+            i18n: true
             widget: string
           - label: Kontaktwege
             name: options
+            i18n: duplicate
             widget: list
             label_singular: Kontaktweg
             summary: '{{fields.label}}: {{fields.value}}'
             fields:
             - label: Bezeichnung
               name: label
+              i18n: true
               widget: string
             - label: Wert
               name: value
+              i18n: true
               widget: string
             - label: Link (tel:, mailto:, …)
               name: link
@@ -889,12 +987,15 @@ collections:
               default: false
           - label: Themen im Formular
             name: topics
+            i18n: true
             widget: list
             label_singular: Thema
           - label: Button-Text
             name: sendLabel
+            i18n: true
             widget: string
           - label: Datenschutz-Hinweis
             name: legal
+            i18n: true
             widget: text
             hint: 'Links: `[Text](#ziel)` · Fett: `**Text**`'

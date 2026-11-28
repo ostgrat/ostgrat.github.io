@@ -1,15 +1,16 @@
 ---
-// Seiten aus dem Seitenbaukasten (CMS → „Seiten“), Adresse = Dateiname.
+// Seiten aus dem Seitenbaukasten (CMS → „Seiten“), Adresse = Dateiname. Englisch: Datei name.en.md unter /en/name/.
 import { getCollection } from 'astro:content';
 import SiteLayout from '../layouts/SiteLayout.astro';
 import Blocks from '../components/Blocks.astro';
 
 export async function getStaticPaths() {
   const pages = await getCollection('pages', (p) => !p.data.draft);
-  return pages.map((page) => ({ params: { slug: page.id }, props: { page } }));
+  const en = new Set(pages.filter((p) => p.id.endsWith('.en')).map((p) => p.id.slice(0, -3)));
+  return pages.filter((p) => !p.id.endsWith('.en')).map((page) => ({ params: { slug: page.id }, props: { page, alt: en.has(page.id) ? `/en/${page.id}/` : '/en/' } }));
 }
-const { page } = Astro.props;
+const { page, alt } = Astro.props;
 ---
-<SiteLayout title={page.data.title} description={page.data.description}>
-  <Blocks blocks={page.data.blocks} />
+<SiteLayout title={page.data.title} description={page.data.description} alt={alt}>
+  <Blocks blocks={page.data.blocks} lang="de" />
 </SiteLayout>

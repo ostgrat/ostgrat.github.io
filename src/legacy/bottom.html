@@ -1348,7 +1348,7 @@ if (document.getElementById('h2box')) {   /* Block „Hero“ kann im CMS fehlen
   const small = document.createElement('canvas'), sg = small.getContext('2d');
   const grid = document.createElement('canvas'), gg = grid.getContext('2d');
   const tmp = document.createElement('canvas'), tg = tmp.getContext('2d');
-  const img = new Image(); img.decoding = 'async'; img.src = 'img/team.jpg';
+  const img = new Image(); img.decoding = 'async'; img.src = '/img/team.jpg';
   let r = 1, w = 0, h = 0, m = {x:0, y:0, tx:0, ty:0, a:0, ta:0}, raf = 0, base = null;
   const pix = {
     resize() {
@@ -2615,7 +2615,7 @@ if (document.getElementById('tick')) {   /* Block „Hero“ kann im CMS fehlen 
 <!-- Schwebende Buttons: links Notfall (passt sich dem Grund an), rechts Beratung (immer Gegenfarbe). Klappen nach 5 s oder beim Scrollen ein, Hover klappt wieder auf. -->
 <a class="fab fab-sos open" href="tel:+43732908700" aria-label="Notfall Hotline 24/7, +43 732 908 700"><i class="ct-dot" aria-hidden="true"></i><span class="fab-t"><span class="fab-in"><span class="fab-p">Notfall Hotline 24/7<span class="fab-num"><span><span class="fab-np">+43 732 908 700</span></span></span></span></span></span></a>
 <button class="fab fab-cta open" type="button" data-ct aria-haspopup="dialog" aria-label="Beratung vereinbaren"><span class="fab-t"><span class="fab-in"><span class="fab-p">Beratung vereinbaren</span></span></span><svg viewBox="0 -960 960 960" aria-hidden="true"><path d="M120-160v-640l760 320-760 320Zm60-93 544-227-544-230v168l242 62-242 60v167Zm0 0v-457 457Z"/></svg></button>
-<template id="ppMedia"><figure class="ct-media"><video disablepictureinpicture disableremoteplayback src="img/kontakt.mp4" poster="img/kontakt.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><canvas class="ct-ascii" aria-hidden="true"></canvas></figure></template>
+<template id="ppMedia"><figure class="ct-media"><video disablepictureinpicture disableremoteplayback src="/img/kontakt.mp4" poster="/img/kontakt.jpg" muted loop playsinline preload="none" aria-hidden="true"></video><canvas class="ct-ascii" aria-hidden="true"></canvas></figure></template>
 <div class="pp" id="pp" role="dialog" aria-modal="true" aria-labelledby="pp-h-kontakt" hidden>
   <div class="pp-glass" data-close></div>
   <div class="pp-box th" tabindex="-1">

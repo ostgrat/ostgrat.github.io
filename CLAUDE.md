@@ -30,6 +30,22 @@ Die Startseite besteht aus Blöcken, die im CMS sortiert, entfernt und hinzugef�
 - **Neuer Block:** Renderer in `home-blocks.mjs`, Typ in `config.yml` (mit `theme`-Feld und Screenshot-Feld `ansicht`), Eintrag in `home.json`, Screenshot unter `public/uploads/bloecke/start-<typ>.jpg`.
 - **Design geändert?** Dann sind die Block-Screenshots in `public/uploads/bloecke/` veraltet. Neu aufnehmen oder im Commit erwähnen.
 
+## Sprachen (Deutsch / Englisch)
+
+Deutsch ist Standard (ohne Präfix), Englisch liegt unter `/en/`.
+
+| Was | Wo |
+| --- | --- |
+| Startseite EN | `src/data/home.en.json` (gleicher Aufbau wie `home.json`; fehlt sie, gilt Deutsch) |
+| Seiten und Blog EN | gleiche Datei mit `.en.md`, z. B. `nis2-check.en.md`, `artikel/name.en.md` |
+| Feste Oberflächentexte (Navbar, Footer, Popups, Vorlagen, Skripte) | `src/i18n/en.json`: deutscher Text genau wie im Code → Englisch |
+| Übersetzung beim Rendern, Links auf `/en/` umschreiben | `src/middleware.ts` + `src/i18n/index.mjs` |
+| CMS | `i18n` in `config.yml` (multiple_files, Standard ohne Sprachendung); Textfelder `i18n: true`, Block-Listen `i18n: duplicate` |
+
+- **Neuer fester Text im HTML oder Skript?** Deutschen Text 1:1 als Schlüssel in `src/i18n/en.json` eintragen. Englische Übersetzungen dürfen in Skript-Strings mit einfachen Anführungszeichen keinen Apostroph enthalten.
+- **Neues Textfeld im CMS?** `i18n: true` dazuschreiben, sonst ist es auf Englisch nicht bearbeitbar.
+- Asset-Pfade immer absolut (`/img/…`), relative Pfade brechen unter `/en/`.
+
 ## Seitenbaukasten (Unterseiten)
 
 Blöcke in `src/lib/blocks.mjs`, Seiten in `src/content/pages/*.md`, Übersicht aller Blöcke unter `/bloecke/`. Gleiche Regeln: Texte über CMS-Felder, Screenshots aktuell halten.

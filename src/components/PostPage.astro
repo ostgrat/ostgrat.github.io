@@ -1,0 +1,101 @@
+---
+// Detailseite eines Beitrags (beide Sprachen): ein Layout, das je nach Beitragsart zusätzliche Bereiche zeigt.
+// Feste Beschriftungen sind deutsch; auf /en/ übersetzt sie die Middleware (src/i18n/en.json).
+import { render } from 'astro:content';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import icons from '../legacy/icons.json';
+import { formatDate, categories, types, inlineSvg, type Post } from '../lib/blog';
+interface Props { post: Post; alt: string | null }
+const { post, alt } = Astro.props;
+const d = post.data;
+const { Content } = await render(post);
+const svg = inlineSvg(d.cover);
+const severity = { kritisch: 'Kritisch', hoch: 'Hoch', mittel: 'Mittel' };
+---
+
+<SiteLayout title={d.title} description={d.excerpt} alt={alt}>
+  <article class:list={['post', post.type]}>
+    <header>
+      <p class="lab">
+        {post.alert ? <span class="flag"><i></i>Sicherheitswarnung</span> : <>{types[post.type]} · {categories[post.cat]}</>}
+      </p>
+      <h1 class="h1">{d.title}</h1>
+      <p class="meta">{d.author} · {formatDate(d.date, post.lang)}</p>
+    </header>
+
+    {post.type === 'warnungen' && (
+      <section class="facts">
+        {d.cve && <div><dt>Kennung</dt><dd class="mono">{d.cve}</dd></div>}
+        {d.severity && <div><dt>Schweregrad</dt><dd class:list={['sev', d.severity]}>{severity[d.severity]}</dd></div>}
+        {d.affected?.length && <div class="wide"><dt>Betroffen</dt><dd><ul>{d.affected.map((a) => <li>{a}</li>)}</ul></dd></div>}
+      </section>
+    )}
+
+    {post.type === 'fallstudien' && (
+      <section class="facts">
+        {d.industry && <div><dt>Branche</dt><dd>{d.industry}</dd></div>}
+        {d.companySize && <div><dt>Unternehmensgröße</dt><dd>{d.companySize}</dd></div>}
+        {d.duration && <div><dt>Umfang</dt><dd>{d.duration}</dd></div>}
+      </section>
+    )}
+
+    {(svg || d.cover) && <figure>{svg ? <Fragment set:html={svg} /> : <img src={d.cover} alt="" />}</figure>}
+
+    {post.type === 'warnungen' && d.actions?.length && (
+      <section class="todo">
+        <h2 class="h3">Was Sie jetzt tun sollten</h2>
+        <ol>{d.actions.map((a) => <li>{a}</li>)}</ol>
+      </section>
+    )}
+
+    {post.type === 'fallstudien' && (
+      <>
+        {d.results?.length && <dl class="results">{d.results.map((r) => <div><dt>{r.value}</dt><dd>{r.label}</dd></div>)}</dl>}
+        <div class="steps">
+          {d.challenge && <section><p class="lab">Ausgangslage</p><p>{d.challenge}</p></section>}
+          {d.approach && <section><p class="lab">Vorgehen</p><p>{d.approach}</p></section>}
+          {d.outcome && <section><p class="lab">Ergebnis</p><p>{d.outcome}</p></section>}
+        </div>
+      </>
+    )}
+
+    <div class="prose body"><Content /></div>
+    <p class="back"><a href="/blog/"><i set:html={icons.arrow}></i>Alle Beiträge</a></p>
+  </article>
+</SiteLayout>
+<style>
+  .post { padding:clamp(120px,22vh,240px) var(--pad) clamp(96px,16vh,180px); max-width:calc(900px + 2 * var(--pad)) }
+  .meta { margin:32px 0 0; color:var(--mut); font-size:15px }
+  .flag { display:inline-flex; align-items:center; gap:8px; height:26px; padding:0 10px; background:var(--acc); color:var(--bg); font-size:12px; letter-spacing:.12em }
+  .flag i { width:6px; height:6px; background:currentColor }
+  .facts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); margin:56px 0 0; border-top:var(--sw) solid var(--line); border-bottom:var(--sw) solid var(--line) }
+  .facts div { padding:20px 20px 20px 0 }
+  .facts div + div { padding-left:20px; border-left:var(--sw) solid var(--line) }
+  .facts .wide { grid-column:span 1 }
+  .warnungen .facts .wide { grid-column:span 1 }
+  dt { color:var(--mut); font-size:13px; letter-spacing:.1em; text-transform:uppercase; margin-bottom:8px }
+  dd { margin:0 }
+  dd ul { margin:0; padding:0; list-style:none } dd li + li { margin-top:4px }
+  .mono { font:500 15px var(--fm) }
+  .sev::before { content:""; display:inline-block; width:8px; height:8px; margin-right:8px; background:var(--mut) }
+  .sev.kritisch::before, .sev.hoch::before { background:var(--acc) }
+  figure { margin:56px 0 0; aspect-ratio:16/9; overflow:hidden; border:var(--sw) solid var(--line) }
+  figure :global(svg), figure img { display:block; width:100%; height:100%; object-fit:cover }
+  .todo { margin:56px 0 0; padding:32px; border:var(--sw) solid var(--acc); background:color-mix(in srgb,var(--acc) 7%,transparent) }
+  .todo .h3 { margin:0 0 16px }
+  .todo ol { margin:0; padding-left:1.4em; color:var(--ink) } .todo li { margin:.5em 0 } .todo li::marker { color:var(--acc); font-family:var(--fm) }
+  .results { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); margin:56px 0 0; border-top:var(--sw) solid var(--line) }
+  .results div { padding:28px 20px 0 0 }
+  .results div + div { padding-left:20px; border-left:var(--sw) solid var(--line) }
+  .results dt { color:var(--ink); font:400 clamp(44px,4.4vw,64px)/1 var(--fh); letter-spacing:-.04em; text-transform:none; margin:0 }
+  .results dd { margin:14px 0 0; color:var(--mut); max-width:24ch }
+  .steps { margin:64px 0 0; display:grid; gap:40px }
+  .steps .lab { margin:0 0 10px; color:var(--acc); font-size:13px }
+  .steps p { margin:0; max-width:64ch; color:var(--mut); font-size:19px; line-height:1.55 }
+  .body { margin-top:56px; font-size:19px; line-height:1.6 }
+  .back { margin:72px 0 0 }
+  .back a { display:inline-flex; align-items:center; gap:10px; color:var(--mut) }
+  .back a:hover { color:var(--ink) }
+  .back i { display:flex; rotate:180deg } .back i :global(svg) { width:18px; height:18px; fill:currentColor }
+  @media (max-width:760px) { .facts { grid-template-columns:1fr } .facts div + div { padding-left:0; border-left:0; border-top:var(--sw) solid var(--line) } .results div + div { padding-left:0; border-left:0 } }
+</style>

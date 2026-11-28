@@ -1,26 +1,5 @@
 ---
-// Startseite: Rahmen (Navbar, Footer, Skripte) aus dem Design-Entwurf, dazwischen die Blöcke aus dem CMS
-// (src/data/home.json → CMS „Startseite“). Das HTML der Blöcke kommt aus src/lib/home-blocks.mjs.
-import home from '../data/home.json';
-import head from '../legacy/head.html?raw';
-import top from '../legacy/top.html?raw';
-import bottom from '../legacy/bottom.html?raw';
-import { renderHome } from '../lib/home-blocks.mjs';
-import { getPosts, toCard } from '../lib/blog';
-const posts = (await getPosts()).map(toCard);
+// Startseite Deutsch. Aufbau: src/components/HomePage.astro, Inhalte: src/data/home.json (CMS „Startseite“).
+import HomePage from '../components/HomePage.astro';
 ---
-<html lang="de">
-<head>
-<meta charset="utf-8">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ostgrat – Sicherheit für den Mittelstand</title>
-<link rel="stylesheet" href="/styles/fonts.css">
-<Fragment set:html={head} />
-</head>
-<body>
-<Fragment set:html={top} />
-<Fragment set:html={renderHome(home.blocks, { posts })} />
-<Fragment set:html={bottom} />
-</body>
-</html>
+<HomePage lang="de" />

@@ -4,7 +4,7 @@
 import { renderBlocks } from '../lib/blocks.mjs';
 import { md } from '../lib/md';
 import { getPosts, toCard } from '../lib/blog';
-const { blocks = [] } = Astro.props;
-const posts = blocks.some((b: any) => b?.type === 'blogTeaser') ? (await getPosts()).map(toCard) : [];
+const { blocks = [], lang = 'de' } = Astro.props;
+const posts = blocks.some((b: any) => b?.type === 'blogTeaser') ? (await getPosts(lang)).map(toCard) : [];
 ---
 <Fragment set:html={renderBlocks(blocks, { md, posts })} />

@@ -4,7 +4,8 @@ import { z } from 'astro/zod';
 
 // Blog: ein Unterordner pro Beitragsart (artikel, warnungen, fallstudien).
 const blog = defineCollection({
-  loader: glob({ pattern: '{artikel,warnungen,fallstudien}/*.md', base: './src/content/blog' }),
+  // Englische Fassung: gleiche Datei mit .en.md (Id endet auf .en)
+  loader: glob({ pattern: '{artikel,warnungen,fallstudien}/*.md', base: './src/content/blog', generateId: ({ entry }) => entry.replace(/\.md$/, '') }),
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
@@ -33,7 +34,7 @@ const blog = defineCollection({
 // Seitenbaukasten: jede Datei ist eine Seite aus Blöcken.
 const block = z.object({ type: z.string() }).passthrough();
 const pages = defineCollection({
-  loader: glob({ pattern: '*.md', base: './src/content/pages' }),
+  loader: glob({ pattern: '*.md', base: './src/content/pages', generateId: ({ entry }) => entry.replace(/\.md$/, '') }),
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
