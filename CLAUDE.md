@@ -8,7 +8,7 @@ Die Startseite besteht aus Blöcken, die im CMS sortiert, entfernt und hinzugef�
 
 | Was | Datei |
 | --- | --- |
-| HTML der Sections (12 Blöcke, inkl. Leistungs-Hero `intro`) | `src/lib/home-blocks.mjs` |
+| HTML der Sections (13 Blöcke, inkl. Leistungs-Hero `intro` und `kacheln`) | `src/lib/home-blocks.mjs` |
 | SVGs der Sections | `src/lib/home-svgs.mjs` |
 | Navbar, Seitenrahmen vor den Blöcken | `src/legacy/top.html` |
 | Footer, Popups, alle Seitenskripte | `src/legacy/bottom.html` |
@@ -29,6 +29,7 @@ Alle Seiten (Startseite, CMS-Seiten, Blog) laufen durch denselben Rahmen `src/co
 - **Hell/Dunkel** kommt aus dem Feld `theme` jedes Blocks (`data-theme="hell|dunkel"` am Block-Element). Die Scroll-Logik in `bottom.html` (`frame()`) liest nur dieses Attribut. Keine festen Section-IDs für den Farbwechsel einbauen.
 - **Block-Attribute:** jeder Block trägt `data-bi` (Position), `data-block` (Typ), `data-theme`. `data-i` ist von den Seitenskripten belegt, nicht für Blöcke verwenden.
 - **Globus** darf nur einmal pro Seite vorkommen, die Progress Section (`.s2`) mehrfach.
+- **Hero-Parallax** (`PAR.hero` in `bottom.html`) greift nur auf Elemente im Block `hero`. Nie seitenweit nach `.cta` o. Ä. suchen.
 - **Neuer Block:** Renderer in `home-blocks.mjs`, Typ in `config.yml` (mit `theme`-Feld und Screenshot-Feld `ansicht`), Eintrag in `home.json`, Screenshot unter `public/uploads/bloecke/start-<typ>.jpg`.
 - **Design geändert?** Dann sind die Block-Screenshots in `public/uploads/bloecke/` veraltet. Neu aufnehmen oder im Commit erwähnen.
 

@@ -34,7 +34,7 @@ const CERT_COLORS = [
 
 /** Standard-Farbe je Block, wenn im CMS nichts gewählt ist (entspricht dem Entwurf). */
 export const defaultTheme = {
-  hero: 'dunkel', intro: 'dunkel', fakten: 'hell', team: 'hell', nis2: 'hell', redteam: 'hell', warum: 'dunkel',
+  hero: 'dunkel', intro: 'dunkel', kacheln: 'hell', fakten: 'hell', team: 'hell', nis2: 'hell', redteam: 'hell', warum: 'dunkel',
   services: 'dunkel', globus: 'dunkel', insights: 'dunkel', faq: 'dunkel', kontakt: 'dunkel',
 };
 
@@ -62,13 +62,25 @@ const R = {
       <h1 id="h-lh" class="lh-h"><span>${esc(b.heading)}</span>${b.subheading ? ` <span class="lh-sub">${esc(b.subheading)}</span>` : ''}</h1>
       ${cta('lh-cta', b.ctaLink, b.ctaLabel)}
     </div>
-    <div class="lh-grid">
+    ${b.video || b.poster || b.sideHeading || list(b.points).length ? `<div class="lh-grid">
       <figure class="lh-media">${b.video ? `<video src="${img(b.video, c.asset)}"${b.poster ? ` poster="${img(b.poster, c.asset)}"` : ''} autoplay muted loop playsinline preload="metadata" aria-hidden="true"></video>` : b.poster ? `<img src="${img(b.poster, c.asset)}" alt="" loading="lazy">` : ''}</figure>
       <div class="lh-side">
         <p class="lh-lead"><span>${esc(b.sideHeading)}</span>${b.sideText ? ` <span class="lh-sub">${esc(b.sideText)}</span>` : ''}</p>
         ${list(b.points).length ? `<div class="lh-list"><p class="lh-k lab">${esc(b.pointsLabel || 'Im Paket')}</p><ul>${list(b.points).map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
       </div>
-    </div>
+    </div>` : ''}
+  </section>`,
+
+  /* Kacheln: Überschrift wie bei den Leistungen, darunter zwei Spalten – Bild oben, Text darunter, Linien als Raster */
+  kacheln: (b, c) => `<section class="kc"${b.anchor ? ` id="${esc(b.anchor)}"` : ''} aria-label="${esc([b.line1, b.line2].filter(Boolean).join(' '))}">
+    <div class="sv-top"><div class="sv-hd"><h2><span>${esc(b.line1)}</span>${b.line2 ? ` <span>${esc(b.line2)}</span>` : ''}</h2></div>${b.intro ? `<p>${inl(b.intro)}</p>` : ''}</div>
+    <ul class="kc-grid">
+      ${list(b.items).map((it, i) => `<li class="kc-i">
+        <figure class="kc-img">${it.image ? `<img src="${img(it.image, c.asset)}" alt="${esc(it.imageAlt || '')}" loading="lazy">` : ''}</figure>
+        <div class="kc-c"><p class="sv-n">${n2(i)}${it.subtitle ? ` · ${esc(it.subtitle)}` : ''}</p><h3>${esc(it.title)}</h3><p class="kc-t">${inl(it.text)}</p>
+        ${it.link && it.linkLabel ? `<a class="kc-go" href="${esc(it.link)}"><span>${esc(it.linkLabel)}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>` : ''}</div>
+      </li>`).join('\n      ')}
+    </ul>
   </section>`,
 
   fakten: (b, c) => `<section class="why" id="fakten" aria-labelledby="h-fakten">

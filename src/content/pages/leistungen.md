@@ -2,11 +2,18 @@
 title: Leistungen
 description: Managed SOC, Pentest & Red Teaming, Incident Response, OT-Security und NIS2 – aus einer Hand in Linz.
 blocks:
+- type: intro
+  ansicht: /uploads/bloecke/start-intro.jpg
+  theme: dunkel
+  heading: Alles, was Ihre Sicherheit braucht.
+  subheading: Vom ersten Pentest bis zum Anruf um drei Uhr nachts.
+  ctaLabel: Beratung vereinbaren
+  ctaLink: '#kontakt'
 - type: services
   ansicht: /uploads/bloecke/start-services.jpg
   theme: dunkel
-  line1: Alles, was Ihre
-  line2: Sicherheit braucht.
+  line1: Fünf Leistungen,
+  line2: ein Team.
   intro: Vom ersten Pentest bis zum Anruf um drei Uhr nachts. Sie sprechen mit den Menschen, die testen, überwachen und reagieren.
   items:
   - title: Managed SOC

@@ -366,8 +366,11 @@ const PAR = {
   up:document.querySelector('.s2') ? parseFloat(getComputedStyle(document.querySelector('.s2')).getPropertyValue('--up')) || 0 : 0,   /* so weit kommt die zweite Section samt Linie zusätzlich entgegen (px, aus dem CSS) */
   range:1.1,                                /* Länge des Übergangs in Bildschirmhöhen */
   s2:document.querySelector('.s2'),
-  hero:[...document.querySelectorAll('h1 .ln'), document.querySelector('.hero-k'), document.querySelector('.copy .lead'), document.querySelector('.cta'), document.querySelector('.h2m')]
+  hero:[]
 };
+/* nur Elemente des Startseiten-Heros – auf anderen Seiten (ohne Hero) darf kein Button oder Text mitlaufen */
+{ const HB = document.querySelector('[data-block="hero"]'), q = s => HB && HB.querySelector(s);
+  if (HB) PAR.hero = [...HB.querySelectorAll('h1 .ln'), q('.hero-k'), q('.copy .lead'), q('.cta'), q('.h2m')]; }
 const CSSPAR = !reduce && window.CSS && CSS.supports('animation-timeline: scroll()');
 if (CSSPAR) {
   PAR.hero.forEach((el, i) => { if (!el) return; el.classList.add('stg'); el.style.setProperty('--d', PAR.stag[i]); });
@@ -3316,7 +3319,7 @@ document.querySelectorAll('.sv-row').forEach(r=>r.addEventListener('click',e=>{i
   const measure=()=>{if(performance.now()-chg<700)return;rows().forEach((r,i)=>{if(r!==cur)hc[i]=r.offsetHeight;});};
   const pick=()=>{raf=0;if(L.dataset.v!=='4'){set(null);ci=-1;return;}measure();const R=rows(),n=R.length;if(hc.length<n||hc.some(x=>!x)){R.forEach((r,i)=>{if(!hc[i])hc[i]=r.offsetHeight;});}
     const lb=L.getBoundingClientRect();if(lb.bottom<0||lb.top>innerHeight){set(null);ci=-1;return;}
-    const p=innerHeight*.5-lb.top,HY=28;if(p<0){set(null);ci=-1;return;}
+    const p=innerHeight*.5-lb.top,HY=28;if(p<0){ci=0;set(R[0]);return;}   /* Liste schon im Bild, aber noch unter der Mitte (z. B. oben auf einer Unterseite): erste Kachel läuft */
     let k=0,acc=0;for(let i=0;i<n;i++){if(p>=acc)k=i;acc+=hc[i];}
     if(ci>=0&&k!==ci){const edge=hc.slice(0,Math.max(k,ci)).reduce((a,b)=>a+b,0);if(Math.abs(p-edge)<HY)k=ci;}   /* kleine Hysterese an der Grenze */
     ci=k;set(R[k]);};

@@ -23,6 +23,41 @@ blocks:
   - title: Finanz
     subtitle: DORA statt NIS2
     text: Für Banken und Versicherungen gilt DORA statt [NIS2](/nis2-check/) – mit eigenen Vorgaben für IT-Risikomanagement, Resilienztests und Dienstleister.
+- type: kacheln
+  ansicht: /uploads/bloecke/start-kacheln.jpg
+  theme: hell
+  line1: Vier Branchen,
+  line2: vier Risiken.
+  intro: Jede Branche fällt anders aus. Wir schützen das, was bei Ihnen zuerst stillsteht.
+  items:
+  - image: /img/industrie.jpg
+    imageAlt: Gelber Industrieroboter in einer Fertigungshalle
+    title: Industrie
+    subtitle: Produktionsstillstand
+    text: Jede Stunde Stillstand kostet Umsatz und Lieferfähigkeit – deshalb sichern wir Steuerungen und Netze, ohne die Linie anzuhalten.
+    linkLabel: OT-Security
+    link: /ot-security/
+  - image: /uploads/start/ueberwachen.jpg
+    imageAlt: Leuchtende Glasfaserenden vor dunklem Hintergrund
+    title: Energie
+    subtitle: Versorgungssicherheit
+    text: 'Wer Strom, Gas oder Wärme liefert, ist kritische Infrastruktur: Ein Ausfall trifft ganze Regionen und löst strenge Meldepflichten aus.'
+    linkLabel: Managed SOC
+    link: /managed-soc/
+  - image: /uploads/start/sv-ot.jpg
+    imageAlt: Glasfläschchen in einer Abfüllanlage
+    title: Gesundheit
+    subtitle: Patientendaten, Medizingeräte
+    text: Patientendaten sind besonders schützenswert, und viele Medizingeräte laufen auf Systemen, die sich nicht patchen lassen.
+    linkLabel: Incident Response
+    link: /incident-response/
+  - image: /img/kontakt-rechner.jpg
+    imageAlt: Alter Rechner mit leuchtendem Bildschirm im Dunkeln
+    title: Finanz
+    subtitle: DORA statt NIS2
+    text: Für Banken und Versicherungen gilt DORA statt [NIS2](/nis2-check/) – mit eigenen Vorgaben für IT-Risikomanagement, Resilienztests und Dienstleister.
+    linkLabel: Pentest & Red Teaming
+    link: /pentest-red-teaming/
 - type: warum
   ansicht: /uploads/bloecke/start-warum.jpg
   theme: dunkel

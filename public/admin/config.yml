@@ -159,10 +159,41 @@ collections:
           - { label: Button-Ziel, name: ctaLink, widget: string, required: false, hint: 'z. B. #kontakt' }
           - { label: Video, name: video, widget: file, required: false }
           - { label: Standbild zum Video, name: poster, widget: image, required: false }
-          - { label: Text rechts, hell, name: sideHeading, widget: string, i18n: true }
+          - { label: Text rechts, hell, name: sideHeading, widget: string, required: false, i18n: true, hint: 'Ohne Video, Bild und Text rechts zeigt der Block nur Titel und Button.' }
           - { label: Text rechts, grau, name: sideText, widget: text, required: false, i18n: true }
           - { label: Überschrift der Liste, name: pointsLabel, widget: string, required: false, default: Im Paket, i18n: true }
           - { label: Liste, name: points, widget: list, required: false, label_singular: Punkt, i18n: true }
+        - label: Kacheln mit Bild
+          name: kacheln
+          widget: object
+          description: 'Überschrift wie bei den Leistungen, darunter Kacheln in zwei Spalten: Bild oben, Text und Link darunter.'
+          summary: '{{fields.line1}} {{fields.line2}}'
+          fields:
+          - label: So sieht der Block aus
+            name: ansicht
+            widget: image
+            default: /uploads/bloecke/start-kacheln.jpg
+            readonly: true
+            required: false
+          - { label: Hintergrund, name: theme, widget: select, default: hell, options: [{ label: Dunkel, value: dunkel }, { label: Hell, value: hell }], hint: Beim Scrollen blendet die Seite in diese Farbe über. }
+          - { label: Überschrift, Zeile 1, name: line1, widget: string, i18n: true }
+          - { label: Überschrift, Zeile 2, name: line2, widget: string, required: false, i18n: true }
+          - { label: Text neben der Überschrift, name: intro, widget: text, required: false, i18n: true }
+          - { label: Sprungmarke, name: anchor, widget: string, required: false, hint: 'z. B. branchen – dann führt #branchen hierher' }
+          - label: Kacheln
+            name: items
+            i18n: duplicate
+            widget: list
+            label_singular: Kachel
+            summary: '{{fields.title}}'
+            fields:
+            - { label: Bild, name: image, widget: image, required: false }
+            - { label: Bildbeschreibung, name: imageAlt, widget: string, required: false, i18n: true }
+            - { label: Titel, name: title, widget: string, i18n: true }
+            - { label: Untertitel, name: subtitle, widget: string, required: false, i18n: true }
+            - { label: Text, name: text, widget: text, i18n: true }
+            - { label: Link-Text, name: linkLabel, widget: string, required: false, i18n: true }
+            - { label: Link-Ziel, name: link, widget: string, required: false, hint: 'z. B. /ot-security/' }
         - label: Hero mit Monitor & Laufband
           name: hero
           widget: object

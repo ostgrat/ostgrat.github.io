@@ -3,11 +3,18 @@ title: Services
 description: Managed SOC, pentest & red teaming, incident response, OT security and NIS2 – from one team in Linz.
 urlSlug: services
 blocks:
+- type: intro
+  ansicht: /uploads/bloecke/start-intro.jpg
+  theme: dunkel
+  heading: Everything your security needs.
+  subheading: From the first pentest to the call at three in the morning.
+  ctaLabel: Book a consultation
+  ctaLink: '#kontakt'
 - type: services
   ansicht: /uploads/bloecke/start-services.jpg
   theme: dunkel
-  line1: Everything your
-  line2: security needs.
+  line1: Five services,
+  line2: one team.
   intro: From the first pentest to the call at three in the morning. You talk to the people who test, monitor and respond.
   items:
   - title: Managed SOC

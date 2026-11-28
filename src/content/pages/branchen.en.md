@@ -24,6 +24,41 @@ blocks:
   - title: Finance
     subtitle: DORA instead of NIS2
     text: Banks and insurers fall under DORA instead of [NIS2](/nis2-check/) – with their own requirements for ICT risk management, resilience testing and service providers.
+- type: kacheln
+  ansicht: /uploads/bloecke/start-kacheln.jpg
+  theme: hell
+  line1: Four industries,
+  line2: four risks.
+  intro: Every industry fails differently. We protect what stops first in yours.
+  items:
+  - image: /img/industrie.jpg
+    imageAlt: Yellow industrial robot in a production hall
+    title: Industry
+    subtitle: Production downtime
+    text: Every hour of downtime costs revenue and delivery capability – that's why we secure controllers and networks without stopping the line.
+    linkLabel: OT-Security
+    link: /ot-security/
+  - image: /uploads/start/ueberwachen.jpg
+    imageAlt: Glowing fibre-optic ends against a dark background
+    title: Energy
+    subtitle: Security of supply
+    text: 'Anyone supplying electricity, gas or heat is critical infrastructure: an outage hits entire regions and triggers strict reporting obligations.'
+    linkLabel: Managed SOC
+    link: /managed-soc/
+  - image: /uploads/start/sv-ot.jpg
+    imageAlt: Glass vials in a filling line
+    title: Healthcare
+    subtitle: Patient data, medical devices
+    text: Patient data needs special protection, and many medical devices run on systems that cannot be patched.
+    linkLabel: Incident Response
+    link: /incident-response/
+  - image: /img/kontakt-rechner.jpg
+    imageAlt: Old computer with a glowing screen in the dark
+    title: Finance
+    subtitle: DORA instead of NIS2
+    text: Banks and insurers fall under DORA instead of [NIS2](/nis2-check/) – with their own requirements for ICT risk management, resilience testing and service providers.
+    linkLabel: Pentest & Red Teaming
+    link: /pentest-red-teaming/
 - type: warum
   ansicht: /uploads/bloecke/start-warum.jpg
   theme: dunkel
